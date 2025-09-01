@@ -4,6 +4,10 @@ import { Ship } from "./ship.js";
 const gameboard = new GameBoard();
 const board = gameboard.getBoard();
 
+beforeEach(() => {
+    gameboard.clearBoard();
+})
+
 test('gameboard is a 10 by 10 grid', () => {
     expect(gameboard.rows).toBe(10);
     expect(gameboard.columns).toBe(10);
@@ -20,6 +24,7 @@ test('placing a 1 long ship on the board returns a ship cell', () => {
     gameboard.placeShip(ship, 0, 0);
     gameboard.placeShip(ship, 0, 1);
     gameboard.placeShip(ship, 2, 0);
+
     expect(board[0][0].type).toBe('ship');
     expect(board[0][1].type).toBe('ship');
     expect(board[2][0].type).toBe('ship');
@@ -81,4 +86,11 @@ test('placing a long ship starting inside the board and passing it returns an er
     const verticalShip = new Ship(3, 'vertical');
     expect(() => gameboard.placeShip(horizontalShip, 1, 8)).toThrow(Error);
     expect(() => gameboard.placeShip(verticalShip, 8, 2)).toThrow(Error);
+});
+
+test('placing 2 ships at the same place returns an error', () => {
+    const ship1 = new Ship(1);
+    const ship2 = new Ship(1);
+    gameboard.placeShip(ship1, 0, 0);
+    expect(() => gameboard.placeShip(ship2, 0, 0)).toThrow(Error);
 });
