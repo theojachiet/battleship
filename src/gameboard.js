@@ -21,6 +21,9 @@ export class GameBoard {
         return this.board;
     }
 
+    placeShip(ship, row, col) {
+        this.board[row][col].type = 'ship';
+    }
 }
 
 export class Cell {
