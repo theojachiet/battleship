@@ -22,8 +22,14 @@ export class GameBoard {
     }
 
     placeShip(ship, row, col) {
-        for (let i = 0; i < ship.length; i++) {
-            this.board[row][col + i].type = 'ship';
+        if (ship.orientation === 'horizontal') {
+            for (let i = 0; i < ship.length; i++) {
+                this.board[row][col + i].type = 'ship';
+            }
+        } else {
+            for (let i = 0; i < ship.length; i++) {
+                this.board[row + i][col].type = 'ship';
+            }
         }
     }
 }

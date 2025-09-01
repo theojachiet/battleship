@@ -23,7 +23,7 @@ test('placing a 1 long ship on the board returns a ship cell', () => {
     expect(board[2][0].type).toBe('ship');
 });
 
-test('placing a 2 long ship returns as many ship cells, horizontally', () => {
+test('placing a 2 or 3 long ship returns as many ship cells, horizontally', () => {
     const ship = new Ship(2);
     const ship3 = new Ship(3);
     gameboard.placeShip(ship, 0, 0);
@@ -37,4 +37,31 @@ test('placing a 2 long ship returns as many ship cells, horizontally', () => {
     
     expect(board[2][4].type).toBe('ship');
     expect(board[2][5].type).toBe('ship');
+    expect(board[2][6].type).toBe('ship');
+});
+
+test('ship orientation returns the asssociated value', () => {
+    const horizontalShip1 = new Ship(1);
+    const horizontalShip2 = new Ship(1, 'horizontal');
+    const verticalShip = new Ship(1, 'vertical');
+    expect(horizontalShip1.orientation).toBe('horizontal');
+    expect(horizontalShip2.orientation).toBe('horizontal');
+    expect(verticalShip.orientation).toBe('vertical');
+})
+
+test('placing a 2 or 3 long ship returns as many ship cells, vertically', () => {
+    const ship = new Ship(2, 'vertical');
+    const ship3 = new Ship(3, 'vertical');
+    gameboard.placeShip(ship, 0, 0);
+    gameboard.placeShip(ship, 1, 1);
+    gameboard.placeShip(ship3, 2, 4);
+    expect(board[0][0].type).toBe('ship');
+    expect(board[1][0].type).toBe('ship');
+
+    expect(board[1][1].type).toBe('ship');
+    expect(board[2][1].type).toBe('ship');
+    
+    expect(board[2][4].type).toBe('ship');
+    expect(board[3][4].type).toBe('ship');
+    expect(board[4][4].type).toBe('ship');
 });
