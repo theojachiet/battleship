@@ -9,7 +9,7 @@ test('gameboard is a 10 by 10 grid', () => {
 
 test('testing the value of a cell returns either water, ship or damaged', () => {
     const board = gameboard.getBoard();
-    expect(board[0][0]).toBe('water' || 'ship' || 'damaged');
+    expect(board[0][0].type).toBe('water' || 'ship' || 'damaged');
 })
 
 //each cell can be 1: water 2: a ship 3: a damaged ship
