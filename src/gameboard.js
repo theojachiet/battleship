@@ -22,6 +22,8 @@ export class GameBoard {
     }
 
     placeShip(ship, row, col) {
+        if (row >= this.rows || row < 0 || col >= this.columns || col < 0) throw new Error('Ship out of the board');
+
         if (ship.orientation === 'horizontal') {
             for (let i = 0; i < ship.length; i++) {
                 this.board[row][col + i].type = 'ship';

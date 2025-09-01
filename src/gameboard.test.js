@@ -13,6 +13,8 @@ test('testing the value of a cell returns either water, ship or damaged', () => 
     expect(board[0][0].type).toBe('water' || 'ship' || 'damaged');
 });
 
+//PLACING SHIPS
+
 test('placing a 1 long ship on the board returns a ship cell', () => {
     const ship = new Ship(1);
     gameboard.placeShip(ship, 0, 0);
@@ -64,4 +66,19 @@ test('placing a 2 or 3 long ship returns as many ship cells, vertically', () => 
     expect(board[2][4].type).toBe('ship');
     expect(board[3][4].type).toBe('ship');
     expect(board[4][4].type).toBe('ship');
+});
+
+//PLACING SHIPS EDGE CASES
+
+test('placing a ship outside the board returns an error', () => {
+    const ship = new Ship(1);
+    expect(() => gameboard.placeShip(ship, 1, 10)).toThrow(Error);
+    expect(() => gameboard.placeShip(ship, -1, 0)).toThrow(Error);
+});
+
+test('placing a long ship starting inside the board and passing it returns an error', () => {
+    const horizontalShip = new Ship(3);
+    const verticalShip = new Ship(3, 'vertical');
+    expect(() => gameboard.placeShip(horizontalShip, 1, 8)).toThrow(Error);
+    expect(() => gameboard.placeShip(verticalShip, 8, 2)).toThrow(Error);
 });
