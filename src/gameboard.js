@@ -22,7 +22,9 @@ export class GameBoard {
     }
 
     placeShip(ship, row, col) {
-        this.board[row][col].type = 'ship';
+        for (let i = 0; i < ship.length; i++) {
+            this.board[row][col + i].type = 'ship';
+        }
     }
 }
 
