@@ -62,7 +62,11 @@ export class GameBoard {
 
     receiveAttack(row, col) {
         if (this.board[row][col].type === 'attacked') throw new Error('This cell has already been attacked');
-        this.board[row][col].type = 'attacked';
+        if (this.board[row][col].type === 'water') {
+            this.board[row][col].type = 'attacked';
+        } else if (this.board[row][col].type === 'ship') {
+            this.board[row][col].type = 'damagedShip';
+        }
     }
 }
 

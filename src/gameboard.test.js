@@ -117,5 +117,8 @@ test('prevent attack on already attacked cells', () => {
 });
 
 test('attacking a ship cell returns a damagedShip cell', () => {
-    
+    const ship = new Ship(2);
+    gameboard.placeShip(ship, 0, 0);
+    gameboard.receiveAttack(0, 1);
+    expect(board[0][1].type).toBe('damagedShip');
 })
