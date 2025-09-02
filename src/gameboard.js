@@ -59,6 +59,11 @@ export class GameBoard {
         }
         return true;
     }
+
+    receiveAttack(row, col) {
+        if (this.board[row][col].type === 'attacked') throw new Error('This cell has already been attacked');
+        this.board[row][col].type = 'attacked';
+    }
 }
 
 export class Cell {

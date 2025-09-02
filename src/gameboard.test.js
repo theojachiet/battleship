@@ -13,8 +13,8 @@ test('gameboard is a 10 by 10 grid', () => {
     expect(gameboard.columns).toBe(10);
 });
 
-test('testing the value of a cell returns either water, ship or damaged', () => {
-    expect(board[0][0].type).toBe('water' || 'ship' || 'damaged');
+test('testing the value of a cell returns either water, ship, damagedShip or attacked', () => {
+    expect(board[0][0].type).toBe('water' || 'ship' || 'damagedShip' || 'attacked');
 });
 
 //PLACING SHIPS
@@ -103,3 +103,19 @@ test('placing 2 big ships that have a common point returns an error for the seco
     expect(() => gameboard.placeShip(ship2, 0, 2)).toThrow(Error);
     expect(() => gameboard.placeShip(ship2, 3, 5)).not.toThrow(Error);
 });
+
+//ATTACK
+
+test('attacking a water cell returns an attacked cell', () => {
+    gameboard.receiveAttack(0, 0);
+    expect(board[0][0].type).toBe('attacked');
+});
+
+test('prevent attack on already attacked cells', () => {
+    gameboard.receiveAttack(0, 0);
+    expect(() => gameboard.receiveAttack(0, 0)).toThrow(Error);
+});
+
+test('attacking a ship cell returns a damagedShip cell', () => {
+    
+})
