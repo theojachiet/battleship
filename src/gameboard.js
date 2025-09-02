@@ -32,6 +32,8 @@ export class GameBoard {
     placeShip(ship, row, col) {
         if (row >= this.rows || row < 0 || col >= this.columns || col < 0) throw new Error('Ship out of the board');
 
+        if (!this.spotIsAvailable(ship, row, col)) throw new Error('Spot is not clear');
+
         if (ship.orientation === 'horizontal') {
             for (let i = 0; i < ship.length; i++) {
                 if (this.board[row][col + i].type === 'ship') throw new Error('A ship is already placed here');
@@ -43,6 +45,19 @@ export class GameBoard {
                 this.board[row + i][col].type = 'ship';
             }
         }
+    }
+
+    spotIsAvailable(ship, row, col) {
+        if (ship.orientation === 'horizontal') {
+            for (let i = 0; i < ship.length; i++) {
+                if (this.board[row][col + i].type !== 'water') return false;
+            }
+        } else {
+            for (let i = 0; i < ship.length; i++) {
+                if (this.board[row + i][col].type !== 'water') return false;
+            }
+        }
+        return true;
     }
 }
 
