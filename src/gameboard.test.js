@@ -191,10 +191,8 @@ test('gameboard reports if all the ships have been sunk', () => {
 
     gameboard.placeShip(ship1, 0, 0);
     gameboard.placeShip(ship2, 4, 5);
-    console.log(gameboard.ships);
 
     gameboard.receiveAttack(0, 0);
-    console.log(gameboard.ships);
     expect(gameboard.gameOver).toBe(false);
     gameboard.receiveAttack(4, 5);
 
