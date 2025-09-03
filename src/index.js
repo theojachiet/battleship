@@ -1,4 +1,7 @@
 import './reset.css';
-import { Ship } from './ship.js';
+import { Player } from './player.js';
+import { displayBoard } from './DOM.js';
 
-console.log('hello');
+const player = new Player('human');
+
+displayBoard(player);
