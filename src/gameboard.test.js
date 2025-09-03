@@ -130,7 +130,6 @@ test('attacking a damaged ship cell returns an error', () => {
     const ship = new Ship(2);
     gameboard.placeShip(ship, 0, 0);
     gameboard.receiveAttack(0, 1);
-    console.log(gameboard.attacks);
     
     expect(() => gameboard.receiveAttack(0, 1)).toThrow(Error);
 });
@@ -162,3 +161,23 @@ test('attacks are beeing recorded to an array', () => {
     gameboard.receiveAttack(2, 5);
     expect(gameboard.attacks).toEqual([[0, 0], [3, 3], [2, 5]]);
 });
+
+test('ship is sunk when hitted at every spot (horizontal)', () => {
+    const ship = new Ship(3);
+    gameboard.placeShip(ship, 0, 0);
+    gameboard.receiveAttack(0, 0);
+    gameboard.receiveAttack(0, 1);
+    expect(ship.isSunk()).toBe(false);
+    gameboard.receiveAttack(0, 2);
+    expect(ship.isSunk()).toBe(true);
+});
+
+test('ship is sunk when hitted at every spot (vertical)', () => {
+    const ship = new Ship(3, 'vertical');
+    gameboard.placeShip(ship, 0, 0);
+    gameboard.receiveAttack(0, 0);
+    gameboard.receiveAttack(1, 0);
+    expect(ship.isSunk()).toBe(false);
+    gameboard.receiveAttack(2, 0);
+    expect(ship.isSunk()).toBe(true);
+})
