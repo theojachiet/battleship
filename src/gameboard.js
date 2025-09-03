@@ -73,12 +73,16 @@ export class GameBoard {
         
         if (this.board[row][col].type.content === 'water') {
             this.board[row][col].type.hit();
+
             this.attacks.push([row, col]);
         } else if (this.board[row][col].type.content === 'ship') {
+
             //changing just the content of the cell but not the type of the entire object
             this.board[row][col].content = 'damagedShip';
             const indexOfShip = this.board[row][col].type.index;
             this.ships[indexOfShip].hit();
+
+            this.attacks.push([row, col]);
         }
     }
 

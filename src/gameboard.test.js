@@ -7,6 +7,7 @@ const board = gameboard.getBoard();
 beforeEach(() => {
     gameboard.clearBoard();
     gameboard.ships = [];
+    gameboard.attacks = [];
 })
 
 test('gameboard is a 10 by 10 grid', () => {
@@ -129,6 +130,7 @@ test('attacking a damaged ship cell returns an error', () => {
     const ship = new Ship(2);
     gameboard.placeShip(ship, 0, 0);
     gameboard.receiveAttack(0, 1);
+    console.log(gameboard.attacks);
     
     expect(() => gameboard.receiveAttack(0, 1)).toThrow(Error);
 });
@@ -150,4 +152,13 @@ test('attacking a ship sends an attack to the ship object', () => {
     expect(ship.numberOfHits).toBe(0);
     gameboard.receiveAttack(0, 1);
     expect(ship.numberOfHits).toBe(1);
+});
+
+test('attacks are beeing recorded to an array', () => {
+    const ship = new Ship(2);
+    gameboard.placeShip(ship, 0, 0);
+    gameboard.receiveAttack(0, 0);
+    gameboard.receiveAttack(3, 3);
+    gameboard.receiveAttack(2, 5);
+    expect(gameboard.attacks).toEqual([[0, 0], [3, 3], [2, 5]]);
 });
