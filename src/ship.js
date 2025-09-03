@@ -5,6 +5,8 @@ export class Ship {
         this.numberOfHits = 0;
         this.sunk = false;
         this.orientation = orientation;
+        this.content = 'ship';
+        this.index = 0;
     }
 
     hit() {

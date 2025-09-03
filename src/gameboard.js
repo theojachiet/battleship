@@ -3,6 +3,8 @@ export class GameBoard {
     constructor() {
         this.rows = 10;
         this.columns = 10;
+        this.ships = [];
+        this.attacks = [];
         this.board = this.makeBoard();
     }
 
@@ -11,7 +13,7 @@ export class GameBoard {
         for (let i = 0; i < this.rows; i++) {
             board[i] = [];
             for (let j = 0; j < this.columns; j++) {
-                board[i].push(new Cell('water'));
+                board[i].push(new Cell(new Water()));
             }
         }
         return board;
@@ -24,54 +26,87 @@ export class GameBoard {
     clearBoard() {
         for (let i = 0; i < this.rows; i++) {
             for (let j = 0; j < this.columns; j++) {
-                this.board[i][j].type = 'water';
+                this.board[i][j].type = new Water();
+                this.board[i][j].content = 'water';
             }
         }
     }
 
     placeShip(ship, row, col) {
+
         if (row >= this.rows || row < 0 || col >= this.columns || col < 0) throw new Error('Ship out of the board');
 
         if (!this.spotIsAvailable(ship, row, col)) throw new Error('Spot is not clear');
 
         if (ship.orientation === 'horizontal') {
             for (let i = 0; i < ship.length; i++) {
-                if (this.board[row][col + i].type === 'ship') throw new Error('A ship is already placed here');
-                this.board[row][col + i].type = 'ship';
+                if (this.board[row][col + i].type.content === 'ship') throw new Error('A ship is already placed here');
+                this.board[row][col + i].type = ship;
             }
         } else {
             for (let i = 0; i < ship.length; i++) {
-                if (this.board[row + i][col].type === 'ship') throw new Error('A ship is already placed here');
-                this.board[row + i][col].type = 'ship';
+                if (this.board[row + i][col].type.content === 'ship') throw new Error('A ship is already placed here');
+                this.board[row + i][col].type = ship;
             }
         }
+
+        this.ships.push(ship);
+        ship.index = this.ships.length - 1;
     }
 
     spotIsAvailable(ship, row, col) {
         if (ship.orientation === 'horizontal') {
             for (let i = 0; i < ship.length; i++) {
-                if (this.board[row][col + i].type !== 'water') return false;
+                if (this.board[row][col + i].type.content !== 'water') return false;
             }
         } else {
             for (let i = 0; i < ship.length; i++) {
-                if (this.board[row + i][col].type !== 'water') return false;
+                if (this.board[row + i][col].type.content !== 'water') return false;
             }
         }
         return true;
     }
 
     receiveAttack(row, col) {
-        if (this.board[row][col].type === 'attacked') throw new Error('This cell has already been attacked');
-        if (this.board[row][col].type === 'water') {
-            this.board[row][col].type = 'attacked';
-        } else if (this.board[row][col].type === 'ship') {
-            this.board[row][col].type = 'damagedShip';
+        if (this.board[row][col].type.content === 'attacked') throw new Error('This cell has already been attacked');
+        if (this.board[row][col].content === 'damagedShip') throw new Error('This cell has already been attacked');
+        
+        if (this.board[row][col].type.content === 'water') {
+            this.board[row][col].type.hit();
+            this.attacks.push([row, col]);
+        } else if (this.board[row][col].type.content === 'ship') {
+            //changing just the content of the cell but not the type of the entire object
+            this.board[row][col].content = 'damagedShip';
+            const indexOfShip = this.board[row][col].type.index;
+            this.ships[indexOfShip].hit();
         }
+    }
+
+    displayBoard() {
+        let boardString = '';
+        for(let i = 0; i < this.rows; i++) {
+            boardString += '\n';
+            for (let j = 0; j < this.columns; j++) {
+                boardString += ` [${this.board[i][j].content}] `;
+            }
+        }
+        return boardString;
     }
 }
 
 export class Cell {
     constructor(type) {
         this.type = type;
+        this.content = type.content;
+    }
+}
+
+export class Water {
+    constructor() {
+        this.content = 'water';
+    }
+
+    hit() {
+        this.content = 'attacked';
     }
 }
