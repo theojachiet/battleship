@@ -8,6 +8,7 @@ beforeEach(() => {
     gameboard.clearBoard();
     gameboard.ships = [];
     gameboard.attacks = [];
+    gameboard.gameOver = false;
 })
 
 test('gameboard is a 10 by 10 grid', () => {
@@ -180,4 +181,22 @@ test('ship is sunk when hitted at every spot (vertical)', () => {
     expect(ship.isSunk()).toBe(false);
     gameboard.receiveAttack(2, 0);
     expect(ship.isSunk()).toBe(true);
-})
+});
+
+//END OF GAME
+
+test('gameboard reports if all the ships have been sunk', () => {
+    const ship1 = new Ship(1);
+    const ship2 = new Ship(1);
+
+    gameboard.placeShip(ship1, 0, 0);
+    gameboard.placeShip(ship2, 4, 5);
+    console.log(gameboard.ships);
+
+    gameboard.receiveAttack(0, 0);
+    console.log(gameboard.ships);
+    expect(gameboard.gameOver).toBe(false);
+    gameboard.receiveAttack(4, 5);
+
+    expect(gameboard.gameOver).toBe(true);
+});

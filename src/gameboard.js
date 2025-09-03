@@ -6,6 +6,7 @@ export class GameBoard {
         this.ships = [];
         this.attacks = [];
         this.board = this.makeBoard();
+        this.gameOver = false;
     }
 
     makeBoard() {
@@ -84,6 +85,8 @@ export class GameBoard {
 
             this.attacks.push([row, col]);
         }
+
+        this.checkGameOver();
     }
 
     displayBoard() {
@@ -95,6 +98,14 @@ export class GameBoard {
             }
         }
         return boardString;
+    }
+
+    checkGameOver() {
+        for(let ship of this.ships) {
+            if (!ship.sunk) return false;
+        }
+        this.gameOver = true;
+        return true;
     }
 }
 
