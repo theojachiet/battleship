@@ -12,7 +12,12 @@ export function displayBoard(player) {
             cellButton.dataset.column = indexCol;
             cellButton.dataset.row = indexRow;
 
-            cellButton.textContent = player.gameboard.getBoard()[indexRow][indexCol].type.content;
+            const content = player.gameboard.getBoard()[indexRow][indexCol].type.content;
+            if (content === 'water') {
+                cellButton.classList.add('water');
+            } else if (content === 'ship') {
+                cellButton.classList.add('ship');
+            }
 
             board.appendChild(cellButton);
         })
