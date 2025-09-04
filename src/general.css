@@ -1,0 +1,30 @@
+body {
+    background-color: rgb(25, 25, 35);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h1 {
+    color: whitesmoke;
+    text-align: center;
+    margin: 40px;
+    font-size: 3em;
+}
+
+.container {
+    margin: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 250px;
+}
+
+.board {
+    display: grid;
+    grid-template-columns: repeat(10, 50px);
+    grid-template-rows: repeat(10, 50px);
+}
+
+button {
+    appearance: none;
+    border: none;
+}

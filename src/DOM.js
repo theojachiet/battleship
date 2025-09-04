@@ -1,6 +1,9 @@
-const playerBoard = document.querySelector('.player-board');
+const container = document.querySelector('.container');
 
 export function displayBoard(player) {
+    const board = document.createElement('div');
+    board.classList.add('board');
+
     player.gameboard.getBoard().forEach((row, indexRow) => {
         row.forEach((cell, indexCol) => {
             const cellButton = document.createElement('button');
@@ -11,7 +14,8 @@ export function displayBoard(player) {
 
             cellButton.textContent = player.gameboard.getBoard()[indexRow][indexCol].type.content;
 
-            playerBoard.appendChild(cellButton);
+            board.appendChild(cellButton);
         })
     })
+    container.appendChild(board);
 }
