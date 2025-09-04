@@ -5,14 +5,6 @@ import { Player } from './player.js';
 import { displayBoard } from './DOM.js';
 import { Ship } from './ship.js';
 
-const player = new Player('human');
-const computer = new Player('computer');
-
-placeShips(player);
-placeShips(computer);
-
-displayBoard(player);
-displayBoard(computer);
 
 function placeShips(player) {
     const ship1 = new Ship(1);
@@ -26,7 +18,7 @@ function placeShips(player) {
 
     const ship8 = new Ship(3);
     const ship9 = new Ship(3, 'vertical');
-    
+
     const ship10 = new Ship(4, 'vertical');
 
     player.gameboard.placeShip(ship1, 4, 0);
@@ -43,3 +35,37 @@ function placeShips(player) {
 
     player.gameboard.placeShip(ship10, 5, 5);
 }
+
+class GameFlow {
+
+    constructor(players) {
+        this.players = players;
+        this.currentPlayer = players[0];
+    }
+
+    addTurn() {
+        if (this.currentPlayer === players[0]) this.currentPlayer = players[1];
+        else this.currentPlayer = players[0];
+    }
+
+    playRound() {
+        //Check if player inputed a valid cell
+        //make the call to continue and print a new board
+    }
+}
+
+function screenController() {
+    const player = new Player('human');
+    const computer = new Player('computer');
+
+    const players = [player, computer];
+
+    placeShips(player);
+    placeShips(computer);
+
+    displayBoard(player);
+    displayBoard(computer);
+}
+
+screenController();
+
