@@ -27,4 +27,14 @@ h1 {
 button {
     appearance: none;
     border: none;
+    padding: 0;
+    background-color: black;
+}
+
+button.water {
+    background-color: aqua;
+}
+
+button.ship {
+    background-color: blue;
 }
