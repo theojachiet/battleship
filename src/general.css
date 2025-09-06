@@ -38,3 +38,11 @@ button.water {
 button.ship {
     background-color: blue;
 }
+
+button.attacked {
+    background-color: black;
+}
+
+button.damaged {
+    background-color: red;
+}
