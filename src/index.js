@@ -59,8 +59,7 @@ class GameFlow {
         //Check if player inputed a valid cell
         //make the call to continue and print a new board
         this.otherPlayer.gameboard.receiveAttack(row, col);
-        // updateBoard(this.otherPlayer.gameboard);
-        // this.addTurn();
+        this.addTurn();
     }
 }
 
@@ -71,7 +70,6 @@ function screenController() {
 
     const game = new GameFlow(players);
 
-
     placeShips(player);
     placeShips(computer);
 
@@ -81,8 +79,10 @@ function screenController() {
     const boards = document.querySelectorAll('.board');
     const playerBoard = boards[0];
     const computerBoard = boards[1];
-
     computerBoard.addEventListener('click', eventHandler);
+
+    let currentPlayerAttacked = computer;
+    let currentBoardAttacked = computerBoard;
 
     function eventHandler(e) {
         const selectedRow = e.target.dataset.row;
@@ -90,11 +90,28 @@ function screenController() {
 
         if (!selectedCol || !selectedRow) return;
 
+        //Play the round and update the board
         game.playRound(selectedRow, selectedCol);
+        // currentBoardAttacked.remove();
+        // displayBoard(currentPlayerAttacked);
+        updateBoard(currentPlayerAttacked, selectedRow, selectedCol)
 
-        computerBoard.remove();
-        displayBoard(computer);
-        //update screen()
+        // switchPlayer();
+    }
+
+    const switchPlayer = () => {
+        //switch event listeners to change the round
+        if (game.currentPlayer.type === 'computer') {
+            computerBoard.removeEventListener('click', eventHandler);
+            playerBoard.addEventListener('click', eventHandler);
+            currentPlayerAttacked = player;
+            currentBoardAttacked = playerBoard;
+        } else {
+            playerBoard.removeEventListener('click', eventHandler);
+            computerBoard.addEventListener('click', eventHandler);
+            currentPlayerAttacked = computer;
+            currentBoardAttacked = computerBoard;
+        }
     }
 }
 
