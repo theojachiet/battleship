@@ -81,22 +81,17 @@ function screenController() {
     const computerBoard = boards[1];
     computerBoard.addEventListener('click', eventHandler);
 
-    let currentPlayerAttacked = computer;
-    let currentBoardAttacked = computerBoard;
-
     function eventHandler(e) {
         const selectedRow = e.target.dataset.row;
         const selectedCol = e.target.dataset.column;
 
         if (!selectedCol || !selectedRow) return;
 
-        //Play the round and update the board
+        //Play the round and update the board (to the current player because it was changed in the playround function)
         game.playRound(selectedRow, selectedCol);
-        // currentBoardAttacked.remove();
-        // displayBoard(currentPlayerAttacked);
-        updateBoard(currentPlayerAttacked, selectedRow, selectedCol)
+        updateBoard(game.currentPlayer, selectedRow, selectedCol);
 
-        // switchPlayer();
+        switchPlayer();
     }
 
     const switchPlayer = () => {
@@ -104,13 +99,9 @@ function screenController() {
         if (game.currentPlayer.type === 'computer') {
             computerBoard.removeEventListener('click', eventHandler);
             playerBoard.addEventListener('click', eventHandler);
-            currentPlayerAttacked = player;
-            currentBoardAttacked = playerBoard;
         } else {
             playerBoard.removeEventListener('click', eventHandler);
             computerBoard.addEventListener('click', eventHandler);
-            currentPlayerAttacked = computer;
-            currentBoardAttacked = computerBoard;
         }
     }
 }

@@ -40,5 +40,4 @@ export function updateBoard(player, row, col) {
     let state = selectedCell.classList[1];
     if (state === 'water') selectedCell.className = 'cell attacked';
     else selectedCell.className = 'cell damaged';
-    console.log(selectedCell.classList);
 }
