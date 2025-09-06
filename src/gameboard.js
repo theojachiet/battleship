@@ -73,8 +73,8 @@ export class GameBoard {
         if (this.board[row][col].content === 'damagedShip') throw new Error('This cell has already been attacked');
         
         if (this.board[row][col].type.content === 'water') {
-            this.board[row][col].type.hit();
 
+            this.board[row][col].type.hit();
             this.attacks.push([row, col]);
         } else if (this.board[row][col].type.content === 'ship') {
 
@@ -85,7 +85,7 @@ export class GameBoard {
 
             this.attacks.push([row, col]);
         }
-
+        console.log('recevied attack');
         this.checkGameOver();
     }
 

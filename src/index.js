@@ -2,7 +2,7 @@ import './reset.css';
 import './general.css';
 
 import { Player } from './player.js';
-import { displayBoard } from './DOM.js';
+import { displayBoard, eventHandler } from './DOM.js';
 import { Ship } from './ship.js';
 
 
@@ -44,27 +44,48 @@ class GameFlow {
     }
 
     addTurn() {
-        if (this.currentPlayer === players[0]) this.currentPlayer = players[1];
-        else this.currentPlayer = players[0];
+        if (this.currentPlayer === this.players[0]) this.currentPlayer = this.players[1];
+        else this.currentPlayer = this.players[0];
     }
 
-    playRound() {
+    playRound(row, col) {
         //Check if player inputed a valid cell
         //make the call to continue and print a new board
+        this.currentPlayer.gameboard.receiveAttack(row, col);
+        this.addTurn();
     }
 }
 
 function screenController() {
     const player = new Player('human');
     const computer = new Player('computer');
-
     const players = [player, computer];
+
+    const game = new GameFlow(players);
+
 
     placeShips(player);
     placeShips(computer);
 
     displayBoard(player);
     displayBoard(computer);
+
+    const boards = document.querySelectorAll('.board');
+    const playerBoard = boards[0];
+    const computerBoard = boards[1];
+
+    computerBoard.addEventListener('click', eventHandler);
+
+    function eventHandler(e) {
+        const selectedRow = e.target.dataset.row;
+        const selectedCol = e.target.dataset.column;
+
+        if (!selectedCol || !selectedRow) return;
+
+        console.log(selectedCol + ' ' + selectedRow);
+        game.playRound(selectedRow, selectedCol);
+        //update screen()
+    }
 }
 
 screenController();

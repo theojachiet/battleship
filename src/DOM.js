@@ -24,15 +24,3 @@ export function displayBoard(player) {
     })
     container.appendChild(board);
 }
-
-export function eventHandler(e) {
-    const selectedRow = e.target.dataset.row;
-    const selectedCol = e.target.dataset.column;
-
-    if (!selectedCol || !selectedRow) return;
-
-    
-
-    //playround()
-    //update screen()
-}
