@@ -39,5 +39,5 @@ export function updateBoard(player, row, col) {
     const selectedCell = document.querySelector(`[data-column="${col}"][data-row="${row}"][data-owner="${player.type}"]`);
     let state = selectedCell.classList[1];
     if (state === 'water') selectedCell.className = 'cell attacked';
-    else selectedCell.className = 'cell damaged';
+    else if (state === 'ship') selectedCell.className = 'cell damaged';
 }

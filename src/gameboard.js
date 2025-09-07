@@ -69,9 +69,16 @@ export class GameBoard {
     }
 
     receiveAttack(row, col) {
-        if (this.board[row][col].type.content === 'attacked') throw new Error('This cell has already been attacked');
-        if (this.board[row][col].content === 'damagedShip') throw new Error('This cell has already been attacked');
-        
+
+        if (this.board[row][col].type.content === 'attacked') {
+            console.log('This cell has already been attacked');
+            return false;
+        }
+        if (this.board[row][col].content === 'damagedShip') {
+            console.log('This cell has already been attacked');
+            return false;
+        }
+
         if (this.board[row][col].type.content === 'water') {
 
             this.board[row][col].type.hit();
@@ -91,7 +98,7 @@ export class GameBoard {
 
     displayBoard() {
         let boardString = '';
-        for(let i = 0; i < this.rows; i++) {
+        for (let i = 0; i < this.rows; i++) {
             boardString += '\n';
             for (let j = 0; j < this.columns; j++) {
                 boardString += ` [${this.board[i][j].content}] `;
@@ -101,7 +108,7 @@ export class GameBoard {
     }
 
     checkGameOver() {
-        for(let ship of this.ships) {
+        for (let ship of this.ships) {
             if (!ship.sunk) return false;
         }
         this.gameOver = true;

@@ -116,7 +116,7 @@ test('attacking a water cell returns an attacked cell', () => {
 
 test('prevent attack on already attacked cells', () => {
     gameboard.receiveAttack(0, 0);
-    expect(() => gameboard.receiveAttack(0, 0)).toThrow(Error);
+    expect(gameboard.receiveAttack(0, 0)).toBe(false);
     expect(() => gameboard.receiveAttack(0, 1)).not.toThrow(Error);
 });
 
@@ -132,7 +132,7 @@ test('attacking a damaged ship cell returns an error', () => {
     gameboard.placeShip(ship, 0, 0);
     gameboard.receiveAttack(0, 1);
     
-    expect(() => gameboard.receiveAttack(0, 1)).toThrow(Error);
+    expect(gameboard.receiveAttack(0, 1)).toBe(false);
 });
 
 test('index of ship can be found on the board cells', () => {
@@ -182,6 +182,7 @@ test('ship is sunk when hitted at every spot (vertical)', () => {
     gameboard.receiveAttack(2, 0);
     expect(ship.isSunk()).toBe(true);
 });
+
 
 //END OF GAME
 
