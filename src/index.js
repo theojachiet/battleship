@@ -58,8 +58,12 @@ class GameFlow {
     playRound(row, col) {
         //Check if player inputed a valid cell
         //make the call to continue and print a new board
-        this.otherPlayer.gameboard.receiveAttack(row, col);
-        this.addTurn();
+        let attackisValid = this.otherPlayer.gameboard.receiveAttack(row, col);
+        if (attackisValid) {
+            this.addTurn();
+            return true;
+        } else return false;
+
     }
 }
 
@@ -88,10 +92,12 @@ function screenController() {
         if (!selectedCol || !selectedRow) return;
 
         //Play the round and update the board (to the current player because it was changed in the playround function)
-        game.playRound(selectedRow, selectedCol);
-        updateBoard(game.currentPlayer, selectedRow, selectedCol);
+        let roundisPlayed = game.playRound(selectedRow, selectedCol);
 
-        switchPlayer();
+        if (roundisPlayed) {
+            updateBoard(game.currentPlayer, selectedRow, selectedCol);
+            switchPlayer();
+        }
     }
 
     const switchPlayer = () => {

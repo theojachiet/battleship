@@ -94,6 +94,7 @@ export class GameBoard {
         }
         console.log('recevied attack');
         this.checkGameOver();
+        return true;
     }
 
     displayBoard() {
