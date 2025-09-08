@@ -3,6 +3,9 @@ import { GameBoard } from "./gameboard.js";
 const container = document.querySelector('.container');
 
 export function displayBoard(player) {
+    const boardContainer = document.createElement('div');
+    boardContainer.classList.add('board-container');
+
     const board = document.createElement('div');
     board.classList.add('board');
 
@@ -34,7 +37,15 @@ export function displayBoard(player) {
         })
     });
 
-    container.appendChild(board);
+    //Adding label
+    const label = document.createElement('p');
+    label.classList.add('label');
+    label.textContent = player.type;
+
+    //Appending to containers
+    boardContainer.appendChild(board);
+    boardContainer.appendChild(label);
+    container.appendChild(boardContainer);
 }
 
 export function updateBoard(player, row, col) {

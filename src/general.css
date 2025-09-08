@@ -18,6 +18,19 @@ h1 {
     gap: 250px;
 }
 
+.board-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap : 20px;
+}
+
+.label {
+    color: whitesmoke;
+    text-transform: capitalize;
+    font-size: 2rem;
+}
+
 .board {
     display: grid;
     grid-template-columns: repeat(10, 50px);
