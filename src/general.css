@@ -44,5 +44,9 @@ button.attacked {
 }
 
 button.damaged {
+    background-color: orange;
+}
+
+button.sunk {
     background-color: red;
 }

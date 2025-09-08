@@ -51,6 +51,7 @@ export class GameBoard {
             }
         }
 
+        ship.recordCoordinates(row, col);
         this.ships.push(ship);
         ship.index = this.ships.length - 1;
     }

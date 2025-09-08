@@ -7,6 +7,7 @@ export class Ship {
         this.orientation = orientation;
         this.content = 'ship';
         this.index = 0;
+        this.coordinates = [];
     }
 
     hit() {
@@ -17,5 +18,17 @@ export class Ship {
     isSunk() {
         if (this.numberOfHits >= this.length) return true;
         return false;
+    }
+
+    recordCoordinates(row, col) {
+        if (this.orientation === 'vertical') {
+            for (let i = 0; i < this.length; i++) {
+                this.coordinates.push([row + i, col]);
+            }
+        } else {
+            for (let i = 0; i < this.length; i++) {
+                this.coordinates.push([row, col + i]);
+            }
+        }
     }
 }
