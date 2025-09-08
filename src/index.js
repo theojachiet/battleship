@@ -40,26 +40,33 @@ class GameFlow {
 
     constructor(players) {
         this.players = players;
-        this.currentPlayer = players[0];
-        this.otherPlayer = players[1];
+
+        this.human = players[0];
+        this.computer = players[1];
+
+        this.currentPlayer = this.human;
+        this.otherPlayer = this.computer;
     }
 
     addTurn() {
-        if (this.currentPlayer === this.players[0]) {
-            this.currentPlayer = this.players[1];
-            this.otherPlayer = this.players[0];
+        if (this.currentPlayer === this.human) {
+            this.currentPlayer = this.computer;
+            this.otherPlayer = this.human;
         }
         else {
-            this.currentPlayer = this.players[0];
-            this.otherPlayer = this.players[1];
+            this.currentPlayer = this.human;
+            this.otherPlayer = this.computer;
         }
     }
 
     playRound(row, col) {
-        //Check if player inputed a valid cell
-        //make the call to continue and print a new board
         let attackisValid = this.otherPlayer.gameboard.receiveAttack(row, col);
+
         if (attackisValid) {
+            if (this.currentPlayer.gameboard.gameOver) {
+                alert(`Game Over ! ${this.otherPlayer.type} won !`);
+                return;
+            }
             this.addTurn();
             return true;
         } else return false;
@@ -96,21 +103,26 @@ function screenController() {
 
         if (roundisPlayed) {
             updateBoard(game.currentPlayer, selectedRow, selectedCol);
-            switchPlayer();
+            const computerAttackCoordinates = computerPlays();
+            updateBoard(game.currentPlayer, computerAttackCoordinates[0], computerAttackCoordinates[1]);
         }
     }
 
-    const switchPlayer = () => {
-        //switch event listeners to change the round
-        if (game.currentPlayer.type === 'computer') {
-            computerBoard.removeEventListener('click', eventHandler);
-            playerBoard.addEventListener('click', eventHandler);
-        } else {
-            playerBoard.removeEventListener('click', eventHandler);
-            computerBoard.addEventListener('click', eventHandler);
+    const computerPlays = () => {
+        let row = Math.floor(Math.random() * 10);
+        let col = Math.floor(Math.random() * 10);
+
+        let roundisPlayed = game.playRound(row, col);
+        console.log(row + ' ' + col)
+
+        while (!roundisPlayed) {
+            row = Math.floor(Math.random() * 10);
+            col = Math.floor(Math.random() * 10);
+            roundisPlayed = game.playRound(row, col);
         }
+
+        return [row, col];
     }
 }
 
 screenController();
-

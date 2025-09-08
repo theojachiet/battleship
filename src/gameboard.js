@@ -81,7 +81,6 @@ export class GameBoard {
         }
 
         if (this.board[row][col].type.content === 'water') {
-
             this.board[row][col].type.hit();
             this.attacks.push([row, col]);
         } else if (this.board[row][col].type.content === 'ship') {
@@ -111,7 +110,7 @@ export class GameBoard {
 
     checkGameOver() {
         for (let ship of this.ships) {
-            if (!ship.sunk) return false;
+            if (ship.sunk === false) return false;
         }
         this.gameOver = true;
         return true;
