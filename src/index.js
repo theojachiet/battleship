@@ -65,7 +65,6 @@ class GameFlow {
         if (attackisValid) {
             if (this.currentPlayer.gameboard.gameOver) {
                 alert(`Game Over ! ${this.otherPlayer.type} won !`);
-                return;
             }
             this.addTurn();
             return true;
@@ -103,6 +102,8 @@ function screenController() {
 
         if (roundisPlayed) {
             updateBoard(game.currentPlayer, selectedRow, selectedCol);
+
+            //Computer plays
             const computerAttackCoordinates = computerPlays();
             updateBoard(game.currentPlayer, computerAttackCoordinates[0], computerAttackCoordinates[1]);
         }
