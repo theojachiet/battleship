@@ -37,16 +37,16 @@ export class GameBoard {
 
         if (row >= this.rows || row < 0 || col >= this.columns || col < 0) throw new Error('Ship out of the board');
 
-        if (!this.spotIsAvailable(ship, row, col)) throw new Error('Spot is not clear');
+        if (!this.spotIsAvailable(ship, row, col)) return false;
 
         if (ship.orientation === 'horizontal') {
             for (let i = 0; i < ship.length; i++) {
-                if (this.board[row][col + i].type.content === 'ship') throw new Error('A ship is already placed here');
+                // if (this.board[row][col + i].type.content === 'ship') return false;
                 this.board[row][col + i].type = ship;
             }
         } else {
             for (let i = 0; i < ship.length; i++) {
-                if (this.board[row + i][col].type.content === 'ship') throw new Error('A ship is already placed here');
+                // if (this.board[row + i][col].type.content === 'ship') return false;
                 this.board[row + i][col].type = ship;
             }
         }
@@ -54,9 +54,12 @@ export class GameBoard {
         ship.recordCoordinates(row, col);
         this.ships.push(ship);
         ship.index = this.ships.length - 1;
+        return true;
     }
 
     spotIsAvailable(ship, row, col) {
+        console.log(row + ' ' + col)
+        console.log(this.board);
         if (ship.orientation === 'horizontal') {
             for (let i = 0; i < ship.length; i++) {
                 if (this.board[row][col + i].type.content !== 'water') return false;
@@ -92,7 +95,7 @@ export class GameBoard {
 
             this.attacks.push([row, col]);
         }
-        console.log('recevied attack');
+
         this.checkGameOver();
         return true;
     }

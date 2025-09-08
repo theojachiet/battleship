@@ -95,16 +95,16 @@ test('placing 2 simple ships at the same place returns an error', () => {
     const ship1 = new Ship(1);
     const ship2 = new Ship(1);
     gameboard.placeShip(ship1, 0, 0);
-    expect(() => gameboard.placeShip(ship2, 0, 0)).toThrow(Error);
+    expect(gameboard.placeShip(ship2, 0, 0)).toBe(false);
 });
 
 test('placing 2 big ships that have a common point returns an error for the second ship', () => {
     const ship1 = new Ship(3);
     const ship2 = new Ship(3, 'vertical');
     gameboard.placeShip(ship1, 0, 1);
-    expect(() => gameboard.placeShip(ship2, 1, 0)).not.toThrow(Error);
-    expect(() => gameboard.placeShip(ship2, 0, 2)).toThrow(Error);
-    expect(() => gameboard.placeShip(ship2, 3, 5)).not.toThrow(Error);
+    expect(gameboard.placeShip(ship2, 1, 0)).toBe(true);
+    expect(gameboard.placeShip(ship2, 0, 2)).toBe(false)
+    expect(gameboard.placeShip(ship2, 3, 5)).toBe(true);
 });
 
 //ATTACK

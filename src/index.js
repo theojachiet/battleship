@@ -6,34 +6,75 @@ import { displayBoard, updateBoard } from './DOM.js';
 import { Ship } from './ship.js';
 
 
-function placeShips(player) {
+// function placeShips(player) {
+//     const ship1 = new Ship(1);
+//     const ship2 = new Ship(1);
+//     const ship3 = new Ship(1);
+//     const ship4 = new Ship(1);
+
+//     const ship5 = new Ship(2);
+//     const ship6 = new Ship(2);
+//     const ship7 = new Ship(2, 'vertical');
+
+//     const ship8 = new Ship(3);
+//     const ship9 = new Ship(3, 'vertical');
+
+//     const ship10 = new Ship(4, 'vertical');
+
+//     player.gameboard.placeShip(ship1, 4, 0);
+//     player.gameboard.placeShip(ship2, 3, 3);
+//     player.gameboard.placeShip(ship3, 7, 1);
+//     player.gameboard.placeShip(ship4, 5, 8);
+
+//     player.gameboard.placeShip(ship5, 5, 2);
+//     player.gameboard.placeShip(ship6, 8, 8);
+//     player.gameboard.placeShip(ship7, 1, 5);
+
+//     player.gameboard.placeShip(ship8, 1, 1);
+//     player.gameboard.placeShip(ship9, 1, 9);
+
+//     player.gameboard.placeShip(ship10, 5, 5);
+// }
+
+function placeRandomShips(player) {
     const ship1 = new Ship(1);
     const ship2 = new Ship(1);
     const ship3 = new Ship(1);
     const ship4 = new Ship(1);
 
-    const ship5 = new Ship(2);
-    const ship6 = new Ship(2);
-    const ship7 = new Ship(2, 'vertical');
+    let ship5
+    randomOrientation() ? ship5 = new Ship(2) : ship5 = new Ship(2, 'vertical');
+    let ship6
+    randomOrientation() ? ship6 = new Ship(2) : ship6 = new Ship(2, 'vertical');
+    let ship7
+    randomOrientation() ? ship7 = new Ship(2) : ship7 = new Ship(2, 'vertical');
 
-    const ship8 = new Ship(3);
-    const ship9 = new Ship(3, 'vertical');
+    let ship8
+    randomOrientation() ? ship8 = new Ship(3) : ship8 = new Ship(3, 'vertical');
+    let ship9
+    randomOrientation() ? ship9 = new Ship(3) : ship9 = new Ship(3, 'vertical');
 
-    const ship10 = new Ship(4, 'vertical');
+    let ship10
+    randomOrientation() ? ship10 = new Ship(4) : ship10 = new Ship(4, 'vertical');
 
-    player.gameboard.placeShip(ship1, 4, 0);
-    player.gameboard.placeShip(ship2, 3, 3);
-    player.gameboard.placeShip(ship3, 7, 1);
-    player.gameboard.placeShip(ship4, 5, 8);
+    function randomOrientation() {
+        return Math.random() > 0.5;
+    }
 
-    player.gameboard.placeShip(ship5, 5, 2);
-    player.gameboard.placeShip(ship6, 8, 8);
-    player.gameboard.placeShip(ship7, 1, 5);
+    let ships = [ship1, ship2, ship3, ship4, ship5, ship6, ship7, ship8, ship9, ship10];
 
-    player.gameboard.placeShip(ship8, 1, 1);
-    player.gameboard.placeShip(ship9, 1, 9);
+    for (let ship of ships) {
+        let row = Math.floor(Math.random() * 10);
+        let col = Math.floor(Math.random() * 10);
 
-    player.gameboard.placeShip(ship10, 5, 5);
+        let shipIsPlaced = player.gameboard.placeShip(ship, row, col);
+
+        while (!shipIsPlaced) {
+            row = Math.floor(Math.random() * 10);
+            col = Math.floor(Math.random() * 10);
+            shipIsPlaced = player.gameboard.placeShip(ship, row, col);
+        }
+    }
 }
 
 class GameFlow {
@@ -80,8 +121,8 @@ function screenController() {
 
     const game = new GameFlow(players);
 
-    placeShips(player);
-    placeShips(computer);
+    placeRandomShips(player);
+    placeRandomShips(computer);
 
     displayBoard(player);
     displayBoard(computer);
@@ -114,7 +155,6 @@ function screenController() {
         let col = Math.floor(Math.random() * 10);
 
         let roundisPlayed = game.playRound(row, col);
-        console.log(row + ' ' + col)
 
         while (!roundisPlayed) {
             row = Math.floor(Math.random() * 10);
