@@ -58,13 +58,13 @@ export class GameBoard {
     }
 
     spotIsAvailable(ship, row, col) {
-        console.log(row + ' ' + col)
-        console.log(this.board);
         if (ship.orientation === 'horizontal') {
+            if (col + ship.length >= this.columns) return false;
             for (let i = 0; i < ship.length; i++) {
                 if (this.board[row][col + i].type.content !== 'water') return false;
             }
         } else {
+            if (row + ship.length >= this.rows) return false;
             for (let i = 0; i < ship.length; i++) {
                 if (this.board[row + i][col].type.content !== 'water') return false;
             }
