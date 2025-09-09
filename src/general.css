@@ -47,6 +47,7 @@ button {
     border: none;
     padding: 0;
     background-color: black;
+    outline: 1px solid whitesmoke;
 }
 
 /* BOTTOM BUTTONS */

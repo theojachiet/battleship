@@ -5,6 +5,8 @@ import { Player } from './player.js';
 import { displayBoard, updateBoard } from './DOM.js';
 import { Ship } from './ship.js';
 
+const container = document.querySelector('.container');
+
 function placeRandomShips(player) {
     const ship1 = new Ship(1);
     const ship2 = new Ship(1);
@@ -90,12 +92,6 @@ function screenController() {
 
     const game = new GameFlow(players);
 
-    placeRandomShips(player);
-    placeRandomShips(computer);
-
-    displayBoard(player);
-    displayBoard(computer);
-
     const randomizeAndRender = () => {
         player.gameboard.clearBoard();
         computer.gameboard.clearBoard();
@@ -103,15 +99,19 @@ function screenController() {
         placeRandomShips(player);
         placeRandomShips(computer);
 
+        container.textContent = '';
+
         displayBoard(player);
         displayBoard(computer);
+
+        const boards = document.querySelectorAll('.board');
+        const computerBoard = boards[1];
+        computerBoard.addEventListener('click', eventHandler);
     }
+    
+    randomizeAndRender();
 
-    const boards = document.querySelectorAll('.board');
-    const computerBoard = boards[1];
     const randomizeButton = document.querySelector('button.randomize');
-
-    computerBoard.addEventListener('click', eventHandler);
     randomizeButton.addEventListener('click', randomizeAndRender);
 
     function eventHandler(e) {
