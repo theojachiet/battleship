@@ -96,10 +96,23 @@ function screenController() {
     displayBoard(player);
     displayBoard(computer);
 
+    const randomizeAndRender = () => {
+        player.gameboard.clearBoard();
+        computer.gameboard.clearBoard();
+
+        placeRandomShips(player);
+        placeRandomShips(computer);
+
+        displayBoard(player);
+        displayBoard(computer);
+    }
+
     const boards = document.querySelectorAll('.board');
-    const playerBoard = boards[0];
     const computerBoard = boards[1];
+    const randomizeButton = document.querySelector('button.randomize');
+
     computerBoard.addEventListener('click', eventHandler);
+    randomizeButton.addEventListener('click', randomizeAndRender);
 
     function eventHandler(e) {
         const selectedRow = e.target.dataset.row;
@@ -130,7 +143,6 @@ function screenController() {
             col = Math.floor(Math.random() * 10);
             roundisPlayed = game.playRound(row, col);
         }
-
         return [row, col];
     }
 }
