@@ -5,37 +5,6 @@ import { Player } from './player.js';
 import { displayBoard, updateBoard } from './DOM.js';
 import { Ship } from './ship.js';
 
-
-// function placeShips(player) {
-//     const ship1 = new Ship(1);
-//     const ship2 = new Ship(1);
-//     const ship3 = new Ship(1);
-//     const ship4 = new Ship(1);
-
-//     const ship5 = new Ship(2);
-//     const ship6 = new Ship(2);
-//     const ship7 = new Ship(2, 'vertical');
-
-//     const ship8 = new Ship(3);
-//     const ship9 = new Ship(3, 'vertical');
-
-//     const ship10 = new Ship(4, 'vertical');
-
-//     player.gameboard.placeShip(ship1, 4, 0);
-//     player.gameboard.placeShip(ship2, 3, 3);
-//     player.gameboard.placeShip(ship3, 7, 1);
-//     player.gameboard.placeShip(ship4, 5, 8);
-
-//     player.gameboard.placeShip(ship5, 5, 2);
-//     player.gameboard.placeShip(ship6, 8, 8);
-//     player.gameboard.placeShip(ship7, 1, 5);
-
-//     player.gameboard.placeShip(ship8, 1, 1);
-//     player.gameboard.placeShip(ship9, 1, 9);
-
-//     player.gameboard.placeShip(ship10, 5, 5);
-// }
-
 function placeRandomShips(player) {
     const ship1 = new Ship(1);
     const ship2 = new Ship(1);
@@ -61,7 +30,7 @@ function placeRandomShips(player) {
         return Math.random() > 0.5;
     }
 
-    let ships = [ship1, ship2, ship3, ship4, ship5, ship6, ship7, ship8, ship9, ship10];
+    let ships = [ship10, ship9, ship8, ship7, ship6, ship5, ship4, ship3, ship2, ship1];
 
     for (let ship of ships) {
         let row = Math.floor(Math.random() * 10);

@@ -38,6 +38,7 @@ export class GameBoard {
         if (row >= this.rows || row < 0 || col >= this.columns || col < 0) throw new Error('Ship out of the board');
 
         if (!this.spotIsAvailable(ship, row, col)) return false;
+        if (!this.spotIsSeparatedFromOthers(ship, row, col)) return false;
 
         if (ship.orientation === 'horizontal') {
             for (let i = 0; i < ship.length; i++) {
@@ -67,6 +68,54 @@ export class GameBoard {
             if (row + ship.length >= this.rows) return false;
             for (let i = 0; i < ship.length; i++) {
                 if (this.board[row + i][col].type.content !== 'water') return false;
+            }
+        }
+        return true;
+    }
+
+    spotIsSeparatedFromOthers(ship, row, col) {
+        console.log(ship.orientation + ' ' + ship.length + ' ' + row + ' ' + col);
+        let top = -1;
+        let bottom = 1;
+        let left = -1;
+        let right = 1;
+
+        //Limiting the range of the search if the ship is on an edge
+        if (row === this.rows - 1) {
+            bottom = 0;
+        }
+        if (row === 0) {
+            top = 0;
+        }
+        if (col === this.columns - 1) {
+            right = 0;
+        }
+        if (col === 0) {
+            left = 0;
+        }
+
+        //Looping through every adjacent cell while avoiding the edges to not get an error
+        if (ship.orientation === 'horizontal') {
+            for (let i = col + left; i < col + ship.length + right; i++) {
+                if (top !== 0) {
+                    console.log((row + top) + ' : ' + (i));
+                    if (this.board[row + top][i].type.content !== 'water') return false;
+                }
+                if (bottom !== 0) {
+                    console.log((row + bottom) + ' : ' + (i));
+                    if (this.board[row + bottom][i].type.content !== 'water') return false;
+                }
+            }
+        } else {
+            for (let i = row + top; i < row + ship.length + bottom; i++) {
+                if (left !== 0) {
+                    console.log((i) + ' : ' + (col + left));
+                    if (this.board[i][col + left].type.content !== 'water') return false;
+                }
+                if (right !== 0) {
+                    console.log((i) + ' : ' + (col + right));
+                    if (this.board[i][col + right].type.content !== 'water') return false;
+                }
             }
         }
         return true;
