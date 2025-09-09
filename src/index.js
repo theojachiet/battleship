@@ -108,7 +108,7 @@ function screenController() {
         const computerBoard = boards[1];
         computerBoard.addEventListener('click', eventHandler);
     }
-    
+
     randomizeAndRender();
 
     const randomizeButton = document.querySelector('button.randomize');

@@ -1,83 +1,89 @@
 body {
-    background-color: rgb(25, 25, 35);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  background-color: rgb(25, 25, 35);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 h1 {
-    color: whitesmoke;
-    text-align: center;
-    margin: 40px;
-    font-size: 3em;
+  color: whitesmoke;
+  text-align: center;
+  margin: 40px;
+  font-size: 3em;
 }
 
 /* BOARDS  */
 
 .container {
-    margin: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 250px;
+  margin: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 250px;
 }
 
 .board-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap : 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
 }
 
 .label {
-    color: whitesmoke;
-    text-transform: capitalize;
-    font-size: 2rem;
+  color: whitesmoke;
+  text-transform: capitalize;
+  font-size: 2rem;
 }
 
 .board {
-    display: grid;
-    grid-template-columns: repeat(10, 50px);
-    grid-template-rows: repeat(10, 50px);
+  display: grid;
+  grid-template-columns: repeat(10, 50px);
+  grid-template-rows: repeat(10, 50px);
 }
 
 button {
-    appearance: none;
-    border: none;
-    padding: 0;
-    background-color: black;
-    outline: 1px solid whitesmoke;
+  appearance: none;
+  border: none;
+  padding: 0;
+  background-color: black;
+  outline: 1px solid whitesmoke;
 }
 
 /* BOTTOM BUTTONS */
 
+.bottom-container {
+    display: flex;
+    gap: 50px;
+}
+
 .randomize {
-    background-color: gray;
-    color: whitesmoke;
-    padding: 0.7em 1.5em;
-    font-size: 1.5em;
-    border-radius: 8px;
+  background-color: gray;
+  color: whitesmoke;
+  padding: 0.7em 1.5em;
+  font-size: 1.5em;
+  border-radius: 8px;
+  outline: none;
 }
 
 /* CELLS STATES */
 
 button.water {
-    background-color: aqua;
+  background-color: aqua;
 }
 
 button.ship {
-    background-color: blue;
+  background-color: blue;
 }
 
 button.attacked {
-    background-color: black;
+  background-color: black;
 }
 
 button.damaged {
-    background-color: orange;
+  background-color: orange;
 }
 
 button.sunk {
-    background-color: red;
+  background-color: red;
 }

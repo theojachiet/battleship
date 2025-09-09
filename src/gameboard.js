@@ -170,7 +170,8 @@ export class GameBoard {
 
     checkGameOver() {
         for (let ship of this.ships) {
-            if (ship.isSunk() === false) return false;
+            console.log(ship.isSunk());
+            if (!ship.isSunk()) return false;
         }
         this.gameOver = true;
         return true;
