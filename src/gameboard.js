@@ -106,6 +106,10 @@ export class GameBoard {
                     if (this.board[row + bottom][i].type.content !== 'water') return false;
                 }
             }
+
+            //Checking the direct left and right of the ship
+            if (left !== 0) if (this.board[row][col - 1].type.content !== 'water') return false;
+            if (right !== 0 && col + ship.length !== this.columns -1) if (this.board[row][col + ship.length + 1].type.content !== 'water') return false;
         } else {
             for (let i = row + top; i < row + ship.length + bottom; i++) {
                 if (left !== 0) {
@@ -117,6 +121,10 @@ export class GameBoard {
                     if (this.board[i][col + right].type.content !== 'water') return false;
                 }
             }
+
+            //Checking the direct top and bottom of the ship
+            if (top !== 0) if (this.board[row -1][col].type.content !== 'water') return false;
+            if (bottom !== 0 && row + ship.length !== this.rows -1) if (this.board[row + ship.length + 1][col].type.content !== 'water') return false;
         }
         return true;
     }

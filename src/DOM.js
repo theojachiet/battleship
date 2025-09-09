@@ -18,22 +18,27 @@ export function displayBoard(player) {
             cellButton.dataset.row = indexRow;
             cellButton.dataset.owner = player.type;
 
-            const content = player.gameboard.getBoard()[indexRow][indexCol].type.content;
-            let specialContent = player.gameboard.getBoard()[indexRow][indexCol].content;
-
-            if (content === 'water') {
+            if (player.type === 'computer') {
                 cellButton.classList.add('water');
-            } else if (content === 'ship') {
-                cellButton.classList.add('ship');
-            } else if (content === 'attacked') {
-                cellButton.classList.add('attacked');
-            }
-            
-            if (specialContent === 'damagedShip') {
-                cellButton.classList.add('damaged');
-            }
+                board.appendChild(cellButton);
+            } else {
+                const content = player.gameboard.getBoard()[indexRow][indexCol].type.content;
+                let specialContent = player.gameboard.getBoard()[indexRow][indexCol].content;
 
-            board.appendChild(cellButton);
+                if (content === 'water') {
+                    cellButton.classList.add('water');
+                } else if (content === 'ship') {
+                    cellButton.classList.add('ship');
+                } else if (content === 'attacked') {
+                    cellButton.classList.add('attacked');
+                }
+
+                if (specialContent === 'damagedShip') {
+                    cellButton.classList.add('damaged');
+                }
+
+                board.appendChild(cellButton);
+            }
         })
     });
 
@@ -50,9 +55,10 @@ export function displayBoard(player) {
 
 export function updateBoard(player, row, col) {
     const selectedCell = document.querySelector(`[data-column="${col}"][data-row="${row}"][data-owner="${player.type}"]`);
-    let state = selectedCell.classList[1];
+    let state = player.gameboard.board[row][col].type.content;
 
-    if (state === 'water') selectedCell.className = 'cell attacked';
+    console.log(state);
+    if (state === 'attacked') selectedCell.className = 'cell attacked';
     else if (state === 'ship') {
         selectedCell.className = 'cell damaged';
         //Find the ship object
