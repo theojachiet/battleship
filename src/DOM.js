@@ -18,6 +18,9 @@ export function displayBoard(player) {
             cellButton.dataset.row = indexRow;
             cellButton.dataset.owner = player.type;
 
+            //Making it draggabble
+            cellButton.setAttribute('draggable', 'true');
+
             if (player.type === 'computer') {
                 cellButton.classList.add('water');
                 board.appendChild(cellButton);
@@ -27,8 +30,10 @@ export function displayBoard(player) {
 
                 if (content === 'water') {
                     cellButton.classList.add('water');
+                    cellButton.dataset.type = 'water';
                 } else if (content === 'ship') {
                     cellButton.classList.add('ship');
+                    cellButton.dataset.type = 'ship';
                 } else if (content === 'attacked') {
                     cellButton.classList.add('attacked');
                 }
@@ -57,7 +62,6 @@ export function updateBoard(player, row, col) {
     const selectedCell = document.querySelector(`[data-column="${col}"][data-row="${row}"][data-owner="${player.type}"]`);
     let state = player.gameboard.board[row][col].type.content;
 
-    console.log(state);
     if (state === 'attacked') selectedCell.className = 'cell attacked';
     else if (state === 'ship') {
         selectedCell.className = 'cell damaged';
@@ -72,3 +76,7 @@ export function updateBoard(player, row, col) {
         }
     }
 }
+
+//Get the whole ship instead of the cell (handle in the dragstart ?)
+//Highlight the targeted cells in red or green depending on the validity of the target
+//Either placing the ship and redraw the board if it s a valid location or move it back to its original locaiton if the drop is invalid

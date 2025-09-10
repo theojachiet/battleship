@@ -74,7 +74,6 @@ export class GameBoard {
     }
 
     spotIsSeparatedFromOthers(ship, row, col) {
-        console.log(ship.orientation + ' ' + ship.length + ' ' + row + ' ' + col);
         let top = -1;
         let bottom = 1;
         let left = -1;
@@ -98,11 +97,9 @@ export class GameBoard {
         if (ship.orientation === 'horizontal') {
             for (let i = col + left; i < col + ship.length + right; i++) {
                 if (top !== 0) {
-                    console.log((row + top) + ' : ' + (i));
                     if (this.board[row + top][i].type.content !== 'water') return false;
                 }
                 if (bottom !== 0) {
-                    console.log((row + bottom) + ' : ' + (i));
                     if (this.board[row + bottom][i].type.content !== 'water') return false;
                 }
             }
@@ -113,11 +110,9 @@ export class GameBoard {
         } else {
             for (let i = row + top; i < row + ship.length + bottom; i++) {
                 if (left !== 0) {
-                    console.log((i) + ' : ' + (col + left));
                     if (this.board[i][col + left].type.content !== 'water') return false;
                 }
                 if (right !== 0) {
-                    console.log((i) + ' : ' + (col + right));
                     if (this.board[i][col + right].type.content !== 'water') return false;
                 }
             }
@@ -132,11 +127,9 @@ export class GameBoard {
     receiveAttack(row, col) {
 
         if (this.board[row][col].type.content === 'attacked') {
-            console.log('This cell has already been attacked');
             return false;
         }
         if (this.board[row][col].content === 'damagedShip') {
-            console.log('This cell has already been attacked');
             return false;
         }
 
@@ -157,6 +150,14 @@ export class GameBoard {
         return true;
     }
 
+    getShip(row, col) {
+        if (this.board[row][col].type.content !== 'ship') return false;
+        const indexOfShip = this.board[row][col].type.index;
+        const ship = this.ships[indexOfShip];
+        return ship;
+
+    }
+
     displayBoard() {
         let boardString = '';
         for (let i = 0; i < this.rows; i++) {
@@ -170,7 +171,6 @@ export class GameBoard {
 
     checkGameOver() {
         for (let ship of this.ships) {
-            console.log(ship.isSunk());
             if (!ship.isSunk()) return false;
         }
         this.gameOver = true;

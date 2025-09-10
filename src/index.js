@@ -111,8 +111,14 @@ function screenController() {
 
     randomizeAndRender();
 
+    const boards = document.querySelectorAll('.board');
+    const playerBoard = boards[0];
+    playerBoard.addEventListener('dragstart', dragStartHandler);
+
     const randomizeButton = document.querySelector('button.randomize');
     randomizeButton.addEventListener('click', randomizeAndRender);
+
+
 
     function eventHandler(e) {
         const selectedRow = e.target.dataset.row;
@@ -132,12 +138,36 @@ function screenController() {
         }
     }
 
+    function dragStartHandler(e) {
+        const selectedRow = e.target.dataset.row;
+        const selectedCol = e.target.dataset.column;
+        const type = e.target.dataset.type;
+
+        if (!selectedCol || !selectedRow) return;
+        if (type !== 'ship') return;
+
+        const ship = player.gameboard.getShip(selectedRow, selectedCol);
+        const shipCoordinates = ship.coordinates;
+
+        for (let cell of shipCoordinates) {
+            if (cell[0] === selectedRow && cell[1] === selectedCol) continue;
+
+            const targetedCell = document.querySelector(`[data-column="${cell[1]}"][data-row="${cell[2]}"][data-owner="player"]`);
+            // e.dataTransfer.addElement(targetedCell);
+        }
+
+        console.log(ship);
+        console.log(selectedCol + ' ' + selectedRow + ' ' + type);
+
+    }
+
     const computerPlays = () => {
         let row = Math.floor(Math.random() * 10);
         let col = Math.floor(Math.random() * 10);
 
         let roundisPlayed = game.playRound(row, col);
 
+        //plays until he enters a valid cell
         while (!roundisPlayed) {
             row = Math.floor(Math.random() * 10);
             col = Math.floor(Math.random() * 10);
