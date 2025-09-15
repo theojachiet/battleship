@@ -114,6 +114,7 @@ function screenController() {
     const boards = document.querySelectorAll('.board');
     const playerBoard = boards[0];
     playerBoard.addEventListener('dragstart', dragStartHandler);
+    playerBoard.addEventListener('drop', dropHandler);
 
     const randomizeButton = document.querySelector('button.randomize');
     randomizeButton.addEventListener('click', randomizeAndRender);
@@ -139,6 +140,7 @@ function screenController() {
     }
 
     function dragStartHandler(e) {
+
         const selectedRow = e.target.dataset.row;
         const selectedCol = e.target.dataset.column;
         const type = e.target.dataset.type;
@@ -148,17 +150,53 @@ function screenController() {
 
         const ship = player.gameboard.getShip(selectedRow, selectedCol);
         const shipCoordinates = ship.coordinates;
+        const shipIndex = ship.index;
+
+        const shipCells = [];
 
         for (let cell of shipCoordinates) {
-            if (cell[0] === selectedRow && cell[1] === selectedCol) continue;
-
-            const targetedCell = document.querySelector(`[data-column="${cell[1]}"][data-row="${cell[2]}"][data-owner="player"]`);
-            // e.dataTransfer.addElement(targetedCell);
+            const targetedCell = document.querySelector(`[data-column="${cell[1]}"][data-row="${cell[0]}"][data-owner="human"]`);
+            shipCells.push(targetedCell);
         }
 
-        console.log(ship);
-        console.log(selectedCol + ' ' + selectedRow + ' ' + type);
+        shipCells.map(c => ( {
+            row: parseInt(c.dataset.row, 10),
+            col: parseInt(c.dataset.column, 10)
+        }));
 
+        e.dataTransfer.setData("application/json", JSON.stringify({
+            shipIndex,
+            cells: shipCells
+        }));
+    }
+
+    function dropHandler(e) {
+        // e.preventDefault();
+        console.log('yo')
+
+
+        //Retrieving data
+        const data = JSON.parse(e.dataTransfer.getData("application/json"));
+        const shipId = data.shipIndex;
+        const oldCells = data.cells;
+        
+        //Getting frop Data
+        const dropCell = e.target.closest('.cell');
+        const targetRow = parseInt(dropCell.dataset.row, 10);
+        const targetCol = parseInt(dropCell.dataset.column, 10);
+
+        //Calculating offset
+        const drow = targetRow - oldCells[0].row;
+        const dcol = targetCol - oldCells[0].col;
+
+        //Getting new boat position
+        const newCells = oldCells.map(c => ({
+            row: c.row + drow,
+            col: c.col + dcol
+        }));
+
+        //Check if valid here
+        console.log(newCells);
     }
 
     const computerPlays = () => {
