@@ -77,6 +77,14 @@ export function updateBoard(player, row, col) {
     }
 }
 
+export function removeShip(player, ship) {
+        for (let cell of ship.coordinates) {
+            const oldShipCell = document.querySelector(`[data-column="${cell[1]}"][data-row="${cell[0]}"][data-owner="human"]`);
+            player.gameboard.board[cell[0]][cell[1]].type.content = 'water';
+            oldShipCell.className = 'water';
+        }
+}
+
 //Get the whole ship instead of the cell (handle in the dragstart ?)
 //Highlight the targeted cells in red or green depending on the validity of the target
 //Either placing the ship and redraw the board if it s a valid location or move it back to its original locaiton if the drop is invalid

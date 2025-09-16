@@ -2,7 +2,7 @@ import './reset.css';
 import './general.css';
 
 import { Player } from './player.js';
-import { displayBoard, updateBoard } from './DOM.js';
+import { displayBoard, removeShip, updateBoard } from './DOM.js';
 import { Ship } from './ship.js';
 
 const container = document.querySelector('.container');
@@ -203,6 +203,10 @@ function screenController() {
         }));
 
         //Check if valid here
+        //update old cells to water
+        removeShip(players[0], players[0].gameboard.ships[shipId]);
+        //update new cells to ship cells
+        //update playerboard ?
         console.log(newCells);
     }
 
