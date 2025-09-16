@@ -141,7 +141,6 @@ function screenController() {
     }
 
     function dragStartHandler(e) {
-
         const selectedRow = e.target.dataset.row;
         const selectedCol = e.target.dataset.column;
         const type = e.target.dataset.type;
@@ -180,7 +179,7 @@ function screenController() {
 
     function dropHandler(e) {
         e.preventDefault();
-        console.log(e.dataTransfer.getData('application/json'));
+        // console.log(e.dataTransfer.getData('application/json'));
 
         //Retrieving data
         const data = JSON.parse(e.dataTransfer.getData("application/json"));
@@ -205,10 +204,12 @@ function screenController() {
         //Check if valid here
         //update old cells to water
         removeShip(players[0], players[0].gameboard.ships[shipId]);
-        
+
         //Changing the ship coordinates
         players[0].gameboard.ships[shipId].coordinates = [];
-        players[0].gameboard.ships[shipId].coordinates.push([newCells[0].row, newCells[0].col]);
+        for (let cell of newCells) {
+            players[0].gameboard.ships[shipId].coordinates.push([cell.row, cell.col]);
+        }
 
         //update new cells to ship cells
         renderNewShip(players[0], players[0].gameboard.ships[shipId]);

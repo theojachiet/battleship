@@ -88,7 +88,6 @@ export function removeShip(player, ship) {
 export function renderNewShip(player, ship) {
     for (let cell of ship.coordinates) {
         const newShipCell = document.querySelector(`[data-column="${cell[1]}"][data-row="${cell[0]}"][data-owner="human"]`);
-        console.log(cell[0] + ' ' + cell[1]);
         player.gameboard.board[cell[0]][cell[1]].type.content = 'ship';
         newShipCell.className = 'ship';
     }
