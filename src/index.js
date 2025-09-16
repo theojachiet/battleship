@@ -114,6 +114,7 @@ function screenController() {
     const boards = document.querySelectorAll('.board');
     const playerBoard = boards[0];
     playerBoard.addEventListener('dragstart', dragStartHandler);
+    playerBoard.addEventListener('dragover', dragOverHandler);
     playerBoard.addEventListener('drop', dropHandler);
 
     const randomizeButton = document.querySelector('button.randomize');
@@ -152,14 +153,14 @@ function screenController() {
         const shipCoordinates = ship.coordinates;
         const shipIndex = ship.index;
 
-        const shipCells = [];
+        let shipCells = [];
 
         for (let cell of shipCoordinates) {
             const targetedCell = document.querySelector(`[data-column="${cell[1]}"][data-row="${cell[0]}"][data-owner="human"]`);
             shipCells.push(targetedCell);
         }
 
-        shipCells.map(c => ( {
+        shipCells = shipCells.map(c => ({
             row: parseInt(c.dataset.row, 10),
             col: parseInt(c.dataset.column, 10)
         }));
@@ -168,18 +169,24 @@ function screenController() {
             shipIndex,
             cells: shipCells
         }));
+
+        console.log(e.dataTransfer.getData('application/json'));
+
+    }
+
+    function dragOverHandler(e) {
+        e.preventDefault();
     }
 
     function dropHandler(e) {
-        // e.preventDefault();
-        console.log('yo')
-
+        e.preventDefault();
+        console.log(e.dataTransfer.getData('application/json'));
 
         //Retrieving data
         const data = JSON.parse(e.dataTransfer.getData("application/json"));
         const shipId = data.shipIndex;
         const oldCells = data.cells;
-        
+
         //Getting frop Data
         const dropCell = e.target.closest('.cell');
         const targetRow = parseInt(dropCell.dataset.row, 10);
