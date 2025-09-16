@@ -2,7 +2,7 @@ import './reset.css';
 import './general.css';
 
 import { Player } from './player.js';
-import { displayBoard, removeShip, updateBoard } from './DOM.js';
+import { displayBoard, removeShip, renderNewShip, updateBoard } from './DOM.js';
 import { Ship } from './ship.js';
 
 const container = document.querySelector('.container');
@@ -205,9 +205,14 @@ function screenController() {
         //Check if valid here
         //update old cells to water
         removeShip(players[0], players[0].gameboard.ships[shipId]);
+        
+        //Changing the ship coordinates
+        players[0].gameboard.ships[shipId].coordinates = [];
+        players[0].gameboard.ships[shipId].coordinates.push([newCells[0].row, newCells[0].col]);
+
         //update new cells to ship cells
+        renderNewShip(players[0], players[0].gameboard.ships[shipId]);
         //update playerboard ?
-        console.log(newCells);
     }
 
     const computerPlays = () => {
