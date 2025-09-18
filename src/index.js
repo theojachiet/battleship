@@ -154,9 +154,6 @@ function screenController() {
         const orientation = ship.orientation;
 
         //Getting the ship length and the position that the ship was selected
-        //I have to change the coordinates reassignment, the replaceSHip should not be touched
-
-        //Get the index of the target of the dragstaret in ship.coordinates[] and offset the position with the index
         let indexOfSelectedCell = 0;
         for (let i = 0; i < shipCoordinates.length; i++) {
             if (shipCoordinates[i][0] == selectedRow && shipCoordinates[i][1] == selectedCol) indexOfSelectedCell = i;
@@ -218,6 +215,7 @@ function screenController() {
         }));
 
         //Check if valid here
+        if (!checkIfShipIsInsideBoard(newCells)) return alert('cannot place a ship outside the board !'); 
         //update old cells to water
         removeShip(players[0], players[0].gameboard.ships[shipId]);
 
@@ -229,7 +227,13 @@ function screenController() {
 
         //update new cells to ship cells
         renderNewShip(players[0], players[0].gameboard.ships[shipId]);
-        //update playerboard ?
+    }
+
+    function checkIfShipIsInsideBoard(coordinates) {
+        for (let cell of coordinates) {
+            if (cell.row < 0 || cell.row > 9 || cell.col < 0 || cell.col > 9) return false;
+        }
+        return true;
     }
 
     const computerPlays = () => {
