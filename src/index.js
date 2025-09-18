@@ -188,6 +188,7 @@ function screenController() {
 
         //Getting frop Data
         const dropCell = e.target.closest('.cell');
+        console.log(dropCell);
         const targetRow = parseInt(dropCell.dataset.row, 10);
         const targetCol = parseInt(dropCell.dataset.column, 10);
 

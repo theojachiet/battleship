@@ -81,7 +81,9 @@ export function removeShip(player, ship) {
     for (let cell of ship.coordinates) {
         const oldShipCell = document.querySelector(`[data-column="${cell[1]}"][data-row="${cell[0]}"][data-owner="human"]`);
         player.gameboard.board[cell[0]][cell[1]].type.content = 'water';
-        oldShipCell.className = 'water';
+        oldShipCell.className = 'cell water';
+        oldShipCell.dataset.type = 'water';
+        player.gameboard.clearSpot(cell[0], cell[1]);
     }
 }
 
@@ -89,7 +91,9 @@ export function renderNewShip(player, ship) {
     for (let cell of ship.coordinates) {
         const newShipCell = document.querySelector(`[data-column="${cell[1]}"][data-row="${cell[0]}"][data-owner="human"]`);
         player.gameboard.board[cell[0]][cell[1]].type.content = 'ship';
-        newShipCell.className = 'ship';
+        newShipCell.className = 'cell ship';
+        newShipCell.dataset.type = 'ship';
+        player.gameboard.replaceShip(ship, cell[0], cell[1]);
     }
 }
 

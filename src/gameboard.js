@@ -33,6 +33,17 @@ export class GameBoard {
         }
     }
 
+    clearSpot(row, col) {
+        this.board[row][col].type = new Water();
+        this.board[row][col].content = 'water';
+    }
+
+    replaceShip(ship, row, col) {
+        ship.content = 'ship';
+        this.board[row][col].type = ship;
+        // ship.recordCoordinates(row, col);
+    }
+
     placeShip(ship, row, col) {
 
         if (row >= this.rows || row < 0 || col >= this.columns || col < 0) throw new Error('Ship out of the board');
@@ -153,9 +164,9 @@ export class GameBoard {
     getShip(row, col) {
         if (this.board[row][col].type.content !== 'ship') return false;
         const indexOfShip = this.board[row][col].type.index;
+        console.log(indexOfShip);
         const ship = this.ships[indexOfShip];
         return ship;
-
     }
 
     displayBoard() {
