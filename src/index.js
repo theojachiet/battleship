@@ -151,6 +151,16 @@ function screenController() {
         const ship = player.gameboard.getShip(selectedRow, selectedCol);
         const shipCoordinates = ship.coordinates;
         const shipIndex = ship.index;
+        const orientation = ship.orientation;
+
+        //Getting the ship length and the position that the ship was selected
+        //I have to change the coordinates reassignment, the replaceSHip should not be touched
+
+        //Get the index of the target of the dragstaret in ship.coordinates[] and offset the position with the index
+        let indexOfSelectedCell = 0;
+        for (let i = 0; i < shipCoordinates.length; i++) {
+            if (shipCoordinates[i][0] == selectedRow && shipCoordinates[i][1] == selectedCol) indexOfSelectedCell = i;
+        }
 
         let shipCells = [];
 
@@ -166,11 +176,10 @@ function screenController() {
 
         e.dataTransfer.setData("application/json", JSON.stringify({
             shipIndex,
+            indexOfSelectedCell,
+            orientation,
             cells: shipCells
         }));
-
-        console.log(e.dataTransfer.getData('application/json'));
-
     }
 
     function dragOverHandler(e) {
@@ -179,22 +188,28 @@ function screenController() {
 
     function dropHandler(e) {
         e.preventDefault();
-        // console.log(e.dataTransfer.getData('application/json'));
 
         //Retrieving data
         const data = JSON.parse(e.dataTransfer.getData("application/json"));
         const shipId = data.shipIndex;
         const oldCells = data.cells;
+        const indexOfSelectedCell = data.indexOfSelectedCell;
+        const orientation = data.orientation;
 
         //Getting frop Data
         const dropCell = e.target.closest('.cell');
-        console.log(dropCell);
         const targetRow = parseInt(dropCell.dataset.row, 10);
         const targetCol = parseInt(dropCell.dataset.column, 10);
 
         //Calculating offset
-        const drow = targetRow - oldCells[0].row;
-        const dcol = targetCol - oldCells[0].col;
+        let drow, dcol;
+        if (orientation === 'vertical') {
+            drow = targetRow - oldCells[0].row - indexOfSelectedCell;
+            dcol = targetCol - oldCells[0].col;
+        } else {
+            drow = targetRow - oldCells[0].row;
+            dcol = targetCol - oldCells[0].col - indexOfSelectedCell;
+        }
 
         //Getting new boat position
         const newCells = oldCells.map(c => ({

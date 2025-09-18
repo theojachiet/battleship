@@ -164,7 +164,6 @@ export class GameBoard {
     getShip(row, col) {
         if (this.board[row][col].type.content !== 'ship') return false;
         const indexOfShip = this.board[row][col].type.index;
-        console.log(indexOfShip);
         const ship = this.ships[indexOfShip];
         return ship;
     }
