@@ -58,14 +58,19 @@ button {
 }
 
 .randomize,
-.switch {
+.switch,
+.submit,
+.ready {
   padding: 0.7em 1.5em;
   font-size: 1.5em;
   border-radius: 8px;
   outline: none;
 }
 
-.randomize:hover, .switch:hover {
+.randomize:hover,
+.switch:hover,
+.submit:hover,
+.ready:hover {
   cursor: pointer;
 }
 
@@ -76,6 +81,16 @@ button {
 
 .switch {
   background-color: red;
+  color: whitesmoke;
+}
+
+.submit {
+  background-color: blue;
+  color: whitesmoke;
+}
+
+.ready {
+  background-color: gray;
   color: whitesmoke;
 }
 

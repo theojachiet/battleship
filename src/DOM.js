@@ -2,7 +2,7 @@ import { GameBoard } from "./gameboard.js";
 
 const container = document.querySelector('.container');
 
-export function displayBoard(player) {
+export function displayBoard(player, opponent = 'none') {
     const boardContainer = document.createElement('div');
     boardContainer.classList.add('board-container');
 
@@ -56,6 +56,15 @@ export function displayBoard(player) {
     //Appending to containers
     boardContainer.appendChild(board);
     boardContainer.appendChild(label);
+
+    if (opponent.type === 'human') {
+        //Adding ready Up button
+        const readyButton = document.createElement('button');
+        readyButton.classList.add('ready');
+        readyButton.textContent = 'Board Ready ?';
+        boardContainer.appendChild(readyButton);
+    }
+
     container.appendChild(boardContainer);
 }
 

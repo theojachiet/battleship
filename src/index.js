@@ -121,11 +121,15 @@ function screenController() {
             playerBoard.addEventListener('dragover', dragOverHandler);
             playerBoard.addEventListener('drop', dropHandler);
         } else {
-            displayBoard(player1);
+            displayBoard(player1, player2);
+
+            //Add Submit button in between the boards
             const submitButton = document.createElement('button');
             submitButton.textContent = 'Submit Move';
+            submitButton.classList.add('submit');
             container.appendChild(submitButton);
-            displayBoard(player2);
+
+            displayBoard(player2, player1);
             //Add ready button below each one
 
             const boards = document.querySelectorAll('.board');
