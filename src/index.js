@@ -90,7 +90,7 @@ function screenController() {
     const computer = new Player('computer');
     const players = [player, computer];
 
-    const game = new GameFlow(players);
+    const game = new GameFlow(players);    
 
     const randomizeAndRender = () => {
         player.gameboard.clearBoard();
@@ -106,16 +106,14 @@ function screenController() {
 
         const boards = document.querySelectorAll('.board');
         const computerBoard = boards[1];
+        const playerBoard = boards[0];
         computerBoard.addEventListener('click', eventHandler);
+        playerBoard.addEventListener('dragstart', dragStartHandler);
+        playerBoard.addEventListener('dragover', dragOverHandler);
+        playerBoard.addEventListener('drop', dropHandler);
     }
 
     randomizeAndRender();
-
-    const boards = document.querySelectorAll('.board');
-    const playerBoard = boards[0];
-    playerBoard.addEventListener('dragstart', dragStartHandler);
-    playerBoard.addEventListener('dragover', dragOverHandler);
-    playerBoard.addEventListener('drop', dropHandler);
 
     const randomizeButton = document.querySelector('button.randomize');
     randomizeButton.addEventListener('click', randomizeAndRender);
@@ -215,7 +213,7 @@ function screenController() {
         }));
 
         //Check if valid here
-        if (!checkIfShipIsInsideBoard(newCells)) return alert('cannot place a ship outside the board !'); 
+        if (!checkIfShipIsInsideBoard(newCells)) return alert('cannot place a ship outside the board !');
         //update old cells to water
         removeShip(players[0], players[0].gameboard.ships[shipId]);
 
