@@ -66,6 +66,7 @@ class GameFlow {
     changeOpponent() {
         if (this.playingAgainstHuman === false) this.otherPlayer = this.opponent;
         else this.otherPlayer = this.computer;
+        this.playingAgainstHuman = !this.playingAgainstHuman;
     }
 
     addTurn() {
@@ -98,29 +99,48 @@ function screenController() {
 
     const game = new GameFlow(players);
 
-    const randomizeAndRender = () => {
-        player.gameboard.clearBoard();
-        computer.gameboard.clearBoard();
+    function randomizeAndRender(player1, player2) {
+        player1.gameboard.clearBoard();
+        player2.gameboard.clearBoard();
 
-        placeRandomShips(player);
-        placeRandomShips(computer);
+        placeRandomShips(player1);
+        placeRandomShips(player2);
 
         container.textContent = '';
 
-        displayBoard(player);
-        displayBoard(computer);
+        if (player2.type === 'computer') {
+            displayBoard(player1);
+            displayBoard(player2);
 
-        const boards = document.querySelectorAll('.board');
-        const computerBoard = boards[1];
-        const playerBoard = boards[0];
+            const boards = document.querySelectorAll('.board');
+            const computerBoard = boards[1];
+            const playerBoard = boards[0];
 
-        computerBoard.addEventListener('click', eventHandler);
-        playerBoard.addEventListener('dragstart', dragStartHandler);
-        playerBoard.addEventListener('dragover', dragOverHandler);
-        playerBoard.addEventListener('drop', dropHandler);
+            computerBoard.addEventListener('click', eventHandler);
+            playerBoard.addEventListener('dragstart', dragStartHandler);
+            playerBoard.addEventListener('dragover', dragOverHandler);
+            playerBoard.addEventListener('drop', dropHandler);
+        } else {
+            displayBoard(player1);
+            const submitButton = document.createElement('button');
+            submitButton.textContent = 'Submit Move';
+            container.appendChild(submitButton);
+            displayBoard(player2);
+            //Add ready button below each one
+
+            const boards = document.querySelectorAll('.board');
+            const opponentBoard = boards[1];
+            const playerBoard = boards[0];
+
+            //Allow player1 to modify his board and make it ready
+            playerBoard.addEventListener('dragstart', dragStartHandler);
+            playerBoard.addEventListener('dragover', dragOverHandler);
+            playerBoard.addEventListener('drop', dropHandler);
+            //ready button add event listener click to readye
+        }
     }
 
-    randomizeAndRender();
+    randomizeAndRender(players[0], players[1]);
 
     const boards = document.querySelectorAll('.board');
     const computerBoard = boards[1];
@@ -276,6 +296,8 @@ function screenController() {
     function switchOpponent() {
         if (switchButton.textContent === 'Switch to Human Opponent') switchButton.textContent = 'Switch to Computer Opponent';
         else switchButton.textContent = 'Switch to Human Opponent';
+        game.changeOpponent();
+        randomizeAndRender(game.currentPlayer, game.otherPlayer);
     }
 }
 
