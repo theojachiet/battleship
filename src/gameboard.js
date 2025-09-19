@@ -85,53 +85,40 @@ export class GameBoard {
     }
 
     spotIsSeparatedFromOthers(ship, row, col) {
-        let top = -1;
-        let bottom = 1;
-        let left = -1;
-        let right = 1;
+        let length = ship.length;
+        let orientation = ship.orientation;
 
-        //Limiting the range of the search if the ship is on an edge
-        if (row === this.rows - 1) {
-            bottom = 0;
-        }
-        if (row === 0) {
-            top = 0;
-        }
-        if (col === this.columns - 1) {
-            right = 0;
-        }
-        if (col === 0) {
-            left = 0;
-        }
+        // Calculate ship's bounding box
+        let rowStart = row;
+        let rowEnd = row;
+        let colStart = col;
+        let colEnd = col;
 
-        //Looping through every adjacent cell while avoiding the edges to not get an error
-        if (ship.orientation === 'horizontal') {
-            for (let i = col + left; i < col + ship.length + right; i++) {
-                if (top !== 0) {
-                    if (this.board[row + top][i].type.content !== 'water') return false;
-                }
-                if (bottom !== 0) {
-                    if (this.board[row + bottom][i].type.content !== 'water') return false;
-                }
-            }
-
-            //Checking the direct left and right of the ship
-            if (left !== 0) if (this.board[row][col - 1].type.content !== 'water') return false;
-            if (right !== 0 && col + ship.length !== this.columns -1) if (this.board[row][col + ship.length + 1].type.content !== 'water') return false;
+        if (orientation === 'horizontal') {
+            colEnd = col + length - 1;
         } else {
-            for (let i = row + top; i < row + ship.length + bottom; i++) {
-                if (left !== 0) {
-                    if (this.board[i][col + left].type.content !== 'water') return false;
-                }
-                if (right !== 0) {
-                    if (this.board[i][col + right].type.content !== 'water') return false;
+            rowEnd = row + length - 1;
+        }
+
+        // Expand the bounding box by 1 in all directions
+        let minRow = Math.max(0, rowStart - 1);
+        let maxRow = Math.min(this.rows - 1, rowEnd + 1);
+        let minCol = Math.max(0, colStart - 1);
+        let maxCol = Math.min(this.columns - 1, colEnd + 1);
+
+        // Check the bounding box for non-water
+        for (let r = minRow; r <= maxRow; r++) {
+            for (let c = minCol; c <= maxCol; c++) {
+                // Skip the ship's own cells (optional if they're not placed yet)
+                if (orientation === 'horizontal' && r === row && c >= col && c <= colEnd) continue;
+                if (orientation === 'vertical' && c === col && r >= row && r <= rowEnd) continue;
+
+                if (this.board[r][c].type.content !== 'water') {
+                    return false;
                 }
             }
-
-            //Checking the direct top and bottom of the ship
-            if (top !== 0) if (this.board[row -1][col].type.content !== 'water') return false;
-            if (bottom !== 0 && row + ship.length !== this.rows -1) if (this.board[row + ship.length + 1][col].type.content !== 'water') return false;
         }
+
         return true;
     }
 

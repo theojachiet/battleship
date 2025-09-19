@@ -221,8 +221,6 @@ function screenController() {
         removeShip(players[0], players[0].gameboard.ships[shipId]);
 
         //Check if the ship is separated from others
-        console.log(newCells)
-        console.log(ship);
         if (!players[0].gameboard.spotIsSeparatedFromOthers(ship, newCells[0].row, newCells[0].col)) {
             return renderNewShip(players[0], ship);
         }
