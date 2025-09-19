@@ -122,14 +122,15 @@ function screenController() {
 
     const randomizeButton = document.querySelector('button.randomize');
     randomizeButton.addEventListener('click', randomizeAndRender);
-
-
+    const switchButton = document.querySelector('button.switch');
+    switchButton.addEventListener('click', switchOpponent);
 
     function eventHandler(e) {
         const selectedRow = e.target.dataset.row;
         const selectedCol = e.target.dataset.column;
 
         if (!selectedCol || !selectedRow) return;
+
         //remove the drag an drop ability
         playerBoard.removeEventListener('dragstart',dragStartHandler);
         playerBoard.removeEventListener('dragover', dragOverHandler);
@@ -264,6 +265,11 @@ function screenController() {
             roundisPlayed = game.playRound(row, col);
         }
         return [row, col];
+    }
+
+    function switchOpponent() {
+        if (switchButton.textContent === 'Switch to Human Opponent') switchButton.textContent = 'Switch to Computer Opponent';
+        else switchButton.textContent = 'Switch to Human Opponent';
     }
 }
 

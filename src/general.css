@@ -53,17 +53,30 @@ button {
 /* BOTTOM BUTTONS */
 
 .bottom-container {
-    display: flex;
-    gap: 50px;
+  display: flex;
+  gap: 50px;
+}
+
+.randomize,
+.switch {
+  padding: 0.7em 1.5em;
+  font-size: 1.5em;
+  border-radius: 8px;
+  outline: none;
+}
+
+.randomize:hover, .switch:hover {
+  cursor: pointer;
 }
 
 .randomize {
   background-color: gray;
   color: whitesmoke;
-  padding: 0.7em 1.5em;
-  font-size: 1.5em;
-  border-radius: 8px;
-  outline: none;
+}
+
+.switch {
+  background-color: red;
+  color: whitesmoke;
 }
 
 /* CELLS STATES */
