@@ -90,7 +90,7 @@ function screenController() {
     const computer = new Player('computer');
     const players = [player, computer];
 
-    const game = new GameFlow(players);    
+    const game = new GameFlow(players);
 
     const randomizeAndRender = () => {
         player.gameboard.clearBoard();
@@ -173,7 +173,8 @@ function screenController() {
             shipIndex,
             indexOfSelectedCell,
             orientation,
-            cells: shipCells
+            cells: shipCells,
+            ship
         }));
     }
 
@@ -190,6 +191,7 @@ function screenController() {
         const oldCells = data.cells;
         const indexOfSelectedCell = data.indexOfSelectedCell;
         const orientation = data.orientation;
+        const ship = data.ship;
 
         //Getting frop Data
         const dropCell = e.target.closest('.cell');
@@ -212,10 +214,18 @@ function screenController() {
             col: c.col + dcol
         }));
 
-        //Check if valid here
+        //Check if inside the board
         if (!checkIfShipIsInsideBoard(newCells)) return alert('cannot place a ship outside the board !');
+
         //update old cells to water
         removeShip(players[0], players[0].gameboard.ships[shipId]);
+
+        //Check if the ship is separated from others
+        console.log(newCells)
+        console.log(ship);
+        if (!players[0].gameboard.spotIsSeparatedFromOthers(ship, newCells[0].row, newCells[0].col)) {
+            return renderNewShip(players[0], ship);
+        }
 
         //Changing the ship coordinates
         players[0].gameboard.ships[shipId].coordinates = [];
