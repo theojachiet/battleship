@@ -55,21 +55,26 @@ class GameFlow {
 
         this.human = players[0];
         this.computer = players[1];
+        this.opponent = players[2];
 
         this.currentPlayer = this.human;
         this.otherPlayer = this.computer;
+
+        this.playingAgainstHuman = false;
+    }
+
+    changeOpponent() {
+        if (this.playingAgainstHuman === false) this.otherPlayer = this.opponent;
+        else this.otherPlayer = this.computer;
     }
 
     addTurn() {
-        if (this.currentPlayer === this.human) {
-            this.currentPlayer = this.computer;
-            this.otherPlayer = this.human;
-        }
-        else {
-            this.currentPlayer = this.human;
-            this.otherPlayer = this.computer;
-        }
+        const secondPlayer = this.playingAgainstHuman ? this.opponent : this.computer;
+
+        this.otherPlayer = this.currentPlayer;
+        this.currentPlayer = (this.currentPlayer === this.human) ? secondPlayer : this.human;
     }
+
 
     playRound(row, col) {
         let attackisValid = this.otherPlayer.gameboard.receiveAttack(row, col);
@@ -88,7 +93,8 @@ class GameFlow {
 function screenController() {
     const player = new Player('human');
     const computer = new Player('computer');
-    const players = [player, computer];
+    const opponent = new Player('human');
+    const players = [player, computer, opponent];
 
     const game = new GameFlow(players);
 
@@ -132,7 +138,7 @@ function screenController() {
         if (!selectedCol || !selectedRow) return;
 
         //remove the drag an drop ability
-        playerBoard.removeEventListener('dragstart',dragStartHandler);
+        playerBoard.removeEventListener('dragstart', dragStartHandler);
         playerBoard.removeEventListener('dragover', dragOverHandler);
         playerBoard.removeEventListener('drop', dropHandler);
 
@@ -274,3 +280,10 @@ function screenController() {
 }
 
 screenController();
+
+//Switch opponent:
+//Switch event listeners between boards
+//Make a finish round button with a switch round screen
+//Prevent the computer from playing
+//Allow both players to drag and drop ships
+//Make a confirm ship positions button for both players before starting the game
