@@ -107,6 +107,7 @@ function screenController() {
         const boards = document.querySelectorAll('.board');
         const computerBoard = boards[1];
         const playerBoard = boards[0];
+
         computerBoard.addEventListener('click', eventHandler);
         playerBoard.addEventListener('dragstart', dragStartHandler);
         playerBoard.addEventListener('dragover', dragOverHandler);
@@ -114,6 +115,10 @@ function screenController() {
     }
 
     randomizeAndRender();
+
+    const boards = document.querySelectorAll('.board');
+    const computerBoard = boards[1];
+    const playerBoard = boards[0];
 
     const randomizeButton = document.querySelector('button.randomize');
     randomizeButton.addEventListener('click', randomizeAndRender);
@@ -125,6 +130,10 @@ function screenController() {
         const selectedCol = e.target.dataset.column;
 
         if (!selectedCol || !selectedRow) return;
+        //remove the drag an drop ability
+        playerBoard.removeEventListener('dragstart',dragStartHandler);
+        playerBoard.removeEventListener('dragover', dragOverHandler);
+        playerBoard.removeEventListener('drop', dropHandler);
 
         //Play the round and update the board (to the current player because it was changed in the playround function)
         let roundisPlayed = game.playRound(selectedRow, selectedCol);

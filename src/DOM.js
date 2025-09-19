@@ -99,7 +99,3 @@ export function renderNewShip(player, ship) {
         player.gameboard.replaceShip(ship, cell[0], cell[1]);
     }
 }
-
-//Get the whole ship instead of the cell (handle in the dragstart ?)
-//Highlight the targeted cells in red or green depending on the validity of the target
-//Either placing the ship and redraw the board if it s a valid location or move it back to its original locaiton if the drop is invalid
