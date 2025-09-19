@@ -31,6 +31,7 @@ export function displayBoard(player) {
                 if (content === 'water') {
                     cellButton.classList.add('water');
                     cellButton.dataset.type = 'water';
+                    cellButton.setAttribute('draggable', 'false');
                 } else if (content === 'ship') {
                     cellButton.classList.add('ship');
                     cellButton.dataset.type = 'ship';
@@ -83,6 +84,7 @@ export function removeShip(player, ship) {
         player.gameboard.board[cell[0]][cell[1]].type.content = 'water';
         oldShipCell.className = 'cell water';
         oldShipCell.dataset.type = 'water';
+        oldShipCell.setAttribute('draggable', 'false');
         player.gameboard.clearSpot(cell[0], cell[1]);
     }
 }
@@ -93,6 +95,7 @@ export function renderNewShip(player, ship) {
         player.gameboard.board[cell[0]][cell[1]].type.content = 'ship';
         newShipCell.className = 'cell ship';
         newShipCell.dataset.type = 'ship';
+        newShipCell.setAttribute('draggable', 'true');
         player.gameboard.replaceShip(ship, cell[0], cell[1]);
     }
 }

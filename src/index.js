@@ -144,7 +144,7 @@ function screenController() {
         const type = e.target.dataset.type;
 
         if (!selectedCol || !selectedRow) return;
-        if (type !== 'ship') return;
+        if (type !== 'ship') return alert('you cannnot move water');
 
         const ship = player.gameboard.getShip(selectedRow, selectedCol);
         const shipCoordinates = ship.coordinates;
