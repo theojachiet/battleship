@@ -64,6 +64,7 @@ class GameFlow {
     }
 
     changeOpponent() {
+        //POtential problem !! If we switch opponent after a few rounds and it changes the wrong players because it is using other player var
         if (this.playingAgainstHuman === false) this.otherPlayer = this.opponent;
         else this.otherPlayer = this.computer;
         this.playingAgainstHuman = !this.playingAgainstHuman;
@@ -74,8 +75,11 @@ class GameFlow {
 
         this.otherPlayer = this.currentPlayer;
         this.currentPlayer = (this.currentPlayer === this.human) ? secondPlayer : this.human;
+        
+        //Switching turn to display the correct board;
+        this.currentPlayer.isMyTurn = !this.currentPlayer.isMyTurn;
+        this.otherPlayer.isMyTurn = !this.otherPlayer.isMyTurn;
     }
-
 
     playRound(row, col) {
         let attackisValid = this.otherPlayer.gameboard.receiveAttack(row, col);
@@ -92,14 +96,16 @@ class GameFlow {
 }
 
 function screenController() {
-    const player = new Player('human');
-    const computer = new Player('computer');
-    const opponent = new Player('human');
+    const player = new Player('human', true);
+    const computer = new Player('computer', false);
+    const opponent = new Player('human', false);
     const players = [player, computer, opponent];
 
     const game = new GameFlow(players);
 
-    function randomizeAndRender(player1, player2) {
+    function randomizeAndRender(player1 = game.currentPlayer, player2 = game.otherPlayer) {
+        console.log(player1)
+        console.log(player2)
         player1.gameboard.clearBoard();
         player2.gameboard.clearBoard();
 
