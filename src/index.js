@@ -316,11 +316,18 @@ function screenController() {
     function board1ReadyHandler(e) {
         e.target.style.backgroundColor = 'green';
         game.addTurn();
+        //Hide player board
+        //Display an alert or something for the other player to click before displaying his board
+        //Display the other players board
     }
 
     function board2ReadyHandler(e) {
         e.target.style.backgroundColor = 'green';
         game.addTurn();
+        //Start the game:
+        //Hide second player board
+        //make a between rounds screen for the first players to click ready (same as when you click submit move)
+        //When it is clicked, show first player board (repeat for all the rounds)
     }
 }
 
