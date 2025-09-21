@@ -104,8 +104,6 @@ function screenController() {
     const game = new GameFlow(players);
 
     function randomizeAndRender(player1 = game.currentPlayer, player2 = game.otherPlayer) {
-        console.log(player1)
-        console.log(player2)
         player1.gameboard.clearBoard();
         player2.gameboard.clearBoard();
 

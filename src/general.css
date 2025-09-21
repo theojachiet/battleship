@@ -20,7 +20,7 @@ h1 {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 250px;
+  gap: 50px;
 }
 
 .board-container {
