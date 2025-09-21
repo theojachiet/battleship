@@ -21,7 +21,7 @@ export function displayBoard(player, opponent = 'none') {
             //Making it draggabble
             cellButton.setAttribute('draggable', 'true');
 
-            if (player.type === 'computer' || player.isMyTurn === false) {
+            if (player.type === 'computer' || player.ismyTurn === false) {
                 cellButton.classList.add('water');
                 board.appendChild(cellButton);
             } else {
