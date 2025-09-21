@@ -134,7 +134,6 @@ function screenController() {
             container.appendChild(submitButton);
 
             displayBoard(player2, player1);
-            //Add ready button below each one
 
             const boards = document.querySelectorAll('.board');
             const opponentBoard = boards[1];
@@ -144,7 +143,13 @@ function screenController() {
             playerBoard.addEventListener('dragstart', dragStartHandler);
             playerBoard.addEventListener('dragover', dragOverHandler);
             playerBoard.addEventListener('drop', dropHandler);
+            
             //ready button add event listener click to readye
+            const readyPlayers = document.querySelectorAll('button.ready');
+            const readyPlayer1Button = readyPlayers[0];
+            const readyPlayer2Button = readyPlayers[1];
+            readyPlayer1Button.addEventListener('click', board1ReadyHandler);
+            readyPlayer2Button.addEventListener('click', board2ReadyHandler);
         }
     }
 
@@ -155,7 +160,7 @@ function screenController() {
     const playerBoard = boards[0];
 
     const randomizeButton = document.querySelector('button.randomize');
-    randomizeButton.addEventListener('click', randomizeAndRender);
+    randomizeButton.addEventListener('click', () => randomizeAndRender());
     const switchButton = document.querySelector('button.switch');
     switchButton.addEventListener('click', switchOpponent);
 
@@ -306,6 +311,16 @@ function screenController() {
         else switchButton.textContent = 'Switch to Human Opponent';
         game.changeOpponent();
         randomizeAndRender(game.currentPlayer, game.otherPlayer);
+    }
+
+    function board1ReadyHandler(e) {
+        e.target.style.backgroundColor = 'green';
+        game.addTurn();
+    }
+
+    function board2ReadyHandler(e) {
+        e.target.style.backgroundColor = 'green';
+        game.addTurn();
     }
 }
 
