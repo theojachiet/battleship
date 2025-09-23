@@ -6,6 +6,8 @@ import { displayBoard, removeShip, renderNewShip, updateBoard } from './DOM.js';
 import { Ship } from './ship.js';
 
 const container = document.querySelector('.container');
+const dialog = document.querySelector('dialog');
+const playButton = document.querySelector('.submit')
 
 function placeRandomShips(player) {
     const ship1 = new Ship(1);
@@ -316,6 +318,7 @@ function screenController() {
     function board1ReadyHandler(e) {
         e.target.style.backgroundColor = 'green';
         game.addTurn();
+        dialog.showModal();
         //Hide player board
         //Display an alert or something for the other player to click before displaying his board
         //Display the other players board
