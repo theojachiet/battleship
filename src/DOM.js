@@ -51,7 +51,7 @@ export function displayBoard(player, opponent = 'none') {
     //Adding label
     const label = document.createElement('p');
     label.classList.add('label');
-    label.textContent = player.type;
+    label.textContent = player.name;
 
     //Appending to containers
     boardContainer.appendChild(board);

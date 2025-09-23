@@ -2,7 +2,7 @@ import './reset.css';
 import './general.css';
 
 import { Player } from './player.js';
-import { displayBoard, removeShip, renderNewShip, updateBoard } from './DOM.js';
+import { displayBoard, hideBoard, removeShip, renderNewShip, updateBoard } from './DOM.js';
 import { Ship } from './ship.js';
 
 const container = document.querySelector('.container');
@@ -75,13 +75,11 @@ class GameFlow {
     addTurn() {
         const secondPlayer = this.playingAgainstHuman ? this.opponent : this.computer;
 
-        this.otherPlayer = this.currentPlayer;
+        const prevPlayer = this.currentPlayer;
         this.currentPlayer = (this.currentPlayer === this.human) ? secondPlayer : this.human;
-        
-        //Switching turn to display the correct board;
-        this.currentPlayer.isMyTurn = !this.currentPlayer.isMyTurn;
-        this.otherPlayer.isMyTurn = !this.otherPlayer.isMyTurn;
+        this.otherPlayer = prevPlayer;
     }
+
 
     playRound(row, col) {
         let attackisValid = this.otherPlayer.gameboard.receiveAttack(row, col);
@@ -98,9 +96,9 @@ class GameFlow {
 }
 
 function screenController() {
-    const player = new Player('human', true);
-    const computer = new Player('computer', false);
-    const opponent = new Player('human', false);
+    const player = new Player('human', true, 'theo');
+    const computer = new Player('computer', false, 'computer');
+    const opponent = new Player('human', false, 'cyrielle');
     const players = [player, computer, opponent];
 
     const game = new GameFlow(players);
@@ -145,7 +143,7 @@ function screenController() {
             playerBoard.addEventListener('dragstart', dragStartHandler);
             playerBoard.addEventListener('dragover', dragOverHandler);
             playerBoard.addEventListener('drop', dropHandler);
-            
+
             //ready button add event listener click to readye
             const readyPlayers = document.querySelectorAll('button.ready');
             const readyPlayer1Button = readyPlayers[0];
@@ -153,6 +151,23 @@ function screenController() {
             readyPlayer1Button.addEventListener('click', board1ReadyHandler);
             readyPlayer2Button.addEventListener('click', board2ReadyHandler);
         }
+            console.log(game.currentPlayer);
+    }
+
+    function renderNextRound() {
+        container.textContent = '';
+
+        console.log(game.currentPlayer);
+
+        displayBoard(players[0], players[2]);
+
+        //Add Submit button in between the boards
+        const submitButton = document.createElement('button');
+        submitButton.textContent = 'Submit Move';
+        submitButton.classList.add('submit');
+        container.appendChild(submitButton);
+
+        displayBoard(players[2], players[0]);
     }
 
     randomizeAndRender(players[0], players[1]);
@@ -317,11 +332,15 @@ function screenController() {
 
     function board1ReadyHandler(e) {
         e.target.style.backgroundColor = 'green';
+        console.log(game.currentPlayer);
         game.addTurn();
+
         dialog.showModal();
-        //Hide player board
-        //Display an alert or something for the other player to click before displaying his board
-        //Display the other players board
+        dialog.addEventListener('submit', (e) => {
+            e.preventDefault();
+            renderNextRound();
+            dialog.close();
+        });
     }
 
     function board2ReadyHandler(e) {
