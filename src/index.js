@@ -78,6 +78,9 @@ class GameFlow {
         const prevPlayer = this.currentPlayer;
         this.currentPlayer = (this.currentPlayer === this.human) ? secondPlayer : this.human;
         this.otherPlayer = prevPlayer;
+
+        this.currentPlayer.changeTurn();
+        this.otherPlayer.changeTurn();
     }
 
 
@@ -332,7 +335,6 @@ function screenController() {
 
     function board1ReadyHandler(e) {
         e.target.style.backgroundColor = 'green';
-        console.log(game.currentPlayer);
         game.addTurn();
 
         dialog.showModal();
