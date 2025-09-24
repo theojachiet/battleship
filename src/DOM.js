@@ -62,6 +62,12 @@ export function displayBoard(player, opponent = 'none') {
         const readyButton = document.createElement('button');
         readyButton.classList.add('ready');
         readyButton.textContent = 'Board Ready ?';
+
+        if(player.ready) {
+             readyButton.classList.add('green');
+             readyButton.textContent = 'Board Ready !';
+        }
+
         boardContainer.appendChild(readyButton);
     }
 

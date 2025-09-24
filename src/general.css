@@ -94,6 +94,10 @@ button {
   color: whitesmoke;
 }
 
+.green {
+  background-color: green;
+}
+
 /* CELLS STATES */
 
 button.water {

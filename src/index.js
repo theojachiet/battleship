@@ -334,7 +334,7 @@ function screenController() {
     }
 
     function board1ReadyHandler(e) {
-        e.target.style.backgroundColor = 'green';
+        players[0].ready = true;
         game.addTurn();
 
         dialog.showModal();
