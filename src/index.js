@@ -139,7 +139,6 @@ function screenController() {
             displayBoard(player2, player1);
 
             const boards = document.querySelectorAll('.board');
-            const opponentBoard = boards[1];
             const playerBoard = boards[0];
 
             //Allow player1 to modify his board and make it ready
@@ -147,20 +146,15 @@ function screenController() {
             playerBoard.addEventListener('dragover', dragOverHandler);
             playerBoard.addEventListener('drop', dropHandler);
 
-            //ready button add event listener click to readye
+            //ready button add event listener click to ready
             const readyPlayers = document.querySelectorAll('button.ready');
             const readyPlayer1Button = readyPlayers[0];
-            const readyPlayer2Button = readyPlayers[1];
             readyPlayer1Button.addEventListener('click', board1ReadyHandler);
-            readyPlayer2Button.addEventListener('click', board2ReadyHandler);
         }
-            console.log(game.currentPlayer);
     }
 
     function renderNextRound() {
         container.textContent = '';
-
-        console.log(game.currentPlayer);
 
         displayBoard(players[0], players[2]);
 
@@ -208,6 +202,9 @@ function screenController() {
     }
 
     function dragStartHandler(e) {
+
+        console.log(e.target);
+
         const selectedRow = e.target.dataset.row;
         const selectedCol = e.target.dataset.column;
         const type = e.target.dataset.type;
@@ -215,7 +212,7 @@ function screenController() {
         if (!selectedCol || !selectedRow) return;
         if (type !== 'ship') return alert('you cannnot move water');
 
-        const ship = player.gameboard.getShip(selectedRow, selectedCol);
+        const ship = game.currentPlayer.gameboard.getShip(selectedRow, selectedCol);
         const shipCoordinates = ship.coordinates;
         const shipIndex = ship.index;
         const orientation = ship.orientation;
@@ -245,13 +242,14 @@ function screenController() {
             cells: shipCells,
             ship
         }));
+
     }
 
     function dragOverHandler(e) {
         e.preventDefault();
     }
 
-    function dropHandler(e) {
+    function dropHandler(e, currentPlayer = player) {
         e.preventDefault();
 
         //Retrieving data
@@ -287,21 +285,21 @@ function screenController() {
         if (!checkIfShipIsInsideBoard(newCells)) return alert('cannot place a ship outside the board !');
 
         //update old cells to water
-        removeShip(players[0], players[0].gameboard.ships[shipId]);
+        removeShip(currentPlayer, currentPlayer.gameboard.ships[shipId]);
 
         //Check if the ship is separated from others
-        if (!players[0].gameboard.spotIsSeparatedFromOthers(ship, newCells[0].row, newCells[0].col)) {
-            return renderNewShip(players[0], ship);
+        if (!currentPlayer.gameboard.spotIsSeparatedFromOthers(ship, newCells[0].row, newCells[0].col)) {
+            return renderNewShip(currentPlayer, ship);
         }
 
         //Changing the ship coordinates
-        players[0].gameboard.ships[shipId].coordinates = [];
+        currentPlayer.gameboard.ships[shipId].coordinates = [];
         for (let cell of newCells) {
-            players[0].gameboard.ships[shipId].coordinates.push([cell.row, cell.col]);
+            currentPlayer.gameboard.ships[shipId].coordinates.push([cell.row, cell.col]);
         }
 
         //update new cells to ship cells
-        renderNewShip(players[0], players[0].gameboard.ships[shipId]);
+        renderNewShip(currentPlayer, currentPlayer.gameboard.ships[shipId]);
     }
 
     function checkIfShipIsInsideBoard(coordinates) {
@@ -333,7 +331,7 @@ function screenController() {
         randomizeAndRender(game.currentPlayer, game.otherPlayer);
     }
 
-    function board1ReadyHandler(e) {
+    function board1ReadyHandler() {
         players[0].ready = true;
         game.addTurn();
 
@@ -342,12 +340,36 @@ function screenController() {
             e.preventDefault();
             renderNextRound();
             dialog.close();
+
+            //Set up listeners for the next player
+            const readyPlayers = document.querySelectorAll('button.ready');
+            const readyPlayer2Button = readyPlayers[1];
+            readyPlayer2Button.addEventListener('click', board2ReadyHandler);
+
+            const boards = document.querySelectorAll('.board');
+            const opponentBoard = boards[1];
+
+            opponentBoard.addEventListener('click', () => { console.log('click') });
+            opponentBoard.addEventListener('dragstart', () => {
+                dragStartHandler(e, opponent);
+            });
+            opponentBoard.addEventListener('dragover', dragOverHandler);
+            opponentBoard.addEventListener('drop', () => {
+                console.log('dragend');
+                dropHandler(e, opponent);
+            });
         });
     }
 
     function board2ReadyHandler(e) {
-        e.target.style.backgroundColor = 'green';
         game.addTurn();
+
+        dialog.showModal();
+        dialog.addEventListener('submit', (e) => {
+            e.preventDefault();
+            renderNextRound();
+            dialog.close();
+        });
         //Start the game:
         //Hide second player board
         //make a between rounds screen for the first players to click ready (same as when you click submit move)
