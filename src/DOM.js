@@ -17,6 +17,7 @@ export function displayBoard(player, opponent = 'none') {
             cellButton.dataset.column = indexCol;
             cellButton.dataset.row = indexRow;
             cellButton.dataset.owner = player.type;
+            cellButton.dataset.name = player.name;
 
             //Making it draggabble
             cellButton.setAttribute('draggable', 'true');
@@ -95,7 +96,9 @@ export function updateBoard(player, row, col) {
 
 export function removeShip(player, ship) {
     for (let cell of ship.coordinates) {
-        const oldShipCell = document.querySelector(`[data-column="${cell[1]}"][data-row="${cell[0]}"][data-owner="human"]`);
+        const cells = document.querySelector(`[data-column="${cell[1]}"][data-row="${cell[0]}"]`);
+        console.log(cells);
+        const oldShipCell = document.querySelector(`[data-column="${cell[1]}"][data-row="${cell[0]}"][data-name="${player.name}"]`);
         player.gameboard.board[cell[0]][cell[1]].type.content = 'water';
         oldShipCell.className = 'cell water';
         oldShipCell.dataset.type = 'water';
@@ -106,7 +109,7 @@ export function removeShip(player, ship) {
 
 export function renderNewShip(player, ship) {
     for (let cell of ship.coordinates) {
-        const newShipCell = document.querySelector(`[data-column="${cell[1]}"][data-row="${cell[0]}"][data-owner="human"]`);
+        const newShipCell = document.querySelector(`[data-column="${cell[1]}"][data-row="${cell[0]}"][data-name="${player.name}"]`);
         player.gameboard.board[cell[0]][cell[1]].type.content = 'ship';
         newShipCell.className = 'cell ship';
         newShipCell.dataset.type = 'ship';

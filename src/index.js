@@ -203,8 +203,6 @@ function screenController() {
 
     function dragStartHandler(e) {
 
-        console.log(e.target);
-
         const selectedRow = e.target.dataset.row;
         const selectedCol = e.target.dataset.column;
         const type = e.target.dataset.type;
@@ -242,14 +240,13 @@ function screenController() {
             cells: shipCells,
             ship
         }));
-
     }
 
     function dragOverHandler(e) {
         e.preventDefault();
     }
 
-    function dropHandler(e, currentPlayer = player) {
+    function dropHandler(e) {
         e.preventDefault();
 
         //Retrieving data
@@ -259,6 +256,7 @@ function screenController() {
         const indexOfSelectedCell = data.indexOfSelectedCell;
         const orientation = data.orientation;
         const ship = data.ship;
+        const currentPlayer = game.currentPlayer;
 
         //Getting frop Data
         const dropCell = e.target.closest('.cell');
@@ -349,15 +347,9 @@ function screenController() {
             const boards = document.querySelectorAll('.board');
             const opponentBoard = boards[1];
 
-            opponentBoard.addEventListener('click', () => { console.log('click') });
-            opponentBoard.addEventListener('dragstart', () => {
-                dragStartHandler(e, opponent);
-            });
+            opponentBoard.addEventListener('dragstart', dragStartHandler)
             opponentBoard.addEventListener('dragover', dragOverHandler);
-            opponentBoard.addEventListener('drop', () => {
-                console.log('dragend');
-                dropHandler(e, opponent);
-            });
+            opponentBoard.addEventListener('drop', dropHandler);
         });
     }
 
