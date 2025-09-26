@@ -165,6 +165,19 @@ function screenController() {
         container.appendChild(submitButton);
 
         displayBoard(players[2], players[0]);
+
+        if (players[0].ready === true && players[2].ready === true) {
+
+            const boards = document.querySelectorAll('.board');
+            const opponentBoard = boards[1];
+            const playerBoard = boards[0];
+
+            if (players[0].ismyTurn) {
+                opponentBoard.addEventListener('click', eventHandler);
+            } else {
+                playerBoard.addEventListener('click', eventHandler);
+            }
+        }
     }
 
     randomizeAndRender(players[0], players[1]);
@@ -354,6 +367,7 @@ function screenController() {
     }
 
     function board2ReadyHandler(e) {
+        players[2].ready = true;
         game.addTurn();
 
         dialog.showModal();
