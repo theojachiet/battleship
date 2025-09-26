@@ -76,7 +76,7 @@ export function displayBoard(player, opponent = 'none') {
 }
 
 export function updateBoard(player, row, col) {
-    const selectedCell = document.querySelector(`[data-column="${col}"][data-row="${row}"][data-owner="${player.type}"]`);
+    const selectedCell = document.querySelector(`[data-column="${col}"][data-row="${row}"][data-name="${player.name}"]`);
     let state = player.gameboard.board[row][col].type.content;
 
     if (state === 'attacked') selectedCell.className = 'cell attacked';
@@ -87,7 +87,7 @@ export function updateBoard(player, row, col) {
         if (ship.isSunk()) {
             //Show that all the ship is sunk by changing the color
             for (let part of ship.coordinates) {
-                const shipCell = document.querySelector(`[data-column="${part[1]}"][data-row="${part[0]}"][data-owner="${player.type}"]`);
+                const shipCell = document.querySelector(`[data-column="${part[1]}"][data-row="${part[0]}"][data-name="${player.name}"]`);
                 shipCell.classList.add('sunk');
             }
         }

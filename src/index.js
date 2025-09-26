@@ -178,6 +178,9 @@ function screenController() {
                 playerBoard.addEventListener('click', eventHandler);
             }
         }
+
+        //Functionnality for the submit button
+        submitButton.addEventListener('click', submitMove);
     }
 
     randomizeAndRender(players[0], players[1]);
@@ -206,11 +209,20 @@ function screenController() {
         let roundisPlayed = game.playRound(selectedRow, selectedCol);
 
         if (roundisPlayed) {
+            console.log(game.currentPlayer);
             updateBoard(game.currentPlayer, selectedRow, selectedCol);
 
-            //Computer plays
-            const computerAttackCoordinates = computerPlays();
-            updateBoard(game.currentPlayer, computerAttackCoordinates[0], computerAttackCoordinates[1]);
+            if (!game.playingAgainstHuman) {
+                //Computer plays
+                const computerAttackCoordinates = computerPlays();
+                updateBoard(game.currentPlayer, computerAttackCoordinates[0], computerAttackCoordinates[1]);
+            } else {
+                const boards = document.querySelectorAll('.board');
+                const playerBoard = boards[0];
+                const opponentBoard = boards[1];
+                if (game.human.ismyTurn) opponentBoard.removeEventListener('click', eventHandler);
+                else playerBoard.removeEventListener('click', eventHandler);
+            }
         }
     }
 
@@ -376,10 +388,17 @@ function screenController() {
             renderNextRound();
             dialog.close();
         });
-        //Start the game:
-        //Hide second player board
-        //make a between rounds screen for the first players to click ready (same as when you click submit move)
-        //When it is clicked, show first player board (repeat for all the rounds)
+    }
+
+    function submitMove() {
+        game.addTurn();
+
+        dialog.showModal();
+        dialog.addEventListener('submit', (e) => {
+            e.preventDefault();
+            renderNextRound();
+            dialog.close();
+        });
     }
 }
 
