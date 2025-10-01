@@ -408,5 +408,3 @@ screenController();
 //Switch event listeners between boards
 //Make a finish round button with a switch round screen
 //Prevent the computer from playing
-//Allow both players to drag and drop ships
-//Make a confirm ship positions button for both players before starting the game
