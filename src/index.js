@@ -115,6 +115,8 @@ function screenController() {
 
         container.textContent = '';
 
+        console.log(player2.ismyTurn);
+
         if (player2.type === 'computer') {
             displayBoard(player1);
             displayBoard(player2);
@@ -155,8 +157,6 @@ function screenController() {
 
     function renderNextRound() {
         container.textContent = '';
-
-        console.log(players[0].ismyTurn + ' ' + players[2].ismyTurn);
 
         displayBoard(players[0], players[2]);
 
@@ -210,7 +210,6 @@ function screenController() {
         let roundisPlayed = game.playRound(selectedRow, selectedCol);
 
         if (roundisPlayed) {
-            console.log(game.currentPlayer);
             updateBoard(game.currentPlayer, selectedRow, selectedCol);
 
             if (!game.playingAgainstHuman) {

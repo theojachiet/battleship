@@ -3,6 +3,7 @@ import { GameBoard } from "./gameboard.js";
 const container = document.querySelector('.container');
 
 export function displayBoard(player, opponent = 'none') {
+
     const boardContainer = document.createElement('div');
     boardContainer.classList.add('board-container');
 
@@ -22,13 +23,28 @@ export function displayBoard(player, opponent = 'none') {
             //Making it draggabble
             cellButton.setAttribute('draggable', 'true');
 
-            if (player.type === 'computer' || player.ismyTurn === false) {
+            const content = player.gameboard.getBoard()[indexRow][indexCol].type.content;
+            let specialContent = player.gameboard.getBoard()[indexRow][indexCol].content;
+
+            if (player.type === 'computer') {
                 cellButton.classList.add('water');
                 board.appendChild(cellButton);
-            } else {
-                const content = player.gameboard.getBoard()[indexRow][indexCol].type.content;
-                let specialContent = player.gameboard.getBoard()[indexRow][indexCol].content;
+            } else if (!player.ismyTurn) {
+                console.log('here');
+                if (content === 'attacked') {
+                    cellButton.classList.add('attacked');
+                } else {
+                    cellButton.classList.add('water');
+                    cellButton.dataset.type = 'water';
+                    cellButton.setAttribute('draggable', 'false');
+                }
 
+                if (specialContent === 'damagedShip') {
+                    cellButton.classList.add('damaged');
+                }
+
+                board.appendChild(cellButton);
+            } else {
                 if (content === 'water') {
                     cellButton.classList.add('water');
                     cellButton.dataset.type = 'water';
@@ -64,9 +80,9 @@ export function displayBoard(player, opponent = 'none') {
         readyButton.classList.add('ready');
         readyButton.textContent = 'Board Ready ?';
 
-        if(player.ready) {
-             readyButton.classList.add('green');
-             readyButton.textContent = 'Board Ready !';
+        if (player.ready) {
+            readyButton.classList.add('green');
+            readyButton.textContent = 'Board Ready !';
         }
 
         boardContainer.appendChild(readyButton);
