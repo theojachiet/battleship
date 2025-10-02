@@ -58,7 +58,7 @@ export function displayBoard(player, opponent = 'none') {
     boardContainer.appendChild(board);
     boardContainer.appendChild(label);
 
-    if (opponent.type === 'human') {
+    if (opponent.type === 'human' && !(player.ready && opponent.ready)) {
         //Adding ready Up button
         const readyButton = document.createElement('button');
         readyButton.classList.add('ready');

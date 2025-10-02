@@ -359,23 +359,7 @@ function screenController() {
         game.addTurn();
 
         dialog.showModal();
-        dialog.addEventListener('submit', (e) => {
-            e.preventDefault();
-            renderNextRound();
-            dialog.close();
-
-            //Set up listeners for the next player
-            const readyPlayers = document.querySelectorAll('button.ready');
-            const readyPlayer2Button = readyPlayers[1];
-            readyPlayer2Button.addEventListener('click', board2ReadyHandler);
-
-            const boards = document.querySelectorAll('.board');
-            const opponentBoard = boards[1];
-
-            opponentBoard.addEventListener('dragstart', dragStartHandler)
-            opponentBoard.addEventListener('dragover', dragOverHandler);
-            opponentBoard.addEventListener('drop', dropHandler);
-        });
+        dialog.addEventListener('submit', board1DialogHandler);
     }
 
     function board2ReadyHandler(e) {
@@ -383,11 +367,30 @@ function screenController() {
         game.addTurn();
 
         dialog.showModal();
+        dialog.removeEventListener('submit', board1DialogHandler);
         dialog.addEventListener('submit', (e) => {
             e.preventDefault();
             renderNextRound();
             dialog.close();
         });
+    }
+
+    function board1DialogHandler(e) {
+        e.preventDefault();
+        renderNextRound();
+        dialog.close();
+
+        //Set up listeners for the next player
+        const readyPlayers = document.querySelectorAll('button.ready');
+        const readyPlayer2Button = readyPlayers[1];
+        readyPlayer2Button.addEventListener('click', board2ReadyHandler);
+
+        const boards = document.querySelectorAll('.board');
+        const opponentBoard = boards[1];
+
+        opponentBoard.addEventListener('dragstart', dragStartHandler)
+        opponentBoard.addEventListener('dragover', dragOverHandler);
+        opponentBoard.addEventListener('drop', dropHandler);
     }
 
     function submitMove() {
