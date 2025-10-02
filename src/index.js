@@ -156,6 +156,8 @@ function screenController() {
     function renderNextRound() {
         container.textContent = '';
 
+        console.log(players[0].ismyTurn + ' ' + players[2].ismyTurn);
+
         displayBoard(players[0], players[2]);
 
         //Add Submit button in between the boards
@@ -213,7 +215,7 @@ function screenController() {
 
             if (!game.playingAgainstHuman) {
                 //Computer plays
-                const computerAttackCoordinates = computerPlays();
+                const computerAttackCoordinates = computerPlays();  
                 updateBoard(game.currentPlayer, computerAttackCoordinates[0], computerAttackCoordinates[1]);
             } else {
                 const boards = document.querySelectorAll('.board');
@@ -221,10 +223,8 @@ function screenController() {
                 const opponentBoard = boards[1];
                 if (!game.human.ismyTurn) {
                     opponentBoard.removeEventListener('click', eventHandler);
-                    console.log('opponent');
                 }
                 else {
-                    console.log('theo');
                     playerBoard.removeEventListener('click', eventHandler);
                 }
             }
@@ -399,7 +399,6 @@ function screenController() {
     }
 
     function submitMove() {
-        game.addTurn();
 
         dialog.showModal();
         dialog.addEventListener('submit', (e) => {
