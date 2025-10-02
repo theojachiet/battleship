@@ -186,7 +186,6 @@ function screenController() {
     randomizeAndRender(players[0], players[1]);
 
     const boards = document.querySelectorAll('.board');
-    const computerBoard = boards[1];
     const playerBoard = boards[0];
 
     const randomizeButton = document.querySelector('button.randomize');
@@ -220,8 +219,14 @@ function screenController() {
                 const boards = document.querySelectorAll('.board');
                 const playerBoard = boards[0];
                 const opponentBoard = boards[1];
-                if (game.human.ismyTurn) opponentBoard.removeEventListener('click', eventHandler);
-                else playerBoard.removeEventListener('click', eventHandler);
+                if (!game.human.ismyTurn) {
+                    opponentBoard.removeEventListener('click', eventHandler);
+                    console.log('opponent');
+                }
+                else {
+                    console.log('theo');
+                    playerBoard.removeEventListener('click', eventHandler);
+                }
             }
         }
     }
