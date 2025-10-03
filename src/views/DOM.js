@@ -140,4 +140,8 @@ function renderNewShip(player, ship) {
     }
 }
 
-export { displayBoard, updateBoard, removeShip, renderNewShip};
+function clearContainer() {
+    container.textContent = '';
+}
+
+export { displayBoard, updateBoard, removeShip, renderNewShip, clearContainer};
