@@ -1,0 +1,46 @@
+class GameFlow {
+    constructor(players) {
+        this.human = players[0];
+        this.computer = players[1];
+        this.opponent = players[2];
+
+        this.currentPlayer = this.human;
+        this.otherPlayer = this.computer;
+
+        this.playingAgainstHuman = false;
+    }
+
+    switchOpponent() {
+        this.otherPlayer = this.playingAgainstHuman ? this.computer : this.opponent;
+        this.playingAgainstHuman = !this.playingAgainstHuman;
+        this.resetTurns();
+    }
+
+    resetTurns() {
+        this.currentPlayer = this.human;
+        this.otherPlayer = this.playingAgainstHuman ? this.opponent : this.computer;
+    }
+
+    playRound(row, col) {
+        const hit = this.otherPlayer.gameboard.receiveAttack(row, col);
+        if (!hit) return false;
+
+        if (this.otherPlayer.gameboard.gameOver) {
+            return { gameOver: true, winner: this.currentPlayer };
+        }
+
+        this.addTurn();
+        return { gameOver: false };
+    }
+
+    addTurn() {
+        const secondPlayer = this.playingAgainstHuman ? this.opponent : this.computer;
+        const prevPlayer = this.currentPlayer;
+
+        this.currentPlayer = (this.currentPlayer === this.human) ? secondPlayer : this.human;
+        this.otherPlayer = prevPlayer;
+
+        this.currentPlayer.changeTurn();
+        this.otherPlayer.changeTurn();
+    }
+}
