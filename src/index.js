@@ -215,7 +215,7 @@ function screenController() {
 
             if (!game.playingAgainstHuman) {
                 //Computer plays
-                const computerAttackCoordinates = computerPlays();  
+                const computerAttackCoordinates = computerPlays();
                 updateBoard(game.currentPlayer, computerAttackCoordinates[0], computerAttackCoordinates[1]);
             } else {
                 const boards = document.querySelectorAll('.board');
@@ -363,6 +363,9 @@ function screenController() {
         players[0].ready = true;
         game.addTurn();
 
+        const dialogText = document.querySelector('.text');
+        dialogText.textContent = `${game.otherPlayer.name} is ready, pass the device to ${game.currentPlayer.name}`;
+
         dialog.showModal();
         dialog.addEventListener('submit', board1DialogHandler);
     }
@@ -370,6 +373,9 @@ function screenController() {
     function board2ReadyHandler(e) {
         players[2].ready = true;
         game.addTurn();
+
+        const dialogText = document.querySelector('.text');
+        dialogText.textContent = `${game.otherPlayer.name} is ready, pass the device to ${game.currentPlayer.name}`;
 
         dialog.showModal();
         dialog.removeEventListener('submit', board1DialogHandler);
@@ -399,6 +405,9 @@ function screenController() {
     }
 
     function submitMove() {
+
+        const dialogText = document.querySelector('.text');
+        dialogText.textContent = `${game.otherPlayer.name} has played, pass the device to ${game.currentPlayer.name}`;
 
         dialog.showModal();
         dialog.addEventListener('submit', (e) => {
