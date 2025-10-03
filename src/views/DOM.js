@@ -1,4 +1,4 @@
-import { GameBoard } from "./gameboard.js";
+import { GameBoard } from "../models/gameboard.js";
 
 const container = document.querySelector('.container');
 
@@ -120,7 +120,6 @@ export function updateBoard(player, row, col) {
 export function removeShip(player, ship) {
     for (let cell of ship.coordinates) {
         const cells = document.querySelector(`[data-column="${cell[1]}"][data-row="${cell[0]}"]`);
-        console.log(cells);
         const oldShipCell = document.querySelector(`[data-column="${cell[1]}"][data-row="${cell[0]}"][data-name="${player.name}"]`);
         player.gameboard.board[cell[0]][cell[1]].type.content = 'water';
         oldShipCell.className = 'cell water';

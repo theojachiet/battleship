@@ -1,9 +1,10 @@
 import './reset.css';
 import './general.css';
 
-import { Player } from './player.js';
-import { displayBoard, hideBoard, removeShip, renderNewShip, updateBoard } from './DOM.js';
-import { Ship } from './ship.js';
+import { Player } from './models/player.js';
+import { displayBoard, hideBoard, removeShip, renderNewShip, updateBoard } from './views/DOM.js';
+import { Ship } from './models/ship.js';
+import { GameFlow } from './controllers/gameflow.js';
 
 const container = document.querySelector('.container');
 const dialog = document.querySelector('dialog');
@@ -50,54 +51,54 @@ function placeRandomShips(player) {
     }
 }
 
-class GameFlow {
+// class GameFlow {
 
-    constructor(players) {
-        this.players = players;
+//     constructor(players) {
+//         this.players = players;
 
-        this.human = players[0];
-        this.computer = players[1];
-        this.opponent = players[2];
+//         this.human = players[0];
+//         this.computer = players[1];
+//         this.opponent = players[2];
 
-        this.currentPlayer = this.human;
-        this.otherPlayer = this.computer;
+//         this.currentPlayer = this.human;
+//         this.otherPlayer = this.computer;
 
-        this.playingAgainstHuman = false;
-    }
+//         this.playingAgainstHuman = false;
+//     }
 
-    changeOpponent() {
-        //POtential problem !! If we switch opponent after a few rounds and it changes the wrong players because it is using other player var
-        if (this.playingAgainstHuman === false) this.otherPlayer = this.opponent;
-        else this.otherPlayer = this.computer;
-        this.playingAgainstHuman = !this.playingAgainstHuman;
-    }
+//     changeOpponent() {
+//         //POtential problem !! If we switch opponent after a few rounds and it changes the wrong players because it is using other player var
+//         if (this.playingAgainstHuman === false) this.otherPlayer = this.opponent;
+//         else this.otherPlayer = this.computer;
+//         this.playingAgainstHuman = !this.playingAgainstHuman;
+//     }
 
-    addTurn() {
-        const secondPlayer = this.playingAgainstHuman ? this.opponent : this.computer;
+//     addTurn() {
+//         const secondPlayer = this.playingAgainstHuman ? this.opponent : this.computer;
 
-        const prevPlayer = this.currentPlayer;
-        this.currentPlayer = (this.currentPlayer === this.human) ? secondPlayer : this.human;
-        this.otherPlayer = prevPlayer;
+//         const prevPlayer = this.currentPlayer;
+//         this.currentPlayer = (this.currentPlayer === this.human) ? secondPlayer : this.human;
+//         this.otherPlayer = prevPlayer;
 
-        this.currentPlayer.changeTurn();
-        this.otherPlayer.changeTurn();
-    }
+//         this.currentPlayer.changeTurn();
+//         this.otherPlayer.changeTurn();
+//     }
 
 
-    playRound(row, col) {
-        let attackisValid = this.otherPlayer.gameboard.receiveAttack(row, col);
+//     playRound(row, col) {
+//         let attackisValid = this.otherPlayer.gameboard.receiveAttack(row, col);
 
-        if (attackisValid) {
-            //Checking otherPlayer because current Player is the attacker
-            if (this.otherPlayer.gameboard.gameOver) {
-                alert(`Game Over ! ${this.otherPlayer.name} won !`);
-            }
-            this.addTurn();
-            return true;
-        } else return false;
+//         if (attackisValid) {
+//             //Checking otherPlayer because current Player is the attacker
+//             if (this.otherPlayer.gameboard.gameOver) {
+//                 alert(`Game Over ! ${this.otherPlayer.name} won !`);
+//             }
+//             this.addTurn();
+//             return true;
+//         } else return false;
 
-    }
-}
+//     }
+// }
 
 function screenController() {
     const player = new Player('human', true, 'theo');
@@ -115,8 +116,6 @@ function screenController() {
         placeRandomShips(player2);
 
         container.textContent = '';
-
-        console.log(player2.ismyTurn);
 
         if (player2.type === 'computer') {
             displayBoard(player1);
@@ -355,7 +354,7 @@ function screenController() {
     function switchOpponent() {
         if (switchButton.textContent === 'Switch to Human Opponent') switchButton.textContent = 'Switch to Computer Opponent';
         else switchButton.textContent = 'Switch to Human Opponent';
-        game.changeOpponent();
+        game.switchOpponent();
         randomizeAndRender(game.currentPlayer, game.otherPlayer);
     }
 

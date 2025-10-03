@@ -1,4 +1,4 @@
-class GameFlow {
+export class GameFlow {
     constructor(players) {
         this.human = players[0];
         this.computer = players[1];
