@@ -30,7 +30,6 @@ export function displayBoard(player, opponent = 'none') {
                 cellButton.classList.add('water');
                 board.appendChild(cellButton);
             } else if (!player.ismyTurn) {
-                console.log('here');
                 if (content === 'attacked') {
                     cellButton.classList.add('attacked');
                 } else {
@@ -41,6 +40,10 @@ export function displayBoard(player, opponent = 'none') {
 
                 if (specialContent === 'damagedShip') {
                     cellButton.classList.add('damaged');
+                    const ship = player.gameboard.getBoard()[indexRow][indexCol].type;
+                    if (ship.isSunk()) {
+                        cellButton.classList.add('sunk');
+                    }
                 }
 
                 board.appendChild(cellButton);
@@ -58,6 +61,10 @@ export function displayBoard(player, opponent = 'none') {
 
                 if (specialContent === 'damagedShip') {
                     cellButton.classList.add('damaged');
+                    const ship = player.gameboard.getBoard()[indexRow][indexCol].type;
+                    if (ship.isSunk()) {
+                        cellButton.classList.add('sunk');
+                    }
                 }
 
                 board.appendChild(cellButton);
