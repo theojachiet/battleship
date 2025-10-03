@@ -2,7 +2,7 @@ import { GameBoard } from "../models/gameboard.js";
 
 const container = document.querySelector('.container');
 
-export function displayBoard(player, opponent = 'none') {
+function displayBoard(player, opponent = 'none') {
 
     const boardContainer = document.createElement('div');
     boardContainer.classList.add('board-container');
@@ -98,7 +98,7 @@ export function displayBoard(player, opponent = 'none') {
     container.appendChild(boardContainer);
 }
 
-export function updateBoard(player, row, col) {
+function updateBoard(player, row, col) {
     const selectedCell = document.querySelector(`[data-column="${col}"][data-row="${row}"][data-name="${player.name}"]`);
     let state = player.gameboard.board[row][col].type.content;
 
@@ -117,7 +117,7 @@ export function updateBoard(player, row, col) {
     }
 }
 
-export function removeShip(player, ship) {
+function removeShip(player, ship) {
     for (let cell of ship.coordinates) {
         const cells = document.querySelector(`[data-column="${cell[1]}"][data-row="${cell[0]}"]`);
         const oldShipCell = document.querySelector(`[data-column="${cell[1]}"][data-row="${cell[0]}"][data-name="${player.name}"]`);
@@ -129,7 +129,7 @@ export function removeShip(player, ship) {
     }
 }
 
-export function renderNewShip(player, ship) {
+function renderNewShip(player, ship) {
     for (let cell of ship.coordinates) {
         const newShipCell = document.querySelector(`[data-column="${cell[1]}"][data-row="${cell[0]}"][data-name="${player.name}"]`);
         player.gameboard.board[cell[0]][cell[1]].type.content = 'ship';
@@ -139,3 +139,5 @@ export function renderNewShip(player, ship) {
         player.gameboard.replaceShip(ship, cell[0], cell[1]);
     }
 }
+
+export { displayBoard, updateBoard, removeShip, renderNewShip};

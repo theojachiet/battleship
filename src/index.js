@@ -2,7 +2,8 @@ import './reset.css';
 import './general.css';
 
 import { Player } from './models/player.js';
-import { displayBoard, hideBoard, removeShip, renderNewShip, updateBoard } from './views/DOM.js';
+import * as DOM from './views/DOM.js';
+// import { displayBoard, removeShip, renderNewShip, updateBoard } from './views/DOM.js';
 import { Ship } from './models/ship.js';
 import { GameFlow } from './controllers/gameflow.js';
 import { placeRandomShips } from './utils/placement.js';
@@ -11,60 +12,11 @@ const container = document.querySelector('.container');
 const dialog = document.querySelector('dialog');
 const playButton = document.querySelector('.submit')
 
-// class GameFlow {
-
-//     constructor(players) {
-//         this.players = players;
-
-//         this.human = players[0];
-//         this.computer = players[1];
-//         this.opponent = players[2];
-
-//         this.currentPlayer = this.human;
-//         this.otherPlayer = this.computer;
-
-//         this.playingAgainstHuman = false;
-//     }
-
-//     changeOpponent() {
-//         //POtential problem !! If we switch opponent after a few rounds and it changes the wrong players because it is using other player var
-//         if (this.playingAgainstHuman === false) this.otherPlayer = this.opponent;
-//         else this.otherPlayer = this.computer;
-//         this.playingAgainstHuman = !this.playingAgainstHuman;
-//     }
-
-//     addTurn() {
-//         const secondPlayer = this.playingAgainstHuman ? this.opponent : this.computer;
-
-//         const prevPlayer = this.currentPlayer;
-//         this.currentPlayer = (this.currentPlayer === this.human) ? secondPlayer : this.human;
-//         this.otherPlayer = prevPlayer;
-
-//         this.currentPlayer.changeTurn();
-//         this.otherPlayer.changeTurn();
-//     }
-
-
-//     playRound(row, col) {
-//         let attackisValid = this.otherPlayer.gameboard.receiveAttack(row, col);
-
-//         if (attackisValid) {
-//             //Checking otherPlayer because current Player is the attacker
-//             if (this.otherPlayer.gameboard.gameOver) {
-//                 alert(`Game Over ! ${this.otherPlayer.name} won !`);
-//             }
-//             this.addTurn();
-//             return true;
-//         } else return false;
-
-//     }
-// }
-
 function screenController() {
     const player = new Player('human', true, 'theo');
     const computer = new Player('computer', false, 'computer');
     const opponent = new Player('human', false, 'cyrielle');
-    const players = [player, computer, opponent];
+    const players = [player, computer, opponent]
 
     const game = new GameFlow(players);
 
@@ -78,8 +30,8 @@ function screenController() {
         container.textContent = '';
 
         if (player2.type === 'computer') {
-            displayBoard(player1);
-            displayBoard(player2);
+            DOM.displayBoard(player1);
+            DOM.displayBoard(player2);
 
             const boards = document.querySelectorAll('.board');
             const computerBoard = boards[1];
@@ -90,7 +42,7 @@ function screenController() {
             playerBoard.addEventListener('dragover', dragOverHandler);
             playerBoard.addEventListener('drop', dropHandler);
         } else {
-            displayBoard(player1, player2);
+            DOM.displayBoard(player1, player2);
 
             //Add Submit button in between the boards
             const submitButton = document.createElement('button');
@@ -98,7 +50,7 @@ function screenController() {
             submitButton.classList.add('submit');
             container.appendChild(submitButton);
 
-            displayBoard(player2, player1);
+            DOM.displayBoard(player2, player1);
 
             const boards = document.querySelectorAll('.board');
             const playerBoard = boards[0];
@@ -118,7 +70,7 @@ function screenController() {
     function renderNextRound() {
         container.textContent = '';
 
-        displayBoard(players[0], players[2]);
+        DOM.displayBoard(players[0], players[2]);
 
         //Add Submit button in between the boards
         const submitButton = document.createElement('button');
@@ -126,7 +78,7 @@ function screenController() {
         submitButton.classList.add('submit');
         container.appendChild(submitButton);
 
-        displayBoard(players[2], players[0]);
+        DOM.displayBoard(players[2], players[0]);
 
         if (players[0].ready === true && players[2].ready === true) {
 
@@ -170,12 +122,12 @@ function screenController() {
         let roundisPlayed = game.playRound(selectedRow, selectedCol);
 
         if (roundisPlayed) {
-            updateBoard(game.currentPlayer, selectedRow, selectedCol);
+            DOM.updateBoard(game.currentPlayer, selectedRow, selectedCol);
 
             if (!game.playingAgainstHuman) {
                 //Computer plays
                 const computerAttackCoordinates = computerPlays();
-                updateBoard(game.currentPlayer, computerAttackCoordinates[0], computerAttackCoordinates[1]);
+                DOM.updateBoard(game.currentPlayer, computerAttackCoordinates[0], computerAttackCoordinates[1]);
             } else {
                 const boards = document.querySelectorAll('.board');
                 const playerBoard = boards[0];
@@ -272,11 +224,11 @@ function screenController() {
         if (!checkIfShipIsInsideBoard(newCells)) return alert('cannot place a ship outside the board !');
 
         //update old cells to water
-        removeShip(currentPlayer, currentPlayer.gameboard.ships[shipId]);
+        DOM.removeShip(currentPlayer, currentPlayer.gameboard.ships[shipId]);
 
         //Check if the ship is separated from others
         if (!currentPlayer.gameboard.spotIsSeparatedFromOthers(ship, newCells[0].row, newCells[0].col)) {
-            return renderNewShip(currentPlayer, ship);
+            return DOM.renderNewShip(currentPlayer, ship);
         }
 
         //Changing the ship coordinates
@@ -286,7 +238,7 @@ function screenController() {
         }
 
         //update new cells to ship cells
-        renderNewShip(currentPlayer, currentPlayer.gameboard.ships[shipId]);
+        DOM.renderNewShip(currentPlayer, currentPlayer.gameboard.ships[shipId]);
     }
 
     function checkIfShipIsInsideBoard(coordinates) {
@@ -378,8 +330,3 @@ function screenController() {
 }
 
 screenController();
-
-//Switch opponent:
-//Switch event listeners between boards
-//Make a finish round button with a switch round screen
-//Prevent the computer from playing
