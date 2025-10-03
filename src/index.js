@@ -88,8 +88,9 @@ class GameFlow {
         let attackisValid = this.otherPlayer.gameboard.receiveAttack(row, col);
 
         if (attackisValid) {
-            if (this.currentPlayer.gameboard.gameOver) {
-                alert(`Game Over ! ${this.otherPlayer.type} won !`);
+            //Checking otherPlayer because current Player is the attacker
+            if (this.otherPlayer.gameboard.gameOver) {
+                alert(`Game Over ! ${this.otherPlayer.name} won !`);
             }
             this.addTurn();
             return true;
