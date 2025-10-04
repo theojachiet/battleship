@@ -23,14 +23,14 @@ export class GameFlow {
 
     playRound(row, col) {
         const hit = this.otherPlayer.gameboard.receiveAttack(row, col);
-        if (!hit) return false;
+        if (!hit) return {valid: false};
 
         if (this.otherPlayer.gameboard.gameOver) {
             return { gameOver: true, winner: this.currentPlayer };
         }
 
         this.addTurn();
-        return { gameOver: false };
+        return { valid: true, gameOver: false };
     }
 
     addTurn() {

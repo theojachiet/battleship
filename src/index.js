@@ -37,7 +37,7 @@ function screenController() {
             const computerBoard = boards[1];
             const playerBoard = boards[0];
 
-            computerBoard.addEventListener('click', eventHandler);
+            computerBoard.addEventListener('click', handleAttackClick);
             playerBoard.addEventListener('dragstart', dragStartHandler);
             playerBoard.addEventListener('dragover', dragOverHandler);
             playerBoard.addEventListener('drop', dropHandler);
@@ -87,9 +87,9 @@ function screenController() {
             const playerBoard = boards[0];
 
             if (players[0].ismyTurn) {
-                opponentBoard.addEventListener('click', eventHandler);
+                opponentBoard.addEventListener('click', handleAttackClick);
             } else {
-                playerBoard.addEventListener('click', eventHandler);
+                playerBoard.addEventListener('click', handleAttackClick);
             }
         }
 
@@ -107,39 +107,40 @@ function screenController() {
     const switchButton = document.querySelector('button.switch');
     switchButton.addEventListener('click', switchOpponent);
 
-    function eventHandler(e) {
-        const selectedRow = e.target.dataset.row;
+    function handleAttackClick(e) {
+        const selectedRow = e.target.dataset.row
         const selectedCol = e.target.dataset.column;
 
         if (!selectedCol || !selectedRow) return;
+
+        //Play the round and update the board (to the current player because it was changed in the playround function)
+        const result = game.playRound(selectedRow, selectedCol);
 
         //remove the drag an drop ability
         playerBoard.removeEventListener('dragstart', dragStartHandler);
         playerBoard.removeEventListener('dragover', dragOverHandler);
         playerBoard.removeEventListener('drop', dropHandler);
 
-        //Play the round and update the board (to the current player because it was changed in the playround function)
-        let roundisPlayed = game.playRound(selectedRow, selectedCol);
+        if (!result.valid) return;
+        
+        DOM.updateBoard(game.currentPlayer, selectedRow, selectedCol);
 
-        if (roundisPlayed) {
-            DOM.updateBoard(game.currentPlayer, selectedRow, selectedCol);
-
-            if (!game.playingAgainstHuman) {
-                //Computer plays
-                const computerAttackCoordinates = computerPlays();
-                DOM.updateBoard(game.currentPlayer, computerAttackCoordinates[0], computerAttackCoordinates[1]);
-            } else {
-                const boards = document.querySelectorAll('.board');
-                const playerBoard = boards[0];
-                const opponentBoard = boards[1];
-                if (!game.human.ismyTurn) {
-                    opponentBoard.removeEventListener('click', eventHandler);
-                }
-                else {
-                    playerBoard.removeEventListener('click', eventHandler);
-                }
+        if (!game.playingAgainstHuman) {
+            //Computer plays
+            const computerAttackCoordinates = computerPlays();
+            DOM.updateBoard(game.currentPlayer, computerAttackCoordinates[0], computerAttackCoordinates[1]);
+        } else {
+            const boards = document.querySelectorAll('.board');
+            const playerBoard = boards[0];
+            const opponentBoard = boards[1];
+            if (!game.human.ismyTurn) {
+                opponentBoard.removeEventListener('click', handleAttackClick);
+            }
+            else {
+                playerBoard.removeEventListener('click', handleAttackClick);
             }
         }
+
     }
 
     function dragStartHandler(e) {
