@@ -116,31 +116,55 @@ function screenController() {
         //Play the round and update the board (to the current player because it was changed in the playround function)
         const result = game.playRound(selectedRow, selectedCol);
 
-        //remove the drag an drop ability
+        //remove the drag an drop ability --> TODO: i should do this in the board Ready button handlers
         playerBoard.removeEventListener('dragstart', dragStartHandler);
         playerBoard.removeEventListener('dragover', dragOverHandler);
         playerBoard.removeEventListener('drop', dropHandler);
 
         if (!result.valid) return;
-        
-        DOM.updateBoard(game.currentPlayer, selectedRow, selectedCol);
 
-        if (!game.playingAgainstHuman) {
-            //Computer plays
-            const computerAttackCoordinates = computerPlays();
-            DOM.updateBoard(game.currentPlayer, computerAttackCoordinates[0], computerAttackCoordinates[1]);
+        DOM.updateBoard(game.currentPlayer, selectedRow, selectedCol, result.hit);
+
+        if (result.ship) if (result.ship.sunk) DOM.markShipSunk(game.currentPlayer, result.ship);
+        if (result.gameOver) return showGameOver(result.winner);
+
+        if (game.currentPlayer.type === 'computer') {
+            playComputerTurn();
         } else {
-            const boards = document.querySelectorAll('.board');
-            const playerBoard = boards[0];
-            const opponentBoard = boards[1];
-            if (!game.human.ismyTurn) {
-                opponentBoard.removeEventListener('click', handleAttackClick);
-            }
-            else {
-                playerBoard.removeEventListener('click', handleAttackClick);
-            }
+            updateTurnDisplay();
         }
+    }
 
+    function playComputerTurn() {
+        let row = Math.floor(Math.random() * 10);
+        let col = Math.floor(Math.random() * 10);
+
+        let result = game.playRound(row, col);
+
+        //plays until he enters a valid cell
+        while (!result.valid) {
+            row = Math.floor(Math.random() * 10);
+            col = Math.floor(Math.random() * 10);
+            result = game.playRound(row, col);
+        }
+        console.log(game.currentPlayer.name);
+
+        DOM.updateBoard(game.currentPlayer, row, col, result.hit);
+
+        if (result.ship) if (result.ship.sunk) DOM.markShipSunk(game.currentPlayer, result.ship);
+        if (result.gameOver) return showGameOver(result.winner);
+    }
+
+    function updateTurnDisplay() {
+        const boards = document.querySelectorAll('.board');
+        const playerBoard = boards[0];
+        const opponentBoard = boards[1];
+        if (!game.human.ismyTurn) {
+            opponentBoard.removeEventListener('click', handleAttackClick);
+        }
+        else {
+            playerBoard.removeEventListener('click', handleAttackClick);
+        }
     }
 
     function dragStartHandler(e) {
@@ -247,21 +271,6 @@ function screenController() {
             if (cell.row < 0 || cell.row > 9 || cell.col < 0 || cell.col > 9) return false;
         }
         return true;
-    }
-
-    const computerPlays = () => {
-        let row = Math.floor(Math.random() * 10);
-        let col = Math.floor(Math.random() * 10);
-
-        let roundisPlayed = game.playRound(row, col);
-
-        //plays until he enters a valid cell
-        while (!roundisPlayed) {
-            row = Math.floor(Math.random() * 10);
-            col = Math.floor(Math.random() * 10);
-            roundisPlayed = game.playRound(row, col);
-        }
-        return [row, col];
     }
 
     function switchOpponent() {

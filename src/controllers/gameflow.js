@@ -23,14 +23,23 @@ export class GameFlow {
 
     playRound(row, col) {
         const hit = this.otherPlayer.gameboard.receiveAttack(row, col);
-        if (!hit) return {valid: false};
+        if (!hit) return { valid: false };
+
+        let ship = null;
+        if (hit.type === 'ship') ship = this.otherPlayer.gameboard.getShip(row, col);
 
         if (this.otherPlayer.gameboard.gameOver) {
             return { gameOver: true, winner: this.currentPlayer };
         }
 
         this.addTurn();
-        return { valid: true, gameOver: false };
+        return {
+            valid: true,
+            hit: hit.type,
+            ship: ship || null,
+            gameOver: false,
+            winner: null
+        };
     }
 
     addTurn() {

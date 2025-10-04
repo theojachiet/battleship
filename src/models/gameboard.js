@@ -145,7 +145,7 @@ export class GameBoard {
         }
 
         this.checkGameOver();
-        return true;
+        return { valid: true, type: this.board[row][col].type.content };
     }
 
     getShip(row, col) {

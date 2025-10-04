@@ -12,7 +12,7 @@ export class Ship {
 
     hit() {
         this.numberOfHits++;
-        if (this.isSunk) this.sunk = true;
+        if (this.isSunk()) this.sunk = true;
     }
 
     isSunk() {

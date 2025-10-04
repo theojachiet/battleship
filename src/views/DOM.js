@@ -98,22 +98,28 @@ function displayBoard(player, opponent = 'none') {
     container.appendChild(boardContainer);
 }
 
-function updateBoard(player, row, col) {
+function updateBoard(player, row, col, state) {
     const selectedCell = document.querySelector(`[data-column="${col}"][data-row="${row}"][data-name="${player.name}"]`);
-    let state = player.gameboard.board[row][col].type.content;
 
     if (state === 'attacked') selectedCell.className = 'cell attacked';
     else if (state === 'ship') {
         selectedCell.className = 'cell damaged';
         //Find the ship object
-        const ship = player.gameboard.getBoard()[row][col].type;
-        if (ship.isSunk()) {
-            //Show that all the ship is sunk by changing the color
-            for (let part of ship.coordinates) {
-                const shipCell = document.querySelector(`[data-column="${part[1]}"][data-row="${part[0]}"][data-name="${player.name}"]`);
-                shipCell.classList.add('sunk');
-            }
-        }
+        // const ship = player.gameboard.getBoard()[row][col].type;
+        // if (ship.isSunk()) {
+        //     //Show that all the ship is sunk by changing the color
+        //     for (let part of ship.coordinates) {
+        //         const shipCell = document.querySelector(`[data-column="${part[1]}"][data-row="${part[0]}"][data-name="${player.name}"]`);
+        //         shipCell.classList.add('sunk');
+        //     }
+        // }
+    }
+}
+
+function markShipSunk(player, ship) {
+    for (let part of ship.coordinates) {
+        const shipCell = document.querySelector(`[data-column="${part[1]}"][data-row="${part[0]}"][data-name="${player.name}"]`);
+        shipCell.classList.add('sunk');
     }
 }
 
@@ -144,4 +150,4 @@ function clearContainer() {
     container.textContent = '';
 }
 
-export { displayBoard, updateBoard, removeShip, renderNewShip, clearContainer};
+export { displayBoard, updateBoard, removeShip, renderNewShip, clearContainer, markShipSunk };
