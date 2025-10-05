@@ -49,33 +49,18 @@ function screenController() {
     }
 
     function renderNextRound() {
-        container.textContent = '';
+        const { playerBoard, opponentBoard, submitButton } = renderBoards(players[0], players[2], { showSubmit: true });
 
-        DOM.displayBoard(players[0], players[2]);
+        submitButton.addEventListener('click', submitMove);
 
-        //Add Submit button in between the boards
-        const submitButton = document.createElement('button');
-        submitButton.textContent = 'Submit Move';
-        submitButton.classList.add('submit');
-        container.appendChild(submitButton);
+        if (!players[0].ready || !players[2].ready) return; //Both players should be ready
 
-        DOM.displayBoard(players[2], players[0]);
-
-        if (players[0].ready === true && players[2].ready === true) {
-
-            const boards = document.querySelectorAll('.board');
-            const opponentBoard = boards[1];
-            const playerBoard = boards[0];
-
-            if (players[0].ismyTurn) {
-                opponentBoard.addEventListener('click', handleAttackClick);
-            } else {
-                playerBoard.addEventListener('click', handleAttackClick);
-            }
+        if (players[0].ismyTurn) {
+            opponentBoard.addEventListener('click', handleAttackClick);
+        } else {
+            playerBoard.addEventListener('click', handleAttackClick);
         }
 
-        //Functionnality for the submit button
-        submitButton.addEventListener('click', submitMove);
     }
 
     function renderBoards(player1, player2, { showSubmit = false } = {}) {
