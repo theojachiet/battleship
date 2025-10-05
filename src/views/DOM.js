@@ -141,4 +141,9 @@ function clearContainer() {
     container.textContent = '';
 }
 
-export { displayBoard, updateBoard, removeShip, renderNewShip, clearContainer, markShipSunk };
+function switchButtonOpponent(switchButton) {
+    if (switchButton.textContent === 'Switch to Human Opponent') switchButton.textContent = 'Switch to Computer Opponent';
+    else switchButton.textContent = 'Switch to Human Opponent';
+}
+
+export { displayBoard, updateBoard, removeShip, renderNewShip, clearContainer, markShipSunk, switchButtonOpponent };

@@ -121,7 +121,11 @@ function screenController() {
     const randomizeButton = document.querySelector('button.randomize');
     randomizeButton.addEventListener('click', () => randomizeAndRender());
     const switchButton = document.querySelector('button.switch');
-    switchButton.addEventListener('click', switchOpponent);
+    switchButton.addEventListener('click', () => {
+        game.switchOpponent();
+        DOM.switchButtonOpponent(switchButton);
+        randomizeAndRender(game.currentPlayer, game.otherPlayer);
+    });
 
     function handleAttackClick(e) {
         const selectedRow = e.target.dataset.row
@@ -284,13 +288,6 @@ function screenController() {
             if (cell.row < 0 || cell.row > 9 || cell.col < 0 || cell.col > 9) return false;
         }
         return true;
-    }
-
-    function switchOpponent() {
-        if (switchButton.textContent === 'Switch to Human Opponent') switchButton.textContent = 'Switch to Computer Opponent';
-        else switchButton.textContent = 'Switch to Human Opponent';
-        game.switchOpponent();
-        randomizeAndRender(game.currentPlayer, game.otherPlayer);
     }
 
     function board1ReadyHandler() {
