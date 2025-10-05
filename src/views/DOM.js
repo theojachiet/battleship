@@ -81,7 +81,7 @@ function displayBoard(player, opponent = 'none') {
     boardContainer.appendChild(board);
     boardContainer.appendChild(label);
 
-    if (opponent.type === 'human' && !(player.ready && opponent.ready)) {
+    if (opponent.type === 'human' && !(player.ready && opponent.ready) && player.type !== 'computer') {
         //Adding ready Up button
         const readyButton = document.createElement('button');
         readyButton.classList.add('ready');
@@ -104,15 +104,6 @@ function updateBoard(player, row, col, state) {
     if (state === 'attacked') selectedCell.className = 'cell attacked';
     else if (state === 'ship') {
         selectedCell.className = 'cell damaged';
-        //Find the ship object
-        // const ship = player.gameboard.getBoard()[row][col].type;
-        // if (ship.isSunk()) {
-        //     //Show that all the ship is sunk by changing the color
-        //     for (let part of ship.coordinates) {
-        //         const shipCell = document.querySelector(`[data-column="${part[1]}"][data-row="${part[0]}"][data-name="${player.name}"]`);
-        //         shipCell.classList.add('sunk');
-        //     }
-        // }
     }
 }
 

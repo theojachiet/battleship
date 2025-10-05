@@ -21,50 +21,68 @@ function screenController() {
     const game = new GameFlow(players);
 
     function randomizeAndRender(player1 = game.currentPlayer, player2 = game.otherPlayer) {
+        player1.ready = false;
+        player2.ready = false;
+
+        //keep it consistent with the gameflow
+        player1.ismyTurn = (player1 === game.currentPlayer);
+        player2.ismyTurn = (player2 === game.currentPlayer);
+
         player1.gameboard.clearBoard();
         player2.gameboard.clearBoard();
-
         placeRandomShips(player1);
         placeRandomShips(player2);
 
-        container.textContent = '';
+        const { playerBoard, opponentBoard } = renderBoards(player1, player2);
 
         if (player2.type === 'computer') {
-            DOM.displayBoard(player1);
-            DOM.displayBoard(player2);
-
-            const boards = document.querySelectorAll('.board');
-            const computerBoard = boards[1];
-            const playerBoard = boards[0];
-
-            computerBoard.addEventListener('click', handleAttackClick);
-            playerBoard.addEventListener('dragstart', dragStartHandler);
-            playerBoard.addEventListener('dragover', dragOverHandler);
-            playerBoard.addEventListener('drop', dropHandler);
+            enableDragOnBoard(playerBoard);
+            opponentBoard.addEventListener('click', handleAttackClick);
         } else {
-            DOM.displayBoard(player1, player2);
-
-            //Add Submit button in between the boards
-            const submitButton = document.createElement('button');
-            submitButton.textContent = 'Submit Move';
-            submitButton.classList.add('submit');
-            container.appendChild(submitButton);
-
-            DOM.displayBoard(player2, player1);
-
-            const boards = document.querySelectorAll('.board');
-            const playerBoard = boards[0];
-
-            //Allow player1 to modify his board and make it ready
-            playerBoard.addEventListener('dragstart', dragStartHandler);
-            playerBoard.addEventListener('dragover', dragOverHandler);
-            playerBoard.addEventListener('drop', dropHandler);
-
-            //ready button add event listener click to ready
+            enableDragOnBoard(playerBoard);
+            
+            //ready button add event listener click to ready only for player1
             const readyPlayers = document.querySelectorAll('button.ready');
             const readyPlayer1Button = readyPlayers[0];
             readyPlayer1Button.addEventListener('click', board1ReadyHandler);
         }
+
+        // if (player2.type === 'computer') {
+        //     DOM.displayBoard(player1);
+        //     DOM.displayBoard(player2);
+
+        //     const boards = document.querySelectorAll('.board');
+        //     const computerBoard = boards[1];
+        //     const playerBoard = boards[0];
+
+        //     computerBoard.addEventListener('click', handleAttackClick);
+        //     playerBoard.addEventListener('dragstart', dragStartHandler);
+        //     playerBoard.addEventListener('dragover', dragOverHandler);
+        //     playerBoard.addEventListener('drop', dropHandler);
+        // } else {
+        //     DOM.displayBoard(player1, player2);
+
+        //     //Add Submit button in between the boards
+        //     const submitButton = document.createElement('button');
+        //     submitButton.textContent = 'Submit Move';
+        //     submitButton.classList.add('submit');
+        //     container.appendChild(submitButton);
+
+        //     DOM.displayBoard(player2, player1);
+
+        //     const boards = document.querySelectorAll('.board');
+        //     const playerBoard = boards[0];
+
+        //     //Allow player1 to modify his board and make it ready
+        //     playerBoard.addEventListener('dragstart', dragStartHandler);
+        //     playerBoard.addEventListener('dragover', dragOverHandler);
+        //     playerBoard.addEventListener('drop', dropHandler);
+
+        //     //ready button add event listener click to ready
+        //     const readyPlayers = document.querySelectorAll('button.ready');
+        //     const readyPlayer1Button = readyPlayers[0];
+        //     readyPlayer1Button.addEventListener('click', board1ReadyHandler);
+        // }s
     }
 
     function renderNextRound() {
@@ -95,6 +113,41 @@ function screenController() {
 
         //Functionnality for the submit button
         submitButton.addEventListener('click', submitMove);
+    }
+
+    function renderBoards(player1, player2, { showSubmit = false } = {}) {
+        DOM.clearContainer();
+        DOM.displayBoard(player1, player2);
+
+        let submitButton = null;
+        if (showSubmit) {
+            submitButton = document.createElement('button');
+            submitButton.textContent = 'Submit Move';
+            submitButton.classList.add('submit');
+            container.appendChild(submitButton);
+        }
+
+        DOM.displayBoard(player2, player1);
+
+        const boards = document.querySelectorAll('.board');
+        const [playerBoard, opponentBoard] = boards;
+
+        return { playerBoard, opponentBoard, submitButton };
+    }
+
+    function enableDragOnBoard(boardEl) {
+        boardEl.addEventListener('dragstart', dragStartHandler);
+        boardEl.addEventListener('dragover', dragOverHandler);
+        boardEl.addEventListener('drop', dropHandler);
+    }
+
+    function disableDragOnBoard(boardEl) {
+        boardEl.removeEventListener('dragstart', dragStartHandler);
+        boardEl.removeEventListener('dragover', dragOverHandler);
+        boardEl.removeEventListener('drop', dropHandler);
+
+        // make cells not draggable (some may still be draggable by attribute)
+        boardEl.querySelectorAll('.cell').forEach(c => c.setAttribute('draggable', 'false'));
     }
 
     randomizeAndRender(players[0], players[1]);
@@ -147,7 +200,6 @@ function screenController() {
             col = Math.floor(Math.random() * 10);
             result = game.playRound(row, col);
         }
-        console.log(game.currentPlayer.name);
 
         DOM.updateBoard(game.currentPlayer, row, col, result.hit);
 
