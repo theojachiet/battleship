@@ -40,49 +40,12 @@ function screenController() {
             opponentBoard.addEventListener('click', handleAttackClick);
         } else {
             enableDragOnBoard(playerBoard);
-            
+
             //ready button add event listener click to ready only for player1
             const readyPlayers = document.querySelectorAll('button.ready');
             const readyPlayer1Button = readyPlayers[0];
             readyPlayer1Button.addEventListener('click', board1ReadyHandler);
         }
-
-        // if (player2.type === 'computer') {
-        //     DOM.displayBoard(player1);
-        //     DOM.displayBoard(player2);
-
-        //     const boards = document.querySelectorAll('.board');
-        //     const computerBoard = boards[1];
-        //     const playerBoard = boards[0];
-
-        //     computerBoard.addEventListener('click', handleAttackClick);
-        //     playerBoard.addEventListener('dragstart', dragStartHandler);
-        //     playerBoard.addEventListener('dragover', dragOverHandler);
-        //     playerBoard.addEventListener('drop', dropHandler);
-        // } else {
-        //     DOM.displayBoard(player1, player2);
-
-        //     //Add Submit button in between the boards
-        //     const submitButton = document.createElement('button');
-        //     submitButton.textContent = 'Submit Move';
-        //     submitButton.classList.add('submit');
-        //     container.appendChild(submitButton);
-
-        //     DOM.displayBoard(player2, player1);
-
-        //     const boards = document.querySelectorAll('.board');
-        //     const playerBoard = boards[0];
-
-        //     //Allow player1 to modify his board and make it ready
-        //     playerBoard.addEventListener('dragstart', dragStartHandler);
-        //     playerBoard.addEventListener('dragover', dragOverHandler);
-        //     playerBoard.addEventListener('drop', dropHandler);
-
-        //     //ready button add event listener click to ready
-        //     const readyPlayers = document.querySelectorAll('button.ready');
-        //     const readyPlayer1Button = readyPlayers[0];
-        //     readyPlayer1Button.addEventListener('click', board1ReadyHandler);
-        // }s
     }
 
     function renderNextRound() {
@@ -169,12 +132,10 @@ function screenController() {
         //Play the round and update the board (to the current player because it was changed in the playround function)
         const result = game.playRound(selectedRow, selectedCol);
 
-        //remove the drag an drop ability --> TODO: i should do this in the board Ready button handlers
-        playerBoard.removeEventListener('dragstart', dragStartHandler);
-        playerBoard.removeEventListener('dragover', dragOverHandler);
-        playerBoard.removeEventListener('drop', dropHandler);
-
         if (!result.valid) return;
+
+        const playerBoard = document.querySelector('.board');
+        disableDragOnBoard(playerBoard);
 
         DOM.updateBoard(game.currentPlayer, selectedRow, selectedCol, result.hit);
 
