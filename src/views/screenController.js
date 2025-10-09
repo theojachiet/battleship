@@ -36,22 +36,34 @@ export const screenController = (() => {
         placeRandomShips(player1);
         placeRandomShips(player2);
 
-        const { playerBoard, opponentBoard } = renderBoards(player1, player2, { showSubmit: false, enableDrag: true });
-
         if (player2.type === 'computer') {
+            const { playerBoard, opponentBoard } = renderBoards(player1, player2, { showSubmit: false });
+
             enableDragAndDrop(playerBoard, game);
             opponentBoard.addEventListener('click', handleAttackClick);
         } else {
+            const { playerBoard, opponentBoard } = renderBoards(player1, player2, { showSubmit: false, showReady: true });
+
             enableDragAndDrop(playerBoard, game);
 
             //ready button add event listener click to ready only for player1
-            const readyPlayers = document.querySelectorAll('button.ready');
-            const readyPlayer1Button = readyPlayers[0];
-            readyPlayer1Button.addEventListener('click', board1ReadyHandler);
+            const readyPlayerButton = document.querySelector('button.ready');
+            readyPlayerButton.addEventListener('click', board1ReadyHandler);
         }
     }
 
     function renderNextRound() {
+        if (!game.opponent.ready) {
+            const { playerBoard, opponentBoard } = renderBoards(game.human, game.opponent, { showSubmit: false, showReady: true });
+
+            const readyPlayerButton = document.querySelector('button.ready');
+            readyPlayerButton.removeEventListener('click', board1ReadyHandler);
+            readyPlayerButton.addEventListener('click', board2ReadyHandler);
+            
+            enableDragAndDrop(opponentBoard, game);
+            return;
+        }
+
         const { playerBoard, opponentBoard, submitButton } = renderBoards(game.human, game.opponent, { showSubmit: true });
 
         submitButton.addEventListener('click', submitMove);
@@ -66,7 +78,7 @@ export const screenController = (() => {
 
     }
 
-    function renderBoards(player1, player2, { showSubmit = false, enableDrag = false } = {}) {
+    function renderBoards(player1, player2, { showSubmit = false, showReady = false } = {}) {
         DOM.clearContainer();
         DOM.displayBoard(player1, player2);
 
@@ -78,12 +90,14 @@ export const screenController = (() => {
             container.appendChild(submitButton);
         }
 
+        if (showReady) {
+            DOM.createReadyButton();
+        }
+
         DOM.displayBoard(player2, player1);
 
         const boards = document.querySelectorAll('.board');
         const [playerBoard, opponentBoard] = boards;
-
-        if (enableDrag) enableDragAndDrop(playerBoard, game);
 
         return { playerBoard, opponentBoard, submitButton };
     }
@@ -153,7 +167,7 @@ export const screenController = (() => {
         dialogText.textContent = `${game.otherPlayer.name} is ready, pass the device to ${game.currentPlayer.name}`;
 
         dialog.showModal();
-        dialog.addEventListener('submit', board1DialogHandler);
+        dialog.addEventListener('submit', readyDialogHandler);
     }
 
     function board2ReadyHandler(e) {
@@ -164,28 +178,12 @@ export const screenController = (() => {
         dialogText.textContent = `${game.otherPlayer.name} is ready, pass the device to ${game.currentPlayer.name}`;
 
         dialog.showModal();
-        dialog.removeEventListener('submit', board1DialogHandler);
-        dialog.addEventListener('submit', (e) => {
-            e.preventDefault();
-            renderNextRound();
-            dialog.close();
-        });
     }
 
-    function board1DialogHandler(e) {
+    function readyDialogHandler(e) {
         e.preventDefault();
         renderNextRound();
         dialog.close();
-
-        //Set up listeners for the next player
-        const readyPlayers = document.querySelectorAll('button.ready');
-        const readyPlayer2Button = readyPlayers[1];
-        readyPlayer2Button.addEventListener('click', board2ReadyHandler);
-
-        const boards = document.querySelectorAll('.board');
-        const opponentBoard = boards[1];
-
-        enableDragAndDrop(opponentBoard, game);
     }
 
     function submitMove() {
@@ -204,14 +202,3 @@ export const screenController = (() => {
 
     return { start };
 })();
-
-// function screenController() {
-//     const player = new Player('human', true, 'theo');
-//     const computer = new Player('computer', false, 'computer');
-//     const opponent = new Player('human', false, 'cyrielle');
-//     const players = [player, computer, opponent]
-
-//     const game = new GameFlow(players);
-
-
-// }

@@ -81,21 +81,15 @@ function displayBoard(player, opponent = 'none') {
     boardContainer.appendChild(board);
     boardContainer.appendChild(label);
 
-    if (opponent.type === 'human' && !(player.ready && opponent.ready) && player.type !== 'computer') {
-        //Adding ready Up button
-        const readyButton = document.createElement('button');
-        readyButton.classList.add('ready');
-        readyButton.textContent = 'Board Ready ?';
-
-        if (player.ready) {
-            readyButton.classList.add('green');
-            readyButton.textContent = 'Board Ready !';
-        }
-
-        boardContainer.appendChild(readyButton);
-    }
-
     container.appendChild(boardContainer);
+}
+
+function createReadyButton() {
+    const readyButton = document.createElement('button');
+    readyButton.classList.add('ready');
+    readyButton.textContent = 'Ready ?';
+
+    container.appendChild(readyButton);
 }
 
 function updateBoard(player, row, col, state) {
@@ -146,4 +140,4 @@ function switchButtonOpponent(switchButton) {
     else switchButton.textContent = 'Switch to Human Opponent';
 }
 
-export { displayBoard, updateBoard, removeShip, renderNewShip, clearContainer, markShipSunk, switchButtonOpponent };
+export { displayBoard, updateBoard, removeShip, renderNewShip, clearContainer, markShipSunk, switchButtonOpponent, createReadyButton };
