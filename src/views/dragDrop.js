@@ -49,13 +49,14 @@ function handleDrop(e, game) {
   const dropCell = e.target.closest('.cell');
   if (!dropCell) return;
 
+  //Retrieve INFO from the dragstart event
   const payload = JSON.parse(e.dataTransfer.getData('application/json'));
   const { shipIndex, orientation, cells, indexOfSelectedCell } = payload;
 
   const targetRow = parseInt(dropCell.dataset.row, 10);
   const targetCol = parseInt(dropCell.dataset.column, 10);
 
-  // compute offset
+  // compute offset to get the new coordinates
   const dRow = orientation === 'vertical'
     ? targetRow - cells[0].row - indexOfSelectedCell
     : targetRow - cells[0].row;
@@ -75,9 +76,10 @@ function handleDrop(e, game) {
   const ship = currentPlayer.gameboard.ships[shipIndex];
   DOM.removeShip(currentPlayer, ship);
 
+  //Checking if the spot is valid
   if (!currentPlayer.gameboard.spotIsSeparatedFromOthers(ship, newCells[0].row, newCells[0].col) ||
     currentPlayer.gameboard.shipIsAlreadyHere(ship, newCells[0].row, newCells[0].col)) {
-    return DOM.renderNewShip(currentPlayer, ship);
+    return DOM.renderNewShip(currentPlayer, ship); //If not, re-draw the ship to its original location
   }
 
   ship.coordinates = newCells.map(c => [c.row, c.col]);

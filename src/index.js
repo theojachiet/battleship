@@ -4,14 +4,12 @@ import './general.css';
 import { Player } from './models/player.js';
 import * as DOM from './views/DOM.js';
 // import { displayBoard, removeShip, renderNewShip, updateBoard } from './views/DOM.js';
-import { Ship } from './models/ship.js';
 import { GameFlow } from './controllers/gameflow.js';
 import { placeRandomShips } from './utils/placement.js';
 import { disableDragAndDrop, enableDragAndDrop } from './views/dragDrop.js';
 
 const container = document.querySelector('.container');
 const dialog = document.querySelector('dialog');
-const playButton = document.querySelector('.submit')
 
 function screenController() {
     const player = new Player('human', true, 'theo');
@@ -88,9 +86,6 @@ function screenController() {
 
     randomizeAndRender(players[0], players[1]);
 
-    const boards = document.querySelectorAll('.board');
-    const playerBoard = boards[0];
-
     const randomizeButton = document.querySelector('button.randomize');
     randomizeButton.addEventListener('click', () => randomizeAndRender());
     const switchButton = document.querySelector('button.switch');
@@ -155,112 +150,6 @@ function screenController() {
         else {
             playerBoard.removeEventListener('click', handleAttackClick);
         }
-    }
-
-    // function dragStartHandler(e) {
-
-    //     const selectedRow = e.target.dataset.row;
-    //     const selectedCol = e.target.dataset.column;
-    //     const type = e.target.dataset.type;
-
-    //     if (!selectedCol || !selectedRow) return;
-    //     if (type !== 'ship') return alert('you cannnot move water');
-
-    //     const ship = game.currentPlayer.gameboard.getShip(selectedRow, selectedCol);
-    //     const shipCoordinates = ship.coordinates;
-    //     const shipIndex = ship.index;
-    //     const orientation = ship.orientation;
-
-    //     //Getting the ship length and the position that the ship was selected
-    //     let indexOfSelectedCell = 0;
-    //     for (let i = 0; i < shipCoordinates.length; i++) {
-    //         if (shipCoordinates[i][0] == selectedRow && shipCoordinates[i][1] == selectedCol) indexOfSelectedCell = i;
-    //     }
-
-    //     let shipCells = [];
-
-    //     for (let cell of shipCoordinates) {
-    //         const targetedCell = document.querySelector(`[data-column="${cell[1]}"][data-row="${cell[0]}"][data-owner="human"]`);
-    //         shipCells.push(targetedCell);
-    //     }
-
-    //     shipCells = shipCells.map(c => ({
-    //         row: parseInt(c.dataset.row, 10),
-    //         col: parseInt(c.dataset.column, 10)
-    //     }));
-
-    //     e.dataTransfer.setData("application/json", JSON.stringify({
-    //         shipIndex,
-    //         indexOfSelectedCell,
-    //         orientation,
-    //         cells: shipCells,
-    //         ship
-    //     }));
-    // }
-
-    // function dragOverHandler(e) {
-    //     e.preventDefault();
-    // }
-
-    // function dropHandler(e) {
-    //     e.preventDefault();
-
-    //     //Retrieving data
-    //     const data = JSON.parse(e.dataTransfer.getData("application/json"));
-    //     const shipId = data.shipIndex;
-    //     const oldCells = data.cells;
-    //     const indexOfSelectedCell = data.indexOfSelectedCell;
-    //     const orientation = data.orientation;
-    //     const ship = data.ship;
-    //     const currentPlayer = game.currentPlayer;
-
-    //     //Getting frop Data
-    //     const dropCell = e.target.closest('.cell');
-    //     const targetRow = parseInt(dropCell.dataset.row, 10);
-    //     const targetCol = parseInt(dropCell.dataset.column, 10);
-
-    //     //Calculating offset
-    //     let drow, dcol;
-    //     if (orientation === 'vertical') {
-    //         drow = targetRow - oldCells[0].row - indexOfSelectedCell;
-    //         dcol = targetCol - oldCells[0].col;
-    //     } else {
-    //         drow = targetRow - oldCells[0].row;
-    //         dcol = targetCol - oldCells[0].col - indexOfSelectedCell;
-    //     }
-
-    //     //Getting new boat position
-    //     const newCells = oldCells.map(c => ({
-    //         row: c.row + drow,
-    //         col: c.col + dcol
-    //     }));
-
-    //     //Check if inside the board
-    //     if (!checkIfShipIsInsideBoard(newCells)) return alert('cannot place a ship outside the board !');
-
-    //     //update old cells to water
-    //     DOM.removeShip(currentPlayer, currentPlayer.gameboard.ships[shipId]);
-
-    //     //Check if the ship is separated from others
-    //     if (!currentPlayer.gameboard.spotIsSeparatedFromOthers(ship, newCells[0].row, newCells[0].col)) {
-    //         return DOM.renderNewShip(currentPlayer, ship);
-    //     }
-
-    //     //Changing the ship coordinates
-    //     currentPlayer.gameboard.ships[shipId].coordinates = [];
-    //     for (let cell of newCells) {
-    //         currentPlayer.gameboard.ships[shipId].coordinates.push([cell.row, cell.col]);
-    //     }
-
-    //     //update new cells to ship cells
-    //     DOM.renderNewShip(currentPlayer, currentPlayer.gameboard.ships[shipId]);
-    // }
-
-    function checkIfShipIsInsideBoard(coordinates) {
-        for (let cell of coordinates) {
-            if (cell.row < 0 || cell.row > 9 || cell.col < 0 || cell.col > 9) return false;
-        }
-        return true;
     }
 
     function board1ReadyHandler() {
