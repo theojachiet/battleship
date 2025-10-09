@@ -86,12 +86,6 @@ function screenController() {
         return { playerBoard, opponentBoard, submitButton };
     }
 
-    function enableDragOnBoard(boardEl) {
-        boardEl.addEventListener('dragstart', dragStartHandler);
-        boardEl.addEventListener('dragover', dragOverHandler);
-        boardEl.addEventListener('drop', dropHandler);
-    }
-
     function disableDragOnBoard(boardEl) {
         boardEl.removeEventListener('dragstart', dragStartHandler);
         boardEl.removeEventListener('dragover', dragOverHandler);
@@ -318,9 +312,7 @@ function screenController() {
         const boards = document.querySelectorAll('.board');
         const opponentBoard = boards[1];
 
-        opponentBoard.addEventListener('dragstart', dragStartHandler)
-        opponentBoard.addEventListener('dragover', dragOverHandler);
-        opponentBoard.addEventListener('drop', dropHandler);
+        enableDragAndDrop(opponentBoard, game);
     }
 
     function submitMove() {
