@@ -86,15 +86,6 @@ function screenController() {
         return { playerBoard, opponentBoard, submitButton };
     }
 
-    function disableDragOnBoard(boardEl) {
-        boardEl.removeEventListener('dragstart', dragStartHandler);
-        boardEl.removeEventListener('dragover', dragOverHandler);
-        boardEl.removeEventListener('drop', dropHandler);
-
-        // make cells not draggable (some may still be draggable by attribute)
-        boardEl.querySelectorAll('.cell').forEach(c => c.setAttribute('draggable', 'false'));
-    }
-
     randomizeAndRender(players[0], players[1]);
 
     const boards = document.querySelectorAll('.board');

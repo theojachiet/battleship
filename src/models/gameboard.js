@@ -122,6 +122,20 @@ export class GameBoard {
         return true;
     }
 
+    shipIsAlreadyHere(ship, row, col) {
+        const length = ship.length;
+        const orientation = ship.orientation;
+
+        for (let i = 0; i < length; i++) {
+            if (orientation === 'horizontal') {
+                if (this.board[row][col + i].type.content === 'ship') return true;
+            } else {
+                if (this.board[row + i][col].type.content === 'ship') return true;
+            }
+        }
+        return false;
+    }
+
     receiveAttack(row, col) {
 
         if (this.board[row][col].type.content === 'attacked') {

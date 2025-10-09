@@ -69,14 +69,14 @@ function handleDrop(e, game) {
   }));
 
   if (!checkIfShipIsInsideBoard(newCells)) {
-    alert('Ship cannot be placed outside the board.');
     return;
   }
 
   const ship = currentPlayer.gameboard.ships[shipIndex];
   DOM.removeShip(currentPlayer, ship);
 
-  if (!currentPlayer.gameboard.spotIsSeparatedFromOthers(ship, newCells[0].row, newCells[0].col)) {
+  if (!currentPlayer.gameboard.spotIsSeparatedFromOthers(ship, newCells[0].row, newCells[0].col) ||
+    currentPlayer.gameboard.shipIsAlreadyHere(ship, newCells[0].row, newCells[0].col)) {
     return DOM.renderNewShip(currentPlayer, ship);
   }
 
