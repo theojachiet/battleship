@@ -7,7 +7,7 @@ import * as DOM from './views/DOM.js';
 import { Ship } from './models/ship.js';
 import { GameFlow } from './controllers/gameflow.js';
 import { placeRandomShips } from './utils/placement.js';
-import { enableDragAndDrop } from './views/dragDrop.js';
+import { disableDragAndDrop, enableDragAndDrop } from './views/dragDrop.js';
 
 const container = document.querySelector('.container');
 const dialog = document.querySelector('dialog');
@@ -121,7 +121,7 @@ function screenController() {
         if (!result.valid) return;
 
         const playerBoard = document.querySelector('.board');
-        disableDragOnBoard(playerBoard);
+        disableDragAndDrop(playerBoard);
 
         DOM.updateBoard(game.currentPlayer, selectedRow, selectedCol, result.hit);
 

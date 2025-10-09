@@ -10,6 +10,8 @@ export function disableDragAndDrop(boardEl) {
   boardEl.removeEventListener('dragstart', handleDragStart);
   boardEl.removeEventListener('dragover', handleDragOver);
   boardEl.removeEventListener('drop', handleDrop);
+
+  boardEl.querySelectorAll('.cell').forEach(c => c.setAttribute('draggable', 'false'));
 }
 
 function handleDragStart(e, game) {
