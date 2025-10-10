@@ -13,7 +13,6 @@ export const screenController = (() => {
         game = newGame;
         ai = new ComputerAI(game.computer.gameboard);
 
-
         randomizeAndRender(game.currentPlayer, game.otherPlayer);
 
         const randomizeButton = document.querySelector('button.randomize');
