@@ -1,5 +1,3 @@
-import { GameBoard } from "../models/gameboard.js";
-
 const container = document.querySelector('.container');
 
 function displayBoard(player, opponent = 'none') {
@@ -39,7 +37,7 @@ function createCellButton(player, cellData, row, col) {
   const { content: cellContent, type: cellType } = cellData;
   const { content: typeContent } = cellType;
 
-  // 1️⃣ Determine the visual type of the cell
+  // Determine the visual type of the cell
   if (player.type === 'computer') {
     btn.classList.add('water');
     btn.dataset.type = 'water';

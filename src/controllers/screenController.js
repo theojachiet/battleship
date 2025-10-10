@@ -1,4 +1,4 @@
-import * as DOM from './DOM.js';
+import * as DOM from '../views/DOM.js';
 import { placeRandomShips } from '../utils/placement.js';
 import { disableDragAndDrop, enableDragAndDrop } from '../views/dragDrop.js';
 
