@@ -3,85 +3,92 @@ import { GameBoard } from "../models/gameboard.js";
 const container = document.querySelector('.container');
 
 function displayBoard(player, opponent = 'none') {
+  const boardContainer = document.createElement('div');
+  boardContainer.classList.add('board-container');
 
-    const boardContainer = document.createElement('div');
-    boardContainer.classList.add('board-container');
+  const board = document.createElement('div');
+  board.classList.add('board');
 
-    const board = document.createElement('div');
-    board.classList.add('board');
+  const boardData = player.gameboard.getBoard();
 
-    player.gameboard.getBoard().forEach((row, indexRow) => {
-        row.forEach((cell, indexCol) => {
-            const cellButton = document.createElement('button');
-            cellButton.classList.add('cell');
+  for (let row = 0; row < boardData.length; row++) {
+    for (let col = 0; col < boardData[row].length; col++) {
+      const cellData = boardData[row][col];
+      const cellButton = createCellButton(player, cellData, row, col);
+      board.appendChild(cellButton);
+    }
+  }
 
-            cellButton.dataset.column = indexCol;
-            cellButton.dataset.row = indexRow;
-            cellButton.dataset.owner = player.type;
-            cellButton.dataset.name = player.name;
+  const label = document.createElement('p');
+  label.classList.add('label');
+  label.textContent = player.name;
 
-            //Making it draggabble
-            cellButton.setAttribute('draggable', 'true');
+  boardContainer.append(board, label);
+  container.appendChild(boardContainer);
+}
 
-            const content = player.gameboard.getBoard()[indexRow][indexCol].type.content;
-            let specialContent = player.gameboard.getBoard()[indexRow][indexCol].content;
+function createCellButton(player, cellData, row, col) {
+  const btn = document.createElement('button');
+  btn.classList.add('cell');
+  btn.dataset.column = col;
+  btn.dataset.row = row;
+  btn.dataset.owner = player.type;
+  btn.dataset.name = player.name;
+  btn.setAttribute('draggable', 'true');
 
-            if (player.type === 'computer') {
-                cellButton.classList.add('water');
-                board.appendChild(cellButton);
-            } else if (!player.ismyTurn) {
-                if (content === 'attacked') {
-                    cellButton.classList.add('attacked');
-                } else {
-                    cellButton.classList.add('water');
-                    cellButton.dataset.type = 'water';
-                    cellButton.setAttribute('draggable', 'false');
-                }
+  const { content: cellContent, type: cellType } = cellData;
+  const { content: typeContent } = cellType;
 
-                if (specialContent === 'damagedShip') {
-                    cellButton.classList.add('damaged');
-                    const ship = player.gameboard.getBoard()[indexRow][indexCol].type;
-                    if (ship.isSunk()) {
-                        cellButton.classList.add('sunk');
-                    }
-                }
+  // 1️⃣ Determine the visual type of the cell
+  if (player.type === 'computer') {
+    btn.classList.add('water');
+    btn.dataset.type = 'water';
+    btn.setAttribute('draggable', 'false');
+  } 
+  else if (!player.ismyTurn) {
+    setNonTurnCellState(btn, typeContent, cellData);
+  } 
+  else {
+    setPlayerTurnCellState(btn, typeContent, cellData);
+  }
 
-                board.appendChild(cellButton);
-            } else {
-                if (content === 'water') {
-                    cellButton.classList.add('water');
-                    cellButton.dataset.type = 'water';
-                    cellButton.setAttribute('draggable', 'false');
-                } else if (content === 'ship') {
-                    cellButton.classList.add('ship');
-                    cellButton.dataset.type = 'ship';
-                } else if (content === 'attacked') {
-                    cellButton.classList.add('attacked');
-                }
+  return btn;
+}
 
-                if (specialContent === 'damagedShip') {
-                    cellButton.classList.add('damaged');
-                    const ship = player.gameboard.getBoard()[indexRow][indexCol].type;
-                    if (ship.isSunk()) {
-                        cellButton.classList.add('sunk');
-                    }
-                }
+function setNonTurnCellState(btn, typeContent, cellData) {
+  if (typeContent === 'attacked') {
+    btn.classList.add('attacked');
+  } else {
+    btn.classList.add('water');
+    btn.dataset.type = 'water';
+    btn.setAttribute('draggable', 'false');
+  }
+  applyDamageState(btn, cellData);
+}
 
-                board.appendChild(cellButton);
-            }
-        })
-    });
+function setPlayerTurnCellState(btn, typeContent, cellData) {
+  if (typeContent === 'water') {
+    btn.classList.add('water');
+    btn.dataset.type = 'water';
+    btn.setAttribute('draggable', 'false');
+  } else if (typeContent === 'ship') {
+    btn.classList.add('ship');
+    btn.dataset.type = 'ship';
+  } else if (typeContent === 'attacked') {
+    btn.classList.add('attacked');
+  }
+  applyDamageState(btn, cellData);
+}
 
-    //Adding label
-    const label = document.createElement('p');
-    label.classList.add('label');
-    label.textContent = player.name;
+function applyDamageState(btn, cellData) {
+  if (cellData.content !== 'damagedShip') return;
 
-    //Appending to containers
-    boardContainer.appendChild(board);
-    boardContainer.appendChild(label);
+  btn.classList.add('damaged');
 
-    container.appendChild(boardContainer);
+  const ship = cellData.type;
+  if (ship.isSunk()) {
+    btn.classList.add('sunk');
+  }
 }
 
 function createReadyButton() {
