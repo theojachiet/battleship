@@ -1,14 +1,18 @@
 import * as DOM from '../views/DOM.js';
 import { placeRandomShips } from '../utils/placement.js';
 import { disableDragAndDrop, enableDragAndDrop } from '../views/dragDrop.js';
+import { ComputerAI } from './computerAI.js';
 
 export const screenController = (() => {
     let game; //Gameflow Instance
     const dialog = document.querySelector('dialog');
     const container = document.querySelector('.container');
+    let ai;
 
     function start(newGame) {
         game = newGame;
+        ai = new ComputerAI(game.computer.gameboard);
+
 
         randomizeAndRender(game.currentPlayer, game.otherPlayer);
 
@@ -59,7 +63,7 @@ export const screenController = (() => {
             const readyPlayerButton = document.querySelector('button.ready');
             readyPlayerButton.removeEventListener('click', board1ReadyHandler);
             readyPlayerButton.addEventListener('click', board2ReadyHandler);
-            
+
             enableDragAndDrop(opponentBoard, game);
             return;
         }
@@ -129,17 +133,9 @@ export const screenController = (() => {
     }
 
     function playComputerTurn() {
-        let row = Math.floor(Math.random() * 10);
-        let col = Math.floor(Math.random() * 10);
-
-        let result = game.playRound(row, col);
-
-        //plays until he enters a valid cell
-        while (!result.valid) {
-            row = Math.floor(Math.random() * 10);
-            col = Math.floor(Math.random() * 10);
-            result = game.playRound(row, col);
-        }
+        const { row, col } = ai.getNextMove();
+        const result = game.playRound(row, col);
+        ai.registerHit(row, col, result);
 
         DOM.updateBoard(game.currentPlayer, row, col, result.hit);
 
