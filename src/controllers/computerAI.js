@@ -2,27 +2,48 @@ export class ComputerAI {
     constructor(gameboard) {
         this.gameboard = gameboard;
         this.memory = [];
+        this.mode = 'random';
+        this.storedShip = null;
+        this.submode = 'directionLess';
         //Add a mode : if a ship is hit but not sunk, go into targetShip mode, if there is no ship or all the ships are sunk, go into search mode.
     }
 
     getNextMove() {
+        //First move case
         if (this.memory.length === 0) {
             return this.makeRandomMove();
         }
 
-        const previousMove = this.memory[this.memory.length - 1];
-        const previousResult = previousMove[2];
+        //Return to random mode if all the ships on the board are sunk
+        if (this.checkAllShipsSunk()) {
+            this.mode = 'random';
+        } else {
+            this.mode = 'target';
+        }
 
-        console.log(previousResult);
+        console.log(this.mode);
 
-        if (previousResult.hit === 'ship') {
-            if (!previousResult.ship.isSunk()) {
+        if (this.mode === 'random') {
+            return this.makeRandomMove();
+        } else if (this.mode === 'target') {
+            const previousMove = this.memory[this.memory.length - 1];
+            const previousResult = previousMove[2];
+
+            if (previousMove[0] === this.storedShip[0] && previousMove[1] === this.storedShip[1]) {
+                this.storedShip = previousMove;
                 return this.targetShip(previousMove);
+                //If previous move was hitting the ship => try around
+            } else if (previousResult.hit !== 'ship') {
+                return this.targetShip(this.storedShip);
+                //If previous move was a failed attempt to find another part of the ship => try again
+            } else if (previousResult.hit === 'ship') {
+                this.submode = 'direction';
+                console.log('direction');
+                return this.makeRandomMove();
+                //If previous move succeded to find another ship, determine its direction and change the submode
             } else {
                 return this.makeRandomMove();
             }
-        } else {
-            return this.makeRandomMove();
         }
     }
 
@@ -56,6 +77,19 @@ export class ComputerAI {
         }
 
         return { row, col };
+    }
+
+    checkAllShipsSunk() {
+        for (let target of this.memory) {
+            if (target[2].hit === 'ship') {
+                if (target[2].ship.sunk === false) {
+                    this.storedShip = target;
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     checkMoveAlreadyMade(row, col) {
