@@ -61,7 +61,7 @@ export class ComputerAI {
             const row = shipCell[0] + dr;
             const col = shipCell[1] + dc;
 
-            if (!this.checkMoveAlreadyMade(row, col)) {
+            if (!this.checkMoveAlreadyMade(row, col) && row >= 0 && col >= 0 && row < 10 && col < 10) {
                 return { row, col };
             }
         }
