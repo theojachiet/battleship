@@ -61,9 +61,11 @@ export class ComputerAI {
             const row = shipCell[0] + dr;
             const col = shipCell[1] + dc;
 
-            if (!this.checkMoveAlreadyMade(row, col) && row >= 0 && col >= 0 && row < 10 && col < 10) {
+            const inBounds = row >= 0 && row < 10 && col >= 0 && col < 10;
+
+            if (inBounds && !this.checkMoveAlreadyMade(row, col)) {
                 return { row, col };
-            }
+            } else continue;
         }
 
         return { row, col };
@@ -94,8 +96,8 @@ export class ComputerAI {
             const leftCell = (storedShip[1] < previousMove[1]) ? storedShip : previousMove;
 
             //Check on both sides of the cells if the ship stops somewhere
-            if (this.checkMoveAlreadyMade(rightCell[0], rightCell[1] + 1)) return 'left';
-            else if (this.checkMoveAlreadyMade(leftCell[0], leftCell[1] - 1)) return 'right';
+            if (this.checkMoveAlreadyMade(rightCell[0], rightCell[1] + 1) || rightCell[1] === 9) return 'left';
+            else if (this.checkMoveAlreadyMade(leftCell[0], leftCell[1] - 1) || leftCell[1] === 0) return 'right';
             else return null;
 
         } else {
@@ -103,8 +105,8 @@ export class ComputerAI {
             const bottomCell = (storedShip[0] > previousMove[0]) ? storedShip : previousMove;
 
             //Check on both sides of the cells if the ship stops somewhere
-            if (this.checkMoveAlreadyMade(topCell[0] - 1, topCell[1])) return 'down';
-            else if (this.checkMoveAlreadyMade(bottomCell[0] + 1, bottomCell[1])) return 'up';
+            if (this.checkMoveAlreadyMade(topCell[0] - 1, topCell[1]) || topCell === 0) return 'down';
+            else if (this.checkMoveAlreadyMade(bottomCell[0] + 1, bottomCell[1]) || bottomCell === 9) return 'up';
             else return null;
         }
     }
