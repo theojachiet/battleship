@@ -21,8 +21,6 @@ export class ComputerAI {
             this.mode = 'target';
         }
 
-        console.log(this.mode);
-
         if (this.mode === 'random') {
             return this.makeRandomMove();
         } else if (this.mode === 'target') {
@@ -37,13 +35,17 @@ export class ComputerAI {
                 return this.targetShip(this.storedShip);
                 //If previous move was a failed attempt to find another part of the ship => try again
             } else if (previousResult.hit === 'ship') {
-                this.submode = 'direction';
-                console.log('direction');
-                return this.makeRandomMove();
-                //If previous move succeded to find another ship, determine its direction and change the submode
+                this.submode = 'orientation';
+                const orientation = this.getShipOrientation(this.storedShip, previousMove);
+                const direction = this.getShipDirection(this.storedShip, previousMove, orientation);
+                console.log(direction);
+                return this.makeRandomMove()
+                //If previous move succeded to find another ship, determine its orientation, direction and change the submode
             } else {
                 return this.makeRandomMove();
             }
+        } else {
+            return this.makeRandomMove();
         }
     }
 
@@ -77,6 +79,34 @@ export class ComputerAI {
         }
 
         return { row, col };
+    }
+
+    getShipOrientation(storedShip, previousMove) {
+        //checking if both rows are the same
+        if (storedShip[0] === previousMove[0]) return 'horizontal';
+        else return 'vertical';
+    }
+
+    getShipDirection(storedShip, previousMove, orientation) {
+        if (orientation === 'horizontal') {
+
+            const rightCell = (storedShip[1] > previousMove[1]) ? storedShip : previousMove;
+            const leftCell = (storedShip[1] < previousMove[1]) ? storedShip : previousMove;
+
+            //Check on both sides of the cells if the ship stops somewhere
+            if (this.checkMoveAlreadyMade(rightCell[0], rightCell[1] + 1)) return 'left';
+            else if (this.checkMoveAlreadyMade(leftCell[0], leftCell[1] - 1)) return 'right';
+            else return null;
+
+        } else {
+            const topCell = (storedShip[0] < previousMove[0]) ? storedShip : previousMove;
+            const bottomCell = (storedShip[0] > previousMove[0]) ? storedShip : previousMove;
+
+            //Check on both sides of the cells if the ship stops somewhere
+            if (this.checkMoveAlreadyMade(topCell[0] - 1, topCell[1])) return 'down';
+            else if (this.checkMoveAlreadyMade(bottomCell[0] + 1, bottomCell[1])) return 'up';
+            else return null;
+        }
     }
 
     checkAllShipsSunk() {
