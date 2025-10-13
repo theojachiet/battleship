@@ -31,43 +31,24 @@ export class ComputerAI {
             const previousResult = previousMove[2];
 
             if (previousMove[0] === this.storedShip[0] && previousMove[1] === this.storedShip[1]) {
+                //If previous move was hitting the ship => try around
                 this.storedShip = previousMove;
                 return this.targetShip(previousMove);
-                //If previous move was hitting the ship => try around
-            } else if (this.shipOrientation !== null) {
-                if (this.direction === null) {
-                    // return this.guessDirection(this.storedShip, previousMove, this.shipOrientation);
-                }
+
             } else if (previousResult.hit !== 'ship' && this.shipOrientation === null && this.direction === null) {
-                return this.targetShip(this.storedShip);
                 //If previous move was a failed attempt to find another part of the ship => try again
+                return this.targetShip(this.storedShip);
+
             } else if (previousResult.hit === 'ship') {
                 //If previous move succeded to find another ship, determine its orientation and direction
 
                 this.shipOrientation = this.getShipOrientation(this.storedShip, previousMove);
+                console.log(this.shipOrientation);
                 this.direction = this.getShipDirection(this.storedShip, previousMove, this.shipOrientation);
+                console.log(this.direction);
 
-                // if (!this.direction) return this.guessDirection(this.storedShip, previousMove, this.shipOrientation);
+                return this.selectCellFromDirection();
 
-                let row, col;
-                switch (this.direction.direction) {
-                    case 'up':
-                        row = this.direction.borderCell[0] - 1;
-                        col = this.direction.borderCell[1];
-                    case 'down':
-                        row = this.direction.borderCell[0] + 1;
-                        col = this.direction.borderCell[1];
-                    case 'left':
-                        row = this.direction.borderCell[0];
-                        col = this.direction.borderCell[1] - 1;
-                    case 'right':
-                        row = this.direction.borderCell[0];
-                        col = this.direction.borderCell[1] + 1;
-                    default:
-                        console.log('no direction found for now');
-                }
-
-                return { row, col }
             } else {
                 return this.makeRandomMove();
             }
@@ -125,8 +106,11 @@ export class ComputerAI {
             //Check on both sides of the cells if the ship stops somewhere
             if (this.checkMoveAlreadyMade(rightCell[0], rightCell[1] + 1) || rightCell[1] === 9) return { direction: 'left', borderCell: leftCell };
             else if (this.checkMoveAlreadyMade(leftCell[0], leftCell[1] - 1) || leftCell[1] === 0) return { direction: 'right', borderCell: rightCell };
+
             else {
-                //Return an object to test a direction in the getNexMove function
+                //Check for boundaries and return an object to test a direction in getNexMove
+                if (rightCell[1] === 9) return { direction: 'none', row: leftCell[0], col: leftCell[1] - 1 };
+                else return { direction: 'none', row: rightCell[0], col: rightCell[1] + 1 };
             }
 
         } else {
@@ -136,8 +120,44 @@ export class ComputerAI {
             //Check on both sides of the cells if the ship stops somewhere
             if (this.checkMoveAlreadyMade(topCell[0] - 1, topCell[1]) || topCell === 0) return { direction: 'down', borderCell: bottomCell };
             else if (this.checkMoveAlreadyMade(bottomCell[0] + 1, bottomCell[1]) || bottomCell === 9) return { direction: 'up', borderCell: topCell };
-            else return null;
+
+            else {
+                //Check for boundaries and return an object to test a direction in getNexMove
+                if (bottomCell[0] === 9) return { direction: 'none', row: topCell[0] - 1, col: topCell[1] };
+                else return { direction: 'none', row: bottomCell[0] + 1, col: bottomCell[1] };
+            }
         }
+    }
+
+    selectCellFromDirection() {
+        let row = 0;
+        let col = 0;
+        switch (this.direction.direction) {
+            case 'up':
+                row = this.direction.borderCell[0] - 1;
+                col = this.direction.borderCell[1];
+                break;
+            case 'down':
+                row = this.direction.borderCell[0] + 1;
+                col = this.direction.borderCell[1];
+                break;
+            case 'left':
+                row = this.direction.borderCell[0];
+                col = this.direction.borderCell[1] - 1;
+                break;
+            case 'right':
+                row = this.direction.borderCell[0];
+                col = this.direction.borderCell[1] + 1;
+                break;
+            case 'none':
+                row = this.direction.row;
+                col = this.direction.col;
+                break;
+        }
+
+        console.log(row + ' ' + col);
+
+        return { row, col }
     }
 
     checkAllShipsSunk() {
