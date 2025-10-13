@@ -4,7 +4,8 @@ export class ComputerAI {
         this.memory = [];
         this.mode = 'random';
         this.storedShip = null;
-        this.submode = 'directionLess';
+        this.shipOrientation = null;
+        this.direction = null;
         //Add a mode : if a ship is hit but not sunk, go into targetShip mode, if there is no ship or all the ships are sunk, go into search mode.
     }
 
@@ -17,6 +18,8 @@ export class ComputerAI {
         //Return to random mode if all the ships on the board are sunk
         if (this.checkAllShipsSunk()) {
             this.mode = 'random';
+            this.shipOrientation = null;
+            this.direction = null;
         } else {
             this.mode = 'target';
         }
@@ -31,16 +34,40 @@ export class ComputerAI {
                 this.storedShip = previousMove;
                 return this.targetShip(previousMove);
                 //If previous move was hitting the ship => try around
-            } else if (previousResult.hit !== 'ship') {
+            } else if (this.shipOrientation !== null) {
+                if (this.direction === null) {
+
+                }
+            } else if (previousResult.hit !== 'ship' && this.shipOrientation === null && this.direction === null) {
                 return this.targetShip(this.storedShip);
                 //If previous move was a failed attempt to find another part of the ship => try again
             } else if (previousResult.hit === 'ship') {
-                this.submode = 'orientation';
-                const orientation = this.getShipOrientation(this.storedShip, previousMove);
-                const direction = this.getShipDirection(this.storedShip, previousMove, orientation);
-                console.log(direction);
-                return this.makeRandomMove()
-                //If previous move succeded to find another ship, determine its orientation, direction and change the submode
+                //If previous move succeded to find another ship, determine its orientation and direction
+
+                this.shipOrientation = this.getShipOrientation(this.storedShip, previousMove);
+                this.direction = this.getShipDirection(this.storedShip, previousMove, this.shipOrientation);
+
+                if (!this.direction) return this.guessDirection();
+
+                let row, col;
+                switch (this.direction.direction) {
+                    case 'up':
+                        row = this.direction.borderCell[0] - 1;
+                        col = this.direction.borderCell[1];
+                    case 'down':
+                        row = this.direction.borderCell[0] + 1;
+                        col = this.direction.borderCell[1];
+                    case 'left':
+                        row = this.direction.borderCell[0];
+                        col = this.direction.borderCell[1] - 1;
+                    case 'right':
+                        row = this.direction.borderCell[0];
+                        col = this.direction.borderCell[1] + 1;
+                    default:
+                        console.log('no direction found for now');
+                }
+
+                return { row, col }
             } else {
                 return this.makeRandomMove();
             }
@@ -96,8 +123,8 @@ export class ComputerAI {
             const leftCell = (storedShip[1] < previousMove[1]) ? storedShip : previousMove;
 
             //Check on both sides of the cells if the ship stops somewhere
-            if (this.checkMoveAlreadyMade(rightCell[0], rightCell[1] + 1) || rightCell[1] === 9) return 'left';
-            else if (this.checkMoveAlreadyMade(leftCell[0], leftCell[1] - 1) || leftCell[1] === 0) return 'right';
+            if (this.checkMoveAlreadyMade(rightCell[0], rightCell[1] + 1) || rightCell[1] === 9) return { direction: 'left', borderCell: leftCell };
+            else if (this.checkMoveAlreadyMade(leftCell[0], leftCell[1] - 1) || leftCell[1] === 0) return { direction: 'right', borderCell: rightCell };
             else return null;
 
         } else {
@@ -105,8 +132,8 @@ export class ComputerAI {
             const bottomCell = (storedShip[0] > previousMove[0]) ? storedShip : previousMove;
 
             //Check on both sides of the cells if the ship stops somewhere
-            if (this.checkMoveAlreadyMade(topCell[0] - 1, topCell[1]) || topCell === 0) return 'down';
-            else if (this.checkMoveAlreadyMade(bottomCell[0] + 1, bottomCell[1]) || bottomCell === 9) return 'up';
+            if (this.checkMoveAlreadyMade(topCell[0] - 1, topCell[1]) || topCell === 0) return { direction: 'down', borderCell: bottomCell };
+            else if (this.checkMoveAlreadyMade(bottomCell[0] + 1, bottomCell[1]) || bottomCell === 9) return { direction: 'up', borderCell: topCell };
             else return null;
         }
     }
