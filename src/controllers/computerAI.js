@@ -36,7 +36,7 @@ export class ComputerAI {
                 //If previous move was hitting the ship => try around
             } else if (this.shipOrientation !== null) {
                 if (this.direction === null) {
-
+                    // return this.guessDirection(this.storedShip, previousMove, this.shipOrientation);
                 }
             } else if (previousResult.hit !== 'ship' && this.shipOrientation === null && this.direction === null) {
                 return this.targetShip(this.storedShip);
@@ -47,7 +47,7 @@ export class ComputerAI {
                 this.shipOrientation = this.getShipOrientation(this.storedShip, previousMove);
                 this.direction = this.getShipDirection(this.storedShip, previousMove, this.shipOrientation);
 
-                if (!this.direction) return this.guessDirection();
+                // if (!this.direction) return this.guessDirection(this.storedShip, previousMove, this.shipOrientation);
 
                 let row, col;
                 switch (this.direction.direction) {
@@ -125,7 +125,9 @@ export class ComputerAI {
             //Check on both sides of the cells if the ship stops somewhere
             if (this.checkMoveAlreadyMade(rightCell[0], rightCell[1] + 1) || rightCell[1] === 9) return { direction: 'left', borderCell: leftCell };
             else if (this.checkMoveAlreadyMade(leftCell[0], leftCell[1] - 1) || leftCell[1] === 0) return { direction: 'right', borderCell: rightCell };
-            else return null;
+            else {
+                //Return an object to test a direction in the getNexMove function
+            }
 
         } else {
             const topCell = (storedShip[0] < previousMove[0]) ? storedShip : previousMove;
