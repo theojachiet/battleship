@@ -39,13 +39,11 @@ export class ComputerAI {
                 //If previous move was a failed attempt to find another part of the ship => try again
                 return this.targetShip(this.storedShip);
 
-            } else if (previousResult.hit === 'ship') {
+            } else if (previousResult.hit === 'ship' || previousResult.hit !== 'ship' && this.shipOrientation !== null) {
                 //If previous move succeded to find another ship, determine its orientation and direction
 
                 this.shipOrientation = this.getShipOrientation(this.storedShip, previousMove);
-                console.log(this.shipOrientation);
                 this.direction = this.getShipDirection(this.storedShip, previousMove, this.shipOrientation);
-                console.log(this.direction);
 
                 return this.selectCellFromDirection();
 
@@ -154,8 +152,6 @@ export class ComputerAI {
                 col = this.direction.col;
                 break;
         }
-
-        console.log(row + ' ' + col);
 
         return { row, col }
     }
