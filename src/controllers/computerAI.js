@@ -39,7 +39,7 @@ export class ComputerAI {
                 //If previous move was a failed attempt to find another part of the ship => try again
                 return this.targetShip(this.storedShip);
 
-            } else if (previousResult.hit === 'ship' || previousResult.hit !== 'ship' && this.shipOrientation !== null) {
+            } else if (previousResult.hit === 'ship') {
                 //If previous move succeded to find another ship, determine its orientation and direction
 
                 this.shipOrientation = this.getShipOrientation(this.storedShip, previousMove);
@@ -47,7 +47,15 @@ export class ComputerAI {
 
                 return this.selectCellFromDirection();
 
-            } else {
+            } else if (previousResult.hit !== 'ship' && this.shipOrientation !== null) {
+                // If it was a failed attempt at finding a direction, just try to find the direction again with the move made before
+                const secondLastMove = this.memory[this.memory.length - 2];
+
+                this.direction = this.getShipDirection(this.storedShip, secondLastMove, this.shipOrientation);
+
+                return this.selectCellFromDirection();
+            } 
+            else {
                 return this.makeRandomMove();
             }
         } else {
@@ -181,7 +189,7 @@ export class ComputerAI {
     } s
 
     registerHit(row, col, result) {
-        if (result.ship !== null) {
+        if (result.ship) {
             if (result.ship.sunk === true) {
                 this.eliminateSurroundingShipCells(result.ship);
             }
@@ -203,7 +211,7 @@ export class ComputerAI {
         for (let cell of ship.coordinates) {
             for (let direction of surroundings) {
                 if (!this.checkMoveAlreadyMade(cell[0] + direction[0], cell[1] + direction[1])) {
-                    this.memory.push([cell[0] + direction[0], cell[1] + direction[1], {hit: 'none'}]);
+                    this.memory.push([cell[0] + direction[0], cell[1] + direction[1], { hit: 'none' }]);
                 }
             }
         }

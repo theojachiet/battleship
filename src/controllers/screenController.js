@@ -9,6 +9,16 @@ export const screenController = (() => {
     const container = document.querySelector('.container');
     let ai;
 
+    container.addEventListener('click', (e) => {
+        const cell = e.target.closest('.cell');
+        if (!cell) return;
+
+        // only attack computer's board
+        if (cell.dataset.owner === 'computer') {
+            handleAttackClick(e);
+        }
+    });
+
     function start(newGame) {
         game = newGame;
         ai = new ComputerAI(game.computer.gameboard);
@@ -99,10 +109,12 @@ export const screenController = (() => {
 
         DOM.displayBoard(player2, player1);
 
-        const boards = document.querySelectorAll('.board');
-        const [playerBoard, opponentBoard] = boards;
-
-        return { playerBoard, opponentBoard, submitButton };
+        const boards = container.querySelectorAll('.board');
+        return {
+            playerBoard: boards[0],
+            opponentBoard: boards[1],
+            submitButton: container.querySelector('button.submit') || null
+        };
     }
 
     function handleAttackClick(e) {
