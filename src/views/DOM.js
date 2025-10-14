@@ -42,10 +42,10 @@ function createCellButton(player, cellData, row, col) {
     btn.classList.add('water');
     btn.dataset.type = 'water';
     btn.setAttribute('draggable', 'false');
-  } 
+  }
   else if (!player.ismyTurn) {
     setNonTurnCellState(btn, typeContent, cellData);
-  } 
+  }
   else {
     setPlayerTurnCellState(btn, typeContent, cellData);
   }
@@ -90,59 +90,63 @@ function applyDamageState(btn, cellData) {
 }
 
 function createReadyButton() {
-    const readyButton = document.createElement('button');
-    readyButton.classList.add('ready');
-    readyButton.textContent = 'Ready ?';
+  const readyButton = document.createElement('button');
+  readyButton.classList.add('ready');
+  readyButton.textContent = 'Ready ?';
 
-    container.appendChild(readyButton);
+  container.appendChild(readyButton);
 }
 
 function updateBoard(player, row, col, state) {
-    const selectedCell = document.querySelector(`[data-column="${col}"][data-row="${row}"][data-name="${player.name}"]`);
+  const selectedCell = document.querySelector(`[data-column="${col}"][data-row="${row}"][data-name="${player.name}"]`);
 
-    if (state === 'attacked') selectedCell.className = 'cell attacked';
-    else if (state === 'ship') {
-        selectedCell.className = 'cell damaged';
-    }
+  if (state === 'attacked') selectedCell.className = 'cell attacked';
+  else if (state === 'ship') {
+    selectedCell.className = 'cell damaged';
+  }
 }
 
 function markShipSunk(player, ship) {
-    for (let part of ship.coordinates) {
-        const shipCell = document.querySelector(`[data-column="${part[1]}"][data-row="${part[0]}"][data-name="${player.name}"]`);
-        shipCell.classList.add('sunk');
-    }
+  for (let part of ship.coordinates) {
+    const shipCell = document.querySelector(`[data-column="${part[1]}"][data-row="${part[0]}"][data-name="${player.name}"]`);
+    shipCell.classList.add('sunk');
+  }
 }
 
 function removeShip(player, ship) {
-    for (let cell of ship.coordinates) {
-        const cells = document.querySelector(`[data-column="${cell[1]}"][data-row="${cell[0]}"]`);
-        const oldShipCell = document.querySelector(`[data-column="${cell[1]}"][data-row="${cell[0]}"][data-name="${player.name}"]`);
-        player.gameboard.board[cell[0]][cell[1]].type.content = 'water';
-        oldShipCell.className = 'cell water';
-        oldShipCell.dataset.type = 'water';
-        oldShipCell.setAttribute('draggable', 'false');
-        player.gameboard.clearSpot(cell[0], cell[1]);
-    }
+  for (let cell of ship.coordinates) {
+    const cells = document.querySelector(`[data-column="${cell[1]}"][data-row="${cell[0]}"]`);
+    const oldShipCell = document.querySelector(`[data-column="${cell[1]}"][data-row="${cell[0]}"][data-name="${player.name}"]`);
+    player.gameboard.board[cell[0]][cell[1]].type.content = 'water';
+    oldShipCell.className = 'cell water';
+    oldShipCell.dataset.type = 'water';
+    oldShipCell.setAttribute('draggable', 'false');
+    player.gameboard.clearSpot(cell[0], cell[1]);
+  }
 }
 
 function renderNewShip(player, ship) {
-    for (let cell of ship.coordinates) {
-        const newShipCell = document.querySelector(`[data-column="${cell[1]}"][data-row="${cell[0]}"][data-name="${player.name}"]`);
-        player.gameboard.board[cell[0]][cell[1]].type.content = 'ship';
-        newShipCell.className = 'cell ship';
-        newShipCell.dataset.type = 'ship';
-        newShipCell.setAttribute('draggable', 'true');
-        player.gameboard.replaceShip(ship, cell[0], cell[1]);
-    }
+  for (let cell of ship.coordinates) {
+    const newShipCell = document.querySelector(`[data-column="${cell[1]}"][data-row="${cell[0]}"][data-name="${player.name}"]`);
+    player.gameboard.board[cell[0]][cell[1]].type.content = 'ship';
+    newShipCell.className = 'cell ship';
+    newShipCell.dataset.type = 'ship';
+    newShipCell.setAttribute('draggable', 'true');
+    player.gameboard.replaceShip(ship, cell[0], cell[1]);
+  }
 }
 
 function clearContainer() {
-    container.textContent = '';
+  container.textContent = '';
 }
 
 function switchButtonOpponent(switchButton) {
-    if (switchButton.textContent === 'Switch to Human Opponent') switchButton.textContent = 'Switch to Computer Opponent';
-    else switchButton.textContent = 'Switch to Human Opponent';
+  if (switchButton.textContent === 'Switch to Human Opponent') switchButton.textContent = 'Switch to Computer Opponent';
+  else switchButton.textContent = 'Switch to Human Opponent';
 }
 
-export { displayBoard, updateBoard, removeShip, renderNewShip, clearContainer, markShipSunk, switchButtonOpponent, createReadyButton };
+function showGameOver(winner) {
+  alert('Congratulations ! ' + winner + ' won !');
+}
+
+export { displayBoard, updateBoard, removeShip, renderNewShip, clearContainer, markShipSunk, switchButtonOpponent, createReadyButton, showGameOver };

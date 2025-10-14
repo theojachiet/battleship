@@ -53,7 +53,6 @@ export const screenController = (() => {
             const { playerBoard, opponentBoard } = renderBoards(player1, player2, { showSubmit: false });
 
             enableDragAndDrop(playerBoard, game);
-            opponentBoard.addEventListener('click', handleAttackClick);
         } else {
             const { playerBoard, opponentBoard } = renderBoards(player1, player2, { showSubmit: false, showReady: true });
 
@@ -134,7 +133,7 @@ export const screenController = (() => {
         DOM.updateBoard(game.currentPlayer, selectedRow, selectedCol, result.hit);
 
         if (result.ship) if (result.ship.sunk) DOM.markShipSunk(game.currentPlayer, result.ship);
-        if (result.gameOver) return showGameOver(result.winner);
+        if (result.gameOver) return DOM.showGameOver(result.winner);
 
         if (game.currentPlayer.type === 'computer') {
             playComputerTurn();
@@ -151,7 +150,7 @@ export const screenController = (() => {
         DOM.updateBoard(game.currentPlayer, row, col, result.hit);
 
         if (result.ship) if (result.ship.sunk) DOM.markShipSunk(game.currentPlayer, result.ship);
-        if (result.gameOver) return showGameOver(result.winner);
+        if (result.gameOver) return DOM.showGameOver(result.winner);
     }
 
     function updateTurnDisplay() {

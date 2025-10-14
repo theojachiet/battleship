@@ -10,27 +10,39 @@ export class ComputerAI {
     }
 
     getNextMove() {
-        //First move case
-        if (this.memory.length === 0) {
-            return this.makeRandomMove();
+        let move;
+        try {
+            //First move case
+            if (this.memory.length === 0) move = this.makeRandomMove();
+
+            //Return to random mode if all the ships on the board are sunk
+            else if (this.checkAllShipsSunk()) {
+                this.mode = 'random';
+                this.shipOrientation = null;
+                this.direction = null;
+                move = this.makeRandomMove();
+            } else {
+                this.mode = 'target';
+                move = this.targetModeMove();
+            }
+        } catch (e) {
+            console.error('AI failed to find a move:', e);
+            move = this.makeRandomMove();
         }
 
-        //Return to random mode if all the ships on the board are sunk
-        if (this.checkAllShipsSunk()) {
-            this.mode = 'random';
-            this.shipOrientation = null;
-            this.direction = null;
-        } else {
-            this.mode = 'target';
-        }
-
-        if (this.mode === 'target') return this.targetModeMove();
-        else return this.makeRandomMove();
+        //Safety fallback in case the AI Algorithm encounters a problem
+        if (!move || move.row == null || move.col == null) move = this.makeRandomMove();
+        return move;
     }
 
     targetModeMove() {
         const previousMove = this.memory[this.memory.length - 1];
         const previousResult = previousMove[2];
+
+        if (!this.storedShip) {
+            // No base ship to target from
+            return this.makeRandomMove();
+        }
 
         if (previousMove[0] === this.storedShip[0] && previousMove[1] === this.storedShip[1]) {
             //If previous move was hitting the ship => try around
@@ -54,12 +66,10 @@ export class ComputerAI {
             const secondLastMove = this.memory[this.memory.length - 2];
 
             this.direction = this.getShipDirection(this.storedShip, secondLastMove, this.shipOrientation);
-
             return this.selectCellFromDirection();
         }
-        else {
-            return this.makeRandomMove();
-        }
+
+        return this.makeRandomMove();
     }
 
     targetShip(shipCell) {
@@ -85,12 +95,22 @@ export class ComputerAI {
     }
 
     makeRandomMove() {
-        let row = Math.floor(Math.random() * 10);
-        let col = Math.floor(Math.random() * 10);
+        const maxAttempts = 50;
+        let attempts = 0;
+        let row, col;
 
         do {
             row = Math.floor(Math.random() * 10);
             col = Math.floor(Math.random() * 10);
+            attempts++;
+            if (attempts > maxAttempts) {
+                // Fallback: allow any unplayed cell
+                do {
+                    row = Math.floor(Math.random() * 10);
+                    col = Math.floor(Math.random() * 10);
+                } while (this.checkMoveAlreadyMade(row, col));
+                break;
+            }
         } while ((row + col) % 2 !== 0 || this.checkMoveAlreadyMade(row, col));
 
         return { row, col };
@@ -191,11 +211,14 @@ export class ComputerAI {
     }
 
     registerHit(row, col, result) {
-        if (result.ship) {
-            if (result.ship.sunk === true) {
-                this.eliminateSurroundingShipCells(result.ship);
-            }
+        //If the ship is sunk : reset search variables to not trigger the wrong algorithm
+        if (result.ship && result.ship.sunk) {
+            this.shipOrientation = null;
+            this.direction = null;
+            this.storedShip = null;
+            this.eliminateSurroundingShipCells(result.ship);
         }
+
         this.memory.push([row, col, result]);
     }
 
