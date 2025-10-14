@@ -188,7 +188,7 @@ export class ComputerAI {
         }
 
         return false;
-    } s
+    }
 
     registerHit(row, col, result) {
         if (result.ship) {
