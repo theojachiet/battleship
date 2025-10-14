@@ -106,7 +106,7 @@ export class ComputerAI {
             else if (this.checkMoveAlreadyMade(leftCell[0], leftCell[1] - 1) || leftCell[1] === 0) return { direction: 'right', borderCell: rightCell };
 
             else {
-                //Check for boundaries and return an object to test a direction in getNexMove
+                //Check for boundaries and return an object to test a direction in getNexMove TODO : implement the extra boundaries logic here if necessary
                 if (rightCell[1] === 9) return { direction: 'none', row: leftCell[0], col: leftCell[1] - 1 };
                 else return { direction: 'none', row: rightCell[0], col: rightCell[1] + 1 };
             }
@@ -181,6 +181,31 @@ export class ComputerAI {
     } s
 
     registerHit(row, col, result) {
+        if (result.ship !== null) {
+            if (result.ship.sunk === true) {
+                this.eliminateSurroundingShipCells(result.ship);
+            }
+        }
         this.memory.push([row, col, result]);
+    }
+
+    eliminateSurroundingShipCells(ship) {
+        const surroundings = [
+            [0, 1],
+            [1, 0],
+            [1, 1],
+            [0, -1],
+            [-1, 0],
+            [-1, -1],
+            [1, -1],
+            [-1, 1]
+        ]
+        for (let cell of ship.coordinates) {
+            for (let direction of surroundings) {
+                if (!this.checkMoveAlreadyMade(cell[0] + direction[0], cell[1] + direction[1])) {
+                    this.memory.push([cell[0] + direction[0], cell[1] + direction[1], {hit: 'none'}]);
+                }
+            }
+        }
     }
 }
