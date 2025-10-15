@@ -10,6 +10,7 @@ export const screenController = (() => {
     let ai;
 
     container.addEventListener('click', (e) => {
+        console.log('click on container');
         const cell = e.target.closest('.cell');
         if (!cell) return;
 
@@ -65,6 +66,8 @@ export const screenController = (() => {
     }
 
     function renderNextRound() {
+        console.log('renderNextROund triggered')
+
         if (!game.opponent.ready) {
             const { playerBoard, opponentBoard } = renderBoards(game.human, game.opponent, { showSubmit: false, showReady: true });
 
@@ -133,7 +136,9 @@ export const screenController = (() => {
         DOM.updateBoard(game.currentPlayer, selectedRow, selectedCol, result.hit);
 
         if (result.ship) if (result.ship.sunk) DOM.markShipSunk(game.currentPlayer, result.ship);
-        if (result.gameOver) return DOM.showGameOver(result.winner);
+        if (result.gameOver) {
+            return DOM.showGameOver(result.winner);
+        }
 
         if (game.currentPlayer.type === 'computer') {
             playComputerTurn();
