@@ -146,7 +146,7 @@ function switchButtonOpponent(switchButton) {
 }
 
 function showGameOver(winner) {
-  alert('Congratulations ! ' + winner + ' won !');
+  alert('Game Over : ' + winner.name + ' won !');
 }
 
 export { displayBoard, updateBoard, removeShip, renderNewShip, clearContainer, markShipSunk, switchButtonOpponent, createReadyButton, showGameOver };
