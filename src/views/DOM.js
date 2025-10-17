@@ -1,3 +1,5 @@
+import { mergeWithCustomize } from "webpack-merge";
+
 const container = document.querySelector('.container');
 
 function displayBoard(player, opponent = 'none') {
@@ -10,11 +12,16 @@ function displayBoard(player, opponent = 'none') {
   const boardData = player.gameboard.getBoard();
 
   for (let row = 0; row < boardData.length; row++) {
+    const rowNumber = document.createElement('span');
+    rowNumber.textContent = row + 1;
+    rowNumber.classList.add('rowNumber');
+    board.appendChild(rowNumber);
     for (let col = 0; col < boardData[row].length; col++) {
       const cellData = boardData[row][col];
       const cellButton = createCellButton(player, cellData, row, col);
       board.appendChild(cellButton);
     }
+    
   }
 
   const label = document.createElement('p');
