@@ -11,17 +11,35 @@ function displayBoard(player, opponent = 'none') {
 
   const boardData = player.gameboard.getBoard();
 
-  for (let row = 0; row < boardData.length; row++) {
+  // //Displaying Column Letters
+  // const colLetters = document.createElement('p');
+  // colLetters.classList.add('colLetters');
+  // colLetters.textContent = 'A B C D E F G H I J';
+  // boardContainer.appendChild(colLetters);
+
+  for (let row = -1; row < boardData.length; row++) {
+    if (row === -1) {
+      const letters = [' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+      for (let letter of letters) {
+        const colLetter = document.createElement('span');
+        colLetter.classList.add('colLetter');
+        colLetter.textContent = letter;
+        board.appendChild(colLetter);
+      }
+      row++;
+    }
+    //Displaying row Numbers
     const rowNumber = document.createElement('span');
     rowNumber.textContent = row + 1;
     rowNumber.classList.add('rowNumber');
     board.appendChild(rowNumber);
+
     for (let col = 0; col < boardData[row].length; col++) {
       const cellData = boardData[row][col];
       const cellButton = createCellButton(player, cellData, row, col);
       board.appendChild(cellButton);
     }
-    
+
   }
 
   const label = document.createElement('p');
