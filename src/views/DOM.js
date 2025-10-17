@@ -1,5 +1,3 @@
-import { mergeWithCustomize } from "webpack-merge";
-
 const container = document.querySelector('.container');
 
 function displayBoard(player, opponent = 'none') {
@@ -10,12 +8,6 @@ function displayBoard(player, opponent = 'none') {
   board.classList.add('board');
 
   const boardData = player.gameboard.getBoard();
-
-  // //Displaying Column Letters
-  // const colLetters = document.createElement('p');
-  // colLetters.classList.add('colLetters');
-  // colLetters.textContent = 'A B C D E F G H I J';
-  // boardContainer.appendChild(colLetters);
 
   for (let row = -1; row < boardData.length; row++) {
     if (row === -1) {
@@ -161,6 +153,21 @@ function renderNewShip(player, ship) {
   }
 }
 
+function updateDescription(player, row, col, result) {
+  const letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+  let elementAttacked;
+  if (result.hit === 'attacked') elementAttacked = 'miss';
+  if (result.hit === 'ship') {
+    if (result.ship.sunk) {
+      elementAttacked = 'coulé';
+    } else {
+      elementAttacked = 'touché';
+    }
+  }
+  const description = document.querySelector('.description');
+  description.textContent = `${player.name} attacks ${letters[col]} ${row + 1} : ${elementAttacked}`;
+}
+
 function clearContainer() {
   container.textContent = '';
 }
@@ -174,4 +181,4 @@ function showGameOver(winner) {
   alert('Game Over : ' + winner.name + ' won !');
 }
 
-export { displayBoard, updateBoard, removeShip, renderNewShip, clearContainer, markShipSunk, switchButtonOpponent, createReadyButton, showGameOver };
+export { displayBoard, updateBoard, removeShip, renderNewShip, clearContainer, markShipSunk, switchButtonOpponent, createReadyButton, showGameOver, updateDescription };

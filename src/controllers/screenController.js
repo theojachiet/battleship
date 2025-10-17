@@ -153,6 +153,7 @@ export const screenController = (() => {
         ai.registerHit(row, col, result);
 
         DOM.updateBoard(game.currentPlayer, row, col, result.hit);
+        DOM.updateDescription(game.otherPlayer, row, col, result);
 
         if (result.ship) if (result.ship.sunk) DOM.markShipSunk(game.currentPlayer, result.ship);
         if (result.gameOver) {
