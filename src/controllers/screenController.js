@@ -39,8 +39,8 @@ export const screenController = (() => {
     function randomizeAndRender(player1 = game.currentPlayer, player2 = game.otherPlayer) {
         player1.ready = false;
         player2.ready = false;
-        player1.gameOver = false;
-        player2.gameOver = false;
+        player1.gameboard.gameOver = false;
+        player2.gameboard.gameOver = false;
 
         //keep it consistent with the gameflow
         player1.ismyTurn = (player1 === game.currentPlayer);
@@ -136,7 +136,8 @@ export const screenController = (() => {
 
         if (result.ship) if (result.ship.sunk) DOM.markShipSunk(game.currentPlayer, result.ship);
         if (result.gameOver) {
-            return DOM.showGameOver(result.winner);
+            DOM.showGameOver(result.winner);
+            return;
         }
 
         if (game.currentPlayer.type === 'computer') {
@@ -155,7 +156,9 @@ export const screenController = (() => {
 
         if (result.ship) if (result.ship.sunk) DOM.markShipSunk(game.currentPlayer, result.ship);
         if (result.gameOver) {
-            return DOM.showGameOver(result.winner);
+            DOM.showGameOver(result.winner);
+            game.addTurn();
+            return;
         }
     }
 

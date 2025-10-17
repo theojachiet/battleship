@@ -32,7 +32,7 @@ export class ComputerAI {
 
         //Safety fallback in case the AI Algorithm encounters a problem
         if (!move || move.row == null || move.col == null) move = this.makeRandomMove();
-        return move;
+        return this.makeRandomMove();
     }
 
     targetModeMove() {
