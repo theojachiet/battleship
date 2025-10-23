@@ -174,7 +174,7 @@ function updateDescription(player, row, col, result) {
     }
   }
   const description = document.querySelector('.description');
-  description.textContent = `${player.name} attacks ${letters[col]} ${row + 1} : ${elementAttacked}`;
+  description.textContent = `${player.name} attacks ${letters[col]} ${parseInt(row) + 1} : ${elementAttacked}`;
 }
 
 function clearContainer() {
