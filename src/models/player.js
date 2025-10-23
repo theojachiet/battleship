@@ -6,6 +6,7 @@ export class Player {
         this.gameboard = new GameBoard();
         this.ismyTurn = ismyTurn;
         this.name = name;
+        this.hasMadeMove = false;
     }
 
     changeTurn() {

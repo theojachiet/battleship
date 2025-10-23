@@ -43,6 +43,8 @@ export const screenController = (() => {
         player2.gameboard.gameOver = false;
         player1.gameboard.attacks = [];
         player2.gameboard.attacks = [];
+        player1.hasMadeMove = false;
+        player2.hasMadeMove = false;
 
         //keep it consistent with the gameflow
         player1.ismyTurn = (player1 === game.currentPlayer);
@@ -152,6 +154,7 @@ export const screenController = (() => {
         } else {
             updateTurnDisplay();
             DOM.updateDescription(game.otherPlayer, selectedRow, selectedCol, result);
+            game.otherPlayer.hasMadeMove = true;
         }
     }
 
@@ -211,6 +214,14 @@ export const screenController = (() => {
     }
 
     function submitMove() {
+
+        //TODO : detect if the player has already made a move, if not, show an alert
+        if (!game.otherPlayer.hasMadeMove) {
+            alert('Make a move before submitting !');
+            return;
+        }
+
+        game.otherPlayer.hasMadeMove = false;
 
         const dialogText = document.querySelector('.text');
         dialogText.textContent = `${game.otherPlayer.name} has played, pass the device to ${game.currentPlayer.name}`;
