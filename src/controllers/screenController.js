@@ -144,6 +144,7 @@ export const screenController = (() => {
             playComputerTurn();
         } else {
             updateTurnDisplay();
+            DOM.updateDescription(game.otherPlayer, selectedRow, selectedCol, result);
         }
     }
 
