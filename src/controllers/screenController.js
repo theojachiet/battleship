@@ -37,23 +37,8 @@ export const screenController = (() => {
     }
 
     function randomizeAndRender(player1 = game.currentPlayer, player2 = game.otherPlayer) {
-        player1.ready = false;
-        player2.ready = false;
-        player1.gameboard.gameOver = false;
-        player2.gameboard.gameOver = false;
-        player1.gameboard.attacks = [];
-        player2.gameboard.attacks = [];
-        player1.hasMadeMove = false;
-        player2.hasMadeMove = false;
-
-        //keep it consistent with the gameflow
-        player1.ismyTurn = (player1 === game.currentPlayer);
-        player2.ismyTurn = (player2 === game.currentPlayer);
-
-        player1.gameboard.clearBoard();
-        player2.gameboard.clearBoard();
-        placeRandomShips(player1);
-        placeRandomShips(player2);
+        playerReset(player1);
+        playerReset(player2);
 
         if (player2.type === 'computer') {
             const { playerBoard, opponentBoard } = renderBoards(player1, player2, { showSubmit: false });
@@ -68,6 +53,18 @@ export const screenController = (() => {
             const readyPlayerButton = document.querySelector('button.ready');
             readyPlayerButton.addEventListener('click', board1ReadyHandler);
         }
+    }
+
+    function playerReset(player) {
+        player.ready = false;
+        player.gameboard.gameOver = false;
+        player.gameboard.attacks = [];
+        player.hasMadeMove = false;
+
+        player.ismyTurn = (player === game.currentPlayer);
+
+        player.gameboard.clearBoard();
+        placeRandomShips(player);
     }
 
     function renderNextRound() {
