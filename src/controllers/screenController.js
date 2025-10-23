@@ -41,6 +41,8 @@ export const screenController = (() => {
         player2.ready = false;
         player1.gameboard.gameOver = false;
         player2.gameboard.gameOver = false;
+        player1.gameboard.attacks = [];
+        player2.gameboard.attacks = [];
 
         //keep it consistent with the gameflow
         player1.ismyTurn = (player1 === game.currentPlayer);

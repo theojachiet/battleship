@@ -11,6 +11,8 @@ function displayBoard(player, opponent = 'none') {
 
   for (let row = -1; row < boardData.length; row++) {
     if (row === -1) {
+
+      //Displaying columns Letters
       const letters = [' ', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
       for (let letter of letters) {
         const colLetter = document.createElement('span');
@@ -28,7 +30,7 @@ function displayBoard(player, opponent = 'none') {
 
     for (let col = 0; col < boardData[row].length; col++) {
       const cellData = boardData[row][col];
-      const cellButton = createCellButton(player, cellData, row, col);
+      const cellButton = createCellButton(player, cellData, row, col, opponent);
       board.appendChild(cellButton);
     }
 
@@ -45,6 +47,13 @@ function displayBoard(player, opponent = 'none') {
 function createCellButton(player, cellData, row, col) {
   const btn = document.createElement('button');
   btn.classList.add('cell');
+
+  if (player.gameboard.attacks.length > 0 && player.ismyTurn) {
+    if (player.gameboard.attacks.at(-1)[0] == row && player.gameboard.attacks.at(-1)[1] == col) {
+      btn.classList.add('last');
+    }
+  }
+
   btn.dataset.column = col;
   btn.dataset.row = row;
   btn.dataset.owner = player.type;

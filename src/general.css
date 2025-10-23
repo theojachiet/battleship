@@ -58,6 +58,10 @@ button {
   outline: 1px solid whitesmoke;
 }
 
+button.last {
+  border: 6px solid limegreen;
+}
+
 .rowNumber {
   color: white;
   padding-top: 15px;
