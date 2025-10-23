@@ -178,7 +178,10 @@ function switchButtonOpponent(switchButton) {
 }
 
 function showGameOver(winner) {
-  alert('Game Over : ' + winner.name + ' won !');
+  const description = document.querySelector('.description');
+
+  description.textContent = 'Game Over : ' + winner.name + ' won !';
+  description.style.color = 'yellow';
 }
 
 export { displayBoard, updateBoard, removeShip, renderNewShip, clearContainer, markShipSunk, switchButtonOpponent, createReadyButton, showGameOver, updateDescription };

@@ -29,7 +29,14 @@ export class GameFlow {
         if (hit.type === 'ship') ship = this.otherPlayer.gameboard.getShip(row, col);
 
         if (this.otherPlayer.gameboard.gameOver) {
-            return { valid: true, gameOver: true, winner: this.currentPlayer };
+            this.addTurn();
+            return {
+                valid: true,
+                hit: hit.type,
+                ship: ship || null,
+                gameOver: true,
+                winner: this.otherPlayer
+            };
         }
 
         this.addTurn();

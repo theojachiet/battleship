@@ -129,14 +129,19 @@ export const screenController = (() => {
 
         if (!result.valid) return;
 
-        const playerBoard = document.querySelector('.board');
+        const boards = document.querySelectorAll('.board');
+        const playerBoard = boards[0];
+        const opponentBoard = boards[1];
+
         disableDragAndDrop(playerBoard);
 
         DOM.updateBoard(game.currentPlayer, selectedRow, selectedCol, result.hit);
 
         if (result.ship) if (result.ship.sunk) DOM.markShipSunk(game.currentPlayer, result.ship);
+
         if (result.gameOver) {
             DOM.showGameOver(result.winner);
+            opponentBoard.removeEventListener('click', handleAttackClick);
             return;
         }
 
