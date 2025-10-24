@@ -9,7 +9,9 @@ export const screenController = (() => {
     const container = document.querySelector('.container');
     let ai;
 
-    container.addEventListener('click', (e) => {
+    container.addEventListener('click', containerClickHandler);
+
+    function containerClickHandler(e) {
         const cell = e.target.closest('.cell');
         if (!cell) return;
 
@@ -17,7 +19,7 @@ export const screenController = (() => {
         if (cell.dataset.owner === 'computer') {
             handleAttackClick(e);
         }
-    });
+    }
 
     function start(newGame) {
         game = newGame;
@@ -44,6 +46,8 @@ export const screenController = (() => {
             const { playerBoard, opponentBoard } = renderBoards(player1, player2, { showSubmit: false });
 
             enableDragAndDrop(playerBoard, game);
+            container.addEventListener('click', containerClickHandler);
+
         } else {
             const { playerBoard, opponentBoard } = renderBoards(player1, player2, { showSubmit: false, showReady: true });
 
@@ -142,7 +146,8 @@ export const screenController = (() => {
 
         if (result.gameOver) {
             DOM.showGameOver(result.winner);
-            opponentBoard.removeEventListener('click', handleAttackClick);
+            container.removeEventListener('click', containerClickHandler);
+            game.addTurn();
             return;
         }
 
@@ -166,7 +171,7 @@ export const screenController = (() => {
         if (result.ship) if (result.ship.sunk) DOM.markShipSunk(game.currentPlayer, result.ship);
         if (result.gameOver) {
             DOM.showGameOver(result.winner);
-            game.addTurn();
+            container.removeEventListener('click', containerClickHandler);
             return;
         }
     }
