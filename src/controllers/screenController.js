@@ -6,6 +6,8 @@ import { ComputerAI } from './computerAI.js';
 export const screenController = (() => {
     let game; //Gameflow Instance
     const dialog = document.querySelector('dialog');
+    const secondNameDialog = document.querySelector('dialog.second-player-name');
+
     const container = document.querySelector('.container');
     let ai;
 
@@ -37,6 +39,7 @@ export const screenController = (() => {
             randomizeAndRender(game.currentPlayer, game.otherPlayer);
         });
     }
+
 
     function randomizeAndRender(player1 = game.currentPlayer, player2 = game.otherPlayer) {
         playerReset(player1);
