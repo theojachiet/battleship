@@ -3,11 +3,17 @@ export class GameFlow {
         this.human = players[0];
         this.computer = players[1];
         this.opponent = players[2];
+        this.players = players;
 
         this.currentPlayer = this.human;
         this.otherPlayer = this.computer;
 
         this.playingAgainstHuman = false;
+    }
+
+    addOpponent(player) {
+        this.opponent = player;
+        this.players.push(player);
     }
 
     switchOpponent() {

@@ -2,6 +2,7 @@ import * as DOM from '../views/DOM.js';
 import { placeRandomShips } from '../utils/placement.js';
 import { disableDragAndDrop, enableDragAndDrop } from '../views/dragDrop.js';
 import { ComputerAI } from './computerAI.js';
+import { Player } from "../models/player.js";
 
 export const screenController = (() => {
     let game; //Gameflow Instance
@@ -34,12 +35,34 @@ export const screenController = (() => {
 
         const switchButton = document.querySelector('button.switch');
         switchButton.addEventListener('click', () => {
-            game.switchOpponent();
-            DOM.switchButtonOpponent(switchButton);
-            randomizeAndRender(game.currentPlayer, game.otherPlayer);
+            //Ensure the game object doesn't already have 3 players
+            if (game.players.length !== 3) {
+                secondNameDialog.showModal();
+                secondNameDialog.addEventListener('submit', secondPlayerNameSubmit);
+            } else {
+                game.switchOpponent();
+                DOM.switchButtonOpponent(switchButton);
+                randomizeAndRender(game.currentPlayer, game.otherPlayer);
+            }
         });
     }
 
+    function secondPlayerNameSubmit(e) {
+        const switchButton = document.querySelector('button.switch');
+
+        e.preventDefault();
+
+        const input = document.querySelector('input.second-player-name');
+        const opponent = new Player("human", false, input.value);
+
+        game.addOpponent(opponent);
+        game.switchOpponent();
+
+        DOM.switchButtonOpponent(switchButton);
+        randomizeAndRender(game.currentPlayer, game.otherPlayer);
+
+        secondNameDialog.close();
+    }
 
     function randomizeAndRender(player1 = game.currentPlayer, player2 = game.otherPlayer) {
         playerReset(player1);
