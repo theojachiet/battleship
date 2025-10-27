@@ -190,7 +190,7 @@ function showGameOver(winner) {
   const description = document.querySelector('.description');
 
   description.textContent = 'Game Over : ' + winner.name + ' won !';
-  description.style.color = 'yellow';
+  alert('Game Over : ' + winner.name + ' won !');
 }
 
 export { displayBoard, updateBoard, removeShip, renderNewShip, clearContainer, markShipSunk, switchButtonOpponent, createReadyButton, showGameOver, updateDescription };
