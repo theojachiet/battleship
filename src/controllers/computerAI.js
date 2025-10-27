@@ -241,4 +241,8 @@ export class ComputerAI {
             }
         }
     }
+
+    resetIntelligence() {
+        this.memory = [];
+    }
 }

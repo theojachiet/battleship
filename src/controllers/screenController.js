@@ -47,6 +47,7 @@ export const screenController = (() => {
 
             enableDragAndDrop(playerBoard, game);
             container.addEventListener('click', containerClickHandler);
+            ai.resetIntelligence();
 
         } else {
             const { playerBoard, opponentBoard } = renderBoards(player1, player2, { showSubmit: false, showReady: true });
@@ -60,6 +61,7 @@ export const screenController = (() => {
     }
 
     function playerReset(player) {
+        console.log(player);
         player.ready = false;
         player.gameboard.gameOver = false;
         player.gameboard.attacks = [];
