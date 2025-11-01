@@ -1,3 +1,4 @@
 Super Cool project, the one i spent the most time on (not even close) Taught me about large(er) scale programming and the fact that i coded it over the span of two months was also good because i had to come back to it after some long periods of not touvhing it therefore my code had to be readable and clean.
 I'm really proud of the human-like AI i implemented, its actually a challenge to beat it and it mostly comes donw to knowing the algorithm to place your ships accordingly and luck (mostly).
 Lots of imporevements can be made to the AI and above all to the design and looks of the page but i'll maybe do that after learning a bit more of frontend.
+There are also still a few minor bugs that i will fix later.
